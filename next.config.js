@@ -2,22 +2,9 @@
 const nextConfig = {
   reactStrictMode: true,
 
-  // Allow unsafe-eval in development for React DevTools and HMR
-  async headers() {
-    return [
-      {
-        source: '/:path*',
-        headers: [
-          {
-            key: 'Content-Security-Policy',
-            value: process.env.NODE_ENV === 'development'
-              ? "script-src 'self' 'unsafe-eval' 'unsafe-inline';"
-              : "script-src 'self';",
-          },
-        ],
-      },
-    ];
-  },
+  // Note: CSP is handled by Vercel/Next.js automatically
+  // Custom CSP headers removed to prevent blocking Next.js inline scripts
+  // Vercel uses proper nonce-based CSP in production
 };
 
 module.exports = nextConfig;
