@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { apiClient } from "@/lib/api-client";
-import { ErrorStatsResponse, SrsStatsResponse, WeakSkillsResponse } from "@/lib/types";
+import { ErrorStatsResponse, SrsStatsResponse, WeakSkillsResponse, StreakResponse } from "@/lib/types";
 import SessionSummary from "./SessionSummary";
 
 export default function Dashboard() {
@@ -12,6 +12,7 @@ export default function Dashboard() {
   const [errorStats, setErrorStats] = useState<ErrorStatsResponse | null>(null);
   const [srsStats, setSrsStats] = useState<SrsStatsResponse | null>(null);
   const [weakSkills, setWeakSkills] = useState<WeakSkillsResponse | null>(null);
+  const [streak, setStreak] = useState<StreakResponse | null>(null);
 
   useEffect(() => {
     loadDashboardData();
@@ -22,15 +23,17 @@ export default function Dashboard() {
     setError(null);
 
     try {
-      const [errors, srs, skills] = await Promise.all([
+      const [errors, srs, skills, streakData] = await Promise.all([
         apiClient.getErrorStats(),
         apiClient.getSrsStats(),
         apiClient.getWeakSkills(3),
+        apiClient.getStreak().catch(() => ({ current_streak: 0, longest_streak: 0, last_active_date: null })),
       ]);
 
       setErrorStats(errors);
       setSrsStats(srs);
       setWeakSkills(skills);
+      setStreak(streakData);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to load dashboard data");
     } finally {
@@ -80,9 +83,18 @@ export default function Dashboard() {
     <div className="max-w-6xl mx-auto space-y-10">
       {/* Header */}
       <div className="text-center">
-        <h2 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 via-white/90 to-rose-300 mb-3">
-          Dashboard
-        </h2>
+        <div className="flex items-center justify-center gap-4 mb-3">
+          <h2 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 via-white/90 to-rose-300">
+            Dashboard
+          </h2>
+          {streak && streak.current_streak > 0 && (
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-500/20 to-red-500/20 border border-orange-500/30 rounded-full">
+              <span className="text-2xl">🔥</span>
+              <span className="text-white font-bold text-lg">{streak.current_streak}</span>
+              <span className="text-white/70 text-sm">day streak</span>
+            </div>
+          )}
+        </div>
         <p className="text-white/50 text-lg">Your learning progress at a glance</p>
       </div>
 

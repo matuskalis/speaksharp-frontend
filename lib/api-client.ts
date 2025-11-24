@@ -36,6 +36,7 @@ import {
   PlacementTestQuestionsResponse,
   PlacementTestSubmitRequest,
   PlacementTestResult,
+  StreakResponse,
 } from "./types";
 import { supabase } from "./supabase-client";
 
@@ -210,6 +211,10 @@ class ApiClient {
 
   async getWeakSkills(limit: number = 3): Promise<WeakSkillsResponse> {
     return this.request<WeakSkillsResponse>(`/api/skills/weakest?limit=${limit}`);
+  }
+
+  async getStreak(): Promise<StreakResponse> {
+    return this.request<StreakResponse>("/api/streaks/current");
   }
 
   // Scenarios endpoints

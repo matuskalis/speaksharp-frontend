@@ -8,6 +8,8 @@ export default function ProfileForm() {
   const [profile, setProfile] = useState<UserProfileResponse | null>(null);
   const [level, setLevel] = useState<string>("A1");
   const [nativeLanguage, setNativeLanguage] = useState<string>("");
+  const [fullName, setFullName] = useState<string>("");
+  const [country, setCountry] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -26,6 +28,8 @@ export default function ProfileForm() {
       setProfile(data);
       setLevel(data.level || "A1");
       setNativeLanguage(data.native_language || "");
+      setFullName((data as any).full_name || "");
+      setCountry((data as any).country || "");
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err) || "Failed to load profile");
     } finally {
@@ -42,7 +46,9 @@ export default function ProfileForm() {
     try {
       const updated = await apiClient.updateProfile({
         native_language: nativeLanguage.trim() || undefined,
-      });
+        full_name: fullName.trim() || undefined,
+        country: country.trim() || undefined,
+      } as any);
       setProfile(updated);
       setSuccess(true);
 
@@ -110,6 +116,36 @@ export default function ProfileForm() {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
+
+        {/* Full Name (Optional) */}
+        <div>
+          <label className="block text-sm font-medium text-white/70 mb-2">
+            Full Name <span className="text-white/40 text-xs">(optional)</span>
+          </label>
+          <input
+            type="text"
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
+            placeholder="Your name"
+            className="w-full px-4 py-2 bg-white/[0.05] border border-white/[0.12] rounded-lg text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={saving}
+          />
+        </div>
+
+        {/* Country (Optional) */}
+        <div>
+          <label className="block text-sm font-medium text-white/70 mb-2">
+            Country <span className="text-white/40 text-xs">(optional)</span>
+          </label>
+          <input
+            type="text"
+            value={country}
+            onChange={(e) => setCountry(e.target.value)}
+            placeholder="e.g., United States, Spain, Japan..."
+            className="w-full px-4 py-2 bg-white/[0.05] border border-white/[0.12] rounded-lg text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={saving}
+          />
+        </div>
 
         {/* Native Language */}
         <div>

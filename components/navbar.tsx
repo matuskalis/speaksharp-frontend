@@ -15,13 +15,15 @@ import {
   Mic,
   User,
   Menu,
-  X
+  X,
+  TrendingUp
 } from "lucide-react";
 import { Button } from "./ui/button";
 
 const navItems = [
   { href: "/", label: "Session", icon: Home },
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/insights", label: "Insights", icon: TrendingUp },
   { href: "/tutor", label: "Tutor", icon: MessageSquare },
   { href: "/review", label: "Review", icon: RotateCcw },
   { href: "/scenarios", label: "Scenarios", icon: Drama },

@@ -188,6 +188,12 @@ export interface WeakSkillsResponse {
   count: number;
 }
 
+export interface StreakResponse {
+  current_streak: number;
+  longest_streak: number;
+  last_active_date: string | null;
+}
+
 // Scenarios types
 export interface ScenarioSummary {
   scenario_id: string;
