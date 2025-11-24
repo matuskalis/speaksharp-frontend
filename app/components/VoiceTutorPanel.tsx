@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { apiClient } from "@/lib/api-client";
 import { VoiceTutorResponse, TutorError } from "@/lib/types";
+import { VERSION } from "@/lib/version";
 
 type RecordingState = "idle" | "recording" | "processing" | "complete";
 
@@ -649,6 +650,11 @@ export default function VoiceTutorPanel() {
           </ul>
         </div>
       )}
+
+      {/* Version Display */}
+      <div className="text-center text-white/30 text-xs">
+        Frontend v{VERSION}
+      </div>
     </div>
   );
 }
