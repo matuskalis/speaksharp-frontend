@@ -131,7 +131,8 @@ export default function VoiceTutorPanel() {
         await processRecording();
       };
 
-      mediaRecorder.start();
+      // Request data every 100ms to ensure proper audio capture
+      mediaRecorder.start(100);
       setRecordingState("recording");
 
       // Start timer
