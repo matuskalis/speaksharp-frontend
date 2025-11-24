@@ -5,6 +5,7 @@ import Link from "next/link";
 import { apiClient } from "@/lib/api-client";
 import { ErrorStatsResponse, SrsStatsResponse, WeakSkillsResponse, StreakResponse, UserProfileResponse } from "@/lib/types";
 import SessionSummary from "./SessionSummary";
+import DailyGoalCard from "@/components/daily-goal-card";
 import { CheckCircle2, Circle, X } from "lucide-react";
 
 export default function Dashboard() {
@@ -252,6 +253,9 @@ export default function Dashboard() {
           </p>
         </div>
       </div>
+
+      {/* Daily Goals */}
+      <DailyGoalCard />
 
       {/* Error Breakdown */}
       <div className="bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/[0.08] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] p-7">

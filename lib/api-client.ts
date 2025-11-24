@@ -37,6 +37,12 @@ import {
   PlacementTestSubmitRequest,
   PlacementTestResult,
   StreakResponse,
+  AchievementsResponse,
+  DailyGoal,
+  UpdateGoalTargetsRequest,
+  ReferralCode,
+  ReferralStats,
+  ClaimReferralRequest,
 } from "./types";
 import { supabase } from "./supabase-client";
 
@@ -215,6 +221,43 @@ class ApiClient {
 
   async getStreak(): Promise<StreakResponse> {
     return this.request<StreakResponse>("/api/streaks/current");
+  }
+
+  // Achievements endpoints
+  async getAchievements(): Promise<AchievementsResponse> {
+    return this.request<AchievementsResponse>("/api/achievements");
+  }
+
+  async getMyAchievements(): Promise<AchievementsResponse> {
+    return this.request<AchievementsResponse>("/api/achievements/mine");
+  }
+
+  // Daily Goals endpoints
+  async getTodayGoal(): Promise<DailyGoal> {
+    return this.request<DailyGoal>("/api/goals/today");
+  }
+
+  async updateTodayGoal(targets: UpdateGoalTargetsRequest): Promise<DailyGoal> {
+    return this.request<DailyGoal>("/api/goals/today", {
+      method: "POST",
+      body: JSON.stringify(targets),
+    });
+  }
+
+  // Referrals endpoints
+  async getMyReferralCode(): Promise<ReferralCode> {
+    return this.request<ReferralCode>("/api/referrals/my-code");
+  }
+
+  async getReferralStats(): Promise<ReferralStats> {
+    return this.request<ReferralStats>("/api/referrals/stats");
+  }
+
+  async claimReferral(data: ClaimReferralRequest): Promise<{status: string; message: string}> {
+    return this.request<{status: string; message: string}>("/api/referrals/claim", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
   }
 
   // Scenarios endpoints

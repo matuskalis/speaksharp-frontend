@@ -194,6 +194,76 @@ export interface StreakResponse {
   last_active_date: string | null;
 }
 
+// Achievements types
+export interface Achievement {
+  achievement_id: string;
+  achievement_key: string;
+  title: string;
+  description: string;
+  icon_url?: string;
+  category: string; // "milestone", "streak", "mastery", "social"
+  points: number;
+  tier: string; // "bronze", "silver", "gold", "platinum"
+  created_at: string;
+  unlocked_at?: string; // Only present for user achievements
+  progress?: number; // Only present for user achievements
+}
+
+export interface AchievementsResponse {
+  achievements: Achievement[];
+  count: number;
+}
+
+// Daily Goals types
+export interface DailyGoal {
+  goal_id: string;
+  user_id: string;
+  goal_date: string;
+  target_study_minutes: number;
+  target_lessons: number;
+  target_reviews: number;
+  target_drills: number;
+  actual_study_minutes: number;
+  actual_lessons: number;
+  actual_reviews: number;
+  actual_drills: number;
+  completed: boolean;
+  completion_percentage: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface UpdateGoalTargetsRequest {
+  target_study_minutes?: number;
+  target_lessons?: number;
+  target_reviews?: number;
+  target_drills?: number;
+}
+
+// Referrals types
+export interface ReferralCode {
+  code_id: string;
+  user_id: string;
+  code: string;
+  total_signups: number;
+  total_conversions: number;
+  reward_type?: string;
+  reward_value?: number;
+  is_active: boolean;
+  expires_at?: string;
+  created_at: string;
+}
+
+export interface ReferralStats {
+  referral_code: string;
+  total_signups: number;
+  total_conversions: number;
+}
+
+export interface ClaimReferralRequest {
+  referral_code: string;
+}
+
 // Scenarios types
 export interface ScenarioSummary {
   scenario_id: string;
