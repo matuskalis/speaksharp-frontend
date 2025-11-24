@@ -205,7 +205,7 @@ export default function VoiceTutorPanel() {
 
       // Create FormData
       const formData = new FormData();
-      formData.append("audio_file", audioFile);
+      formData.append("file", audioFile);
 
       // Send to backend
       const result = await apiClient.tutorVoice(formData);
@@ -229,7 +229,7 @@ export default function VoiceTutorPanel() {
       let statusCode = null;
 
       if (err instanceof Error) {
-        const errorStr = err.message.toLowerCase();
+        const errorStr = err.message || String(err);
 
         if (errorStr.includes("400") || errorStr.includes("invalid file format")) {
           errorMessage = "Invalid audio format. Your browser's recording format is not supported. Please try a different browser (Chrome or Safari recommended).";
@@ -237,14 +237,19 @@ export default function VoiceTutorPanel() {
         } else if (errorStr.includes("401") || errorStr.includes("unauthorized")) {
           errorMessage = "Authentication error. Please sign out and sign in again.";
           statusCode = 401;
+        } else if (errorStr.includes("422")) {
+          errorMessage = "Invalid request format. Please try again with a different browser.";
+          statusCode = 422;
         } else if (errorStr.includes("500") || errorStr.includes("internal server")) {
           errorMessage = "Server error. The AI service may be temporarily unavailable. Please try again in a moment.";
           statusCode = 500;
         } else if (errorStr.includes("network") || errorStr.includes("fetch")) {
           errorMessage = "Network error. Please check your internet connection and try again.";
         } else {
-          errorMessage = `Processing error: ${err.message}`;
+          errorMessage = `Processing error: ${errorStr}`;
         }
+      } else {
+        errorMessage = `Processing error: ${JSON.stringify(err)}`;
       }
 
       setError(errorMessage);
