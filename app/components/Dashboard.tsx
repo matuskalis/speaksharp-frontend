@@ -1,9 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { apiClient } from "@/lib/api-client";
-import { ErrorStatsResponse, SrsStatsResponse, WeakSkillsResponse, StreakResponse } from "@/lib/types";
+import { ErrorStatsResponse, SrsStatsResponse, WeakSkillsResponse, StreakResponse, UserProfileResponse } from "@/lib/types";
 import SessionSummary from "./SessionSummary";
+import { CheckCircle2, Circle, X } from "lucide-react";
 
 export default function Dashboard() {
   const [loading, setLoading] = useState(true);
@@ -13,6 +15,8 @@ export default function Dashboard() {
   const [srsStats, setSrsStats] = useState<SrsStatsResponse | null>(null);
   const [weakSkills, setWeakSkills] = useState<WeakSkillsResponse | null>(null);
   const [streak, setStreak] = useState<StreakResponse | null>(null);
+  const [userProfile, setUserProfile] = useState<UserProfileResponse | null>(null);
+  const [showOnboarding, setShowOnboarding] = useState(true);
 
   useEffect(() => {
     loadDashboardData();
@@ -23,17 +27,19 @@ export default function Dashboard() {
     setError(null);
 
     try {
-      const [errors, srs, skills, streakData] = await Promise.all([
+      const [errors, srs, skills, streakData, profile] = await Promise.all([
         apiClient.getErrorStats(),
         apiClient.getSrsStats(),
         apiClient.getWeakSkills(3),
         apiClient.getStreak().catch(() => ({ current_streak: 0, longest_streak: 0, last_active_date: null })),
+        apiClient.getCurrentUser().catch(() => null),
       ]);
 
       setErrorStats(errors);
       setSrsStats(srs);
       setWeakSkills(skills);
       setStreak(streakData);
+      setUserProfile(profile);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to load dashboard data");
     } finally {
@@ -79,8 +85,113 @@ export default function Dashboard() {
     pronunciation_placeholder: "Pronunciation",
   };
 
+  // Check if onboarding is complete
+  const isOnboardingComplete = (userProfile as any)?.onboarding_completed === true;
+  const hasCompletedPlacementTest = userProfile?.level && userProfile.level !== "A1";
+  const hasCompletedProfile = !!(userProfile as any)?.full_name && !!(userProfile as any)?.country;
+  const hasCompletedFirstLesson = (srsStats?.total_cards || 0) > 0;
+
+  const handleCompleteOnboarding = async () => {
+    try {
+      await apiClient.updateProfile({ onboarding_completed: true } as any);
+      setShowOnboarding(false);
+    } catch (error) {
+      console.error("Failed to mark onboarding as complete:", error);
+    }
+  };
+
   return (
     <div className="max-w-6xl mx-auto space-y-10">
+      {/* Onboarding Checklist */}
+      {!isOnboardingComplete && showOnboarding && (
+        <div className="bg-gradient-to-r from-indigo-500/10 to-rose-500/10 backdrop-blur-md rounded-2xl border border-indigo-500/30 shadow-[0_8px_32px_0_rgba(99,102,241,0.15)] p-6">
+          <div className="flex items-start justify-between mb-4">
+            <div>
+              <h3 className="text-2xl font-bold text-white mb-2">Welcome to SpeakSharp! 👋</h3>
+              <p className="text-white/70">Complete these steps to get started:</p>
+            </div>
+            <button
+              onClick={() => setShowOnboarding(false)}
+              className="text-white/50 hover:text-white transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+
+          <div className="space-y-3">
+            {/* Placement Test */}
+            <Link
+              href="/placement-test"
+              className={`flex items-center gap-3 p-4 rounded-xl border transition-all ${
+                hasCompletedPlacementTest
+                  ? "bg-green-500/10 border-green-500/30 cursor-default"
+                  : "bg-white/[0.05] border-white/[0.12] hover:bg-white/[0.08]"
+              }`}
+            >
+              {hasCompletedPlacementTest ? (
+                <CheckCircle2 className="w-5 h-5 text-green-400 flex-shrink-0" />
+              ) : (
+                <Circle className="w-5 h-5 text-white/40 flex-shrink-0" />
+              )}
+              <div className="flex-1">
+                <div className="text-white font-medium">Take Placement Test</div>
+                <div className="text-sm text-white/50">Find your English level (5 min)</div>
+              </div>
+            </Link>
+
+            {/* Complete Profile */}
+            <Link
+              href="/profile"
+              className={`flex items-center gap-3 p-4 rounded-xl border transition-all ${
+                hasCompletedProfile
+                  ? "bg-green-500/10 border-green-500/30 cursor-default"
+                  : "bg-white/[0.05] border-white/[0.12] hover:bg-white/[0.08]"
+              }`}
+            >
+              {hasCompletedProfile ? (
+                <CheckCircle2 className="w-5 h-5 text-green-400 flex-shrink-0" />
+              ) : (
+                <Circle className="w-5 h-5 text-white/40 flex-shrink-0" />
+              )}
+              <div className="flex-1">
+                <div className="text-white font-medium">Complete Your Profile</div>
+                <div className="text-sm text-white/50">Add your name and country</div>
+              </div>
+            </Link>
+
+            {/* First Lesson */}
+            <Link
+              href="/lessons"
+              className={`flex items-center gap-3 p-4 rounded-xl border transition-all ${
+                hasCompletedFirstLesson
+                  ? "bg-green-500/10 border-green-500/30 cursor-default"
+                  : "bg-white/[0.05] border-white/[0.12] hover:bg-white/[0.08]"
+              }`}
+            >
+              {hasCompletedFirstLesson ? (
+                <CheckCircle2 className="w-5 h-5 text-green-400 flex-shrink-0" />
+              ) : (
+                <Circle className="w-5 h-5 text-white/40 flex-shrink-0" />
+              )}
+              <div className="flex-1">
+                <div className="text-white font-medium">Complete Your First Lesson</div>
+                <div className="text-sm text-white/50">Start learning with AI-powered lessons</div>
+              </div>
+            </Link>
+          </div>
+
+          {/* Complete Button */}
+          {hasCompletedPlacementTest && hasCompletedProfile && hasCompletedFirstLesson && (
+            <button
+              onClick={handleCompleteOnboarding}
+              className="mt-4 w-full px-6 py-3 bg-gradient-to-r from-indigo-500 to-rose-500 text-white font-medium rounded-lg hover:from-indigo-600 hover:to-rose-600 transition-all duration-300"
+            >
+              ✨ Complete Onboarding
+            </button>
+          )}
+        </div>
+      )}
+
       {/* Header */}
       <div className="text-center">
         <div className="flex items-center justify-center gap-4 mb-3">
