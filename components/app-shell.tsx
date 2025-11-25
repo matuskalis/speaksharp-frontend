@@ -92,7 +92,7 @@ export function AppShell({ children }: AppShellProps) {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center">
+      <main className="min-h-screen bg-[#030303] flex items-center justify-center">
         <div className="text-center">
           <div className="animate-pulse text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 via-white/90 to-rose-300">
             Loading...
@@ -103,10 +103,10 @@ export function AppShell({ children }: AppShellProps) {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 relative overflow-hidden">
+    <main className="min-h-screen bg-[#030303] relative overflow-hidden">
       {/* Animated Background Shapes */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.08] via-transparent to-rose-500/[0.08] blur-3xl" />
+        <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.03] via-transparent to-rose-500/[0.03] blur-3xl" />
 
         {/* Floating shapes */}
         <ElegantShape

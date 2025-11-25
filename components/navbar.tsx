@@ -47,7 +47,7 @@ export function Navbar() {
     <>
       {/* Desktop Navigation */}
       <nav className="hidden lg:block max-w-5xl mx-auto">
-        <div className="flex items-center justify-center gap-2 bg-background-secondary backdrop-blur-md rounded-2xl border border-border shadow-glow p-2">
+        <div className="flex items-center justify-center gap-2 bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/[0.08] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] p-2">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = pathname === item.href;
@@ -74,7 +74,7 @@ export function Navbar() {
       {/* Mobile Navigation */}
       <nav className="lg:hidden max-w-5xl mx-auto">
         {/* Mobile Header */}
-        <div className="flex items-center justify-between bg-background-secondary backdrop-blur-md rounded-2xl border border-border shadow-glow p-4">
+        <div className="flex items-center justify-between bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/[0.08] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] p-4">
           <div className="flex items-center gap-3">
             {(() => {
               const activeItem = navItems.find(item => pathname === item.href);
@@ -104,7 +104,7 @@ export function Navbar() {
 
         {/* Mobile Menu Dropdown */}
         {mobileMenuOpen && (
-          <div className="mt-2 bg-background-secondary backdrop-blur-md rounded-2xl border border-border shadow-glow overflow-hidden">
+          <div className="mt-2 bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/[0.08] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] overflow-hidden">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = pathname === item.href;
