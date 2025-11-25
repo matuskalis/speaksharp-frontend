@@ -8,7 +8,7 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      // Spacing scale: 4/8/12/16/20/24/32/40/48/64
+      // Spacing scale: 4px base unit for consistent rhythm
       spacing: {
         '1': '4px',
         '2': '8px',
@@ -16,10 +16,33 @@ const config: Config = {
         '4': '16px',
         '5': '20px',
         '6': '24px',
+        '7': '28px',
         '8': '32px',
         '10': '40px',
         '12': '48px',
+        '14': '56px',
         '16': '64px',
+        '20': '80px',
+        '24': '96px',
+        '32': '128px',
+      },
+      // Layout grid system
+      container: {
+        center: true,
+        padding: {
+          DEFAULT: '1rem',
+          sm: '1.5rem',
+          lg: '2rem',
+          xl: '2.5rem',
+          '2xl': '3rem',
+        },
+        screens: {
+          sm: '640px',
+          md: '768px',
+          lg: '1024px',
+          xl: '1280px',
+          '2xl': '1400px',
+        },
       },
       // Typography
       fontSize: {

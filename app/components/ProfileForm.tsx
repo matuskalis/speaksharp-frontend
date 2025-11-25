@@ -3,6 +3,9 @@
 import { useState, useEffect } from "react";
 import { apiClient } from "@/lib/api-client";
 import { UserProfileResponse } from "@/lib/types";
+import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 export default function ProfileForm() {
   const [profile, setProfile] = useState<UserProfileResponse | null>(null);
@@ -14,6 +17,16 @@ export default function ProfileForm() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+
+  // CEFR level descriptions
+  const levelDescriptions: Record<string, string> = {
+    A1: "Beginner",
+    A2: "Elementary",
+    B1: "Intermediate",
+    B2: "Upper-Intermediate",
+    C1: "Advanced",
+    C2: "Proficient"
+  };
 
   // Fetch profile on mount
   useEffect(() => {
@@ -63,142 +76,191 @@ export default function ProfileForm() {
 
   if (loading) {
     return (
-      <div className="max-w-3xl mx-auto p-6 bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/[0.08] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)]">
-        <div className="animate-pulse">
-          <div className="h-6 bg-white/[0.05] rounded mb-4 w-1/3"></div>
-          <div className="h-10 bg-white/[0.05] rounded mb-4"></div>
-          <div className="h-10 bg-white/[0.05] rounded"></div>
-        </div>
+      <div className="max-w-3xl mx-auto space-y-6">
+        <Card className="animate-pulse">
+          <CardContent>
+            <div className="h-6 bg-white/[0.05] rounded mb-6 w-1/3"></div>
+            <div className="h-10 bg-white/[0.05] rounded mb-4"></div>
+            <div className="h-10 bg-white/[0.05] rounded"></div>
+          </CardContent>
+        </Card>
       </div>
     );
   }
 
   return (
-    <div className="max-w-3xl mx-auto p-7 bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/[0.08] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)]">
-      <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 via-white/90 to-rose-300 mb-6">Your Profile</h2>
-
-      {/* English Level - Read Only */}
-      <div className="mb-6">
-        <label className="block text-sm font-medium text-white/70 mb-2">
-          English Level (CEFR)
-        </label>
-        <div className="flex items-center gap-4">
-          <div className="flex-1 p-4 bg-white/[0.05] border border-white/[0.12] rounded-lg">
-            <div className="flex items-center justify-between">
+    <div className="max-w-3xl mx-auto space-y-6">
+      {/* English Level Card */}
+      <Card>
+        <CardHeader>
+          <CardTitle>English Level</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            {/* Level Display */}
+            <div className="flex items-center justify-between p-5 bg-white/[0.03] border border-white/[0.08] rounded-xl">
               <div>
-                <span className="text-2xl font-bold text-white">{level}</span>
-                <span className="ml-3 text-sm text-white/50">
-                  {level === "A1" && "Beginner"}
-                  {level === "A2" && "Elementary"}
-                  {level === "B1" && "Intermediate"}
-                  {level === "B2" && "Upper-Intermediate"}
-                  {level === "C1" && "Advanced"}
-                  {level === "C2" && "Proficient"}
-                </span>
+                <div className="flex items-baseline gap-3">
+                  <span className="text-display font-bold text-text-primary">{level}</span>
+                  <span className="text-body text-text-tertiary">
+                    {levelDescriptions[level]}
+                  </span>
+                </div>
+                <p className="text-caption text-text-quaternary mt-2">
+                  Common European Framework of Reference
+                </p>
               </div>
-              <div className="text-xs bg-blue-500/10 text-blue-300 px-3 py-1 rounded border border-blue-500/20">
-                Verified by test
+              <div className="px-3 py-1.5 bg-primary/10 text-primary border border-primary/20 rounded-lg">
+                <span className="text-caption font-medium">Verified</span>
               </div>
             </div>
+
+            {/* Retake Test Button */}
+            <div className="flex items-center justify-between p-4 bg-white/[0.02] border border-white/[0.06] rounded-xl">
+              <div>
+                <p className="text-body-lg text-text-secondary font-medium">
+                  Update your level
+                </p>
+                <p className="text-caption text-text-quaternary mt-1">
+                  Take our placement test to reassess your English proficiency
+                </p>
+              </div>
+              <a href="/placement-test">
+                <Button variant="secondary" size="md">
+                  {level === "A1" && profile?.created_at === profile?.updated_at
+                    ? "Take Test"
+                    : "Retake Test"}
+                </Button>
+              </a>
+            </div>
           </div>
-          <a
-            href="/placement-test"
-            className="px-6 py-3 bg-gradient-to-r from-indigo-500 to-rose-500 text-white font-medium rounded-lg hover:from-indigo-600 hover:to-rose-600 transition-all duration-300 whitespace-nowrap"
-          >
-            {level === "A1" && profile?.created_at === profile?.updated_at
-              ? "Take Test"
-              : "Retake Test"}
-          </a>
-        </div>
-        <p className="mt-2 text-xs text-white/40">
-          📊 Your level is determined by our placement test to ensure accurate personalized learning.
-        </p>
-      </div>
+        </CardContent>
+      </Card>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      {/* Personal Information Card */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Personal Information</CardTitle>
+        </CardHeader>
+        <form onSubmit={handleSubmit}>
+          <CardContent>
+            <div className="space-y-5">
+              {/* Full Name */}
+              <div className="space-y-2">
+                <label htmlFor="fullName" className="block text-body-lg font-medium text-text-secondary">
+                  Full Name
+                  <span className="text-caption text-text-quaternary ml-2">(optional)</span>
+                </label>
+                <Input
+                  id="fullName"
+                  type="text"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  placeholder="Enter your full name"
+                  disabled={saving}
+                  fullWidth
+                />
+              </div>
 
-        {/* Full Name (Optional) */}
-        <div>
-          <label className="block text-sm font-medium text-white/70 mb-2">
-            Full Name <span className="text-white/40 text-xs">(optional)</span>
-          </label>
-          <input
-            type="text"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-            placeholder="Your name"
-            className="w-full px-4 py-2 bg-white/[0.05] border border-white/[0.12] rounded-lg text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={saving}
-          />
-        </div>
+              {/* Country */}
+              <div className="space-y-2">
+                <label htmlFor="country" className="block text-body-lg font-medium text-text-secondary">
+                  Country
+                  <span className="text-caption text-text-quaternary ml-2">(optional)</span>
+                </label>
+                <Input
+                  id="country"
+                  type="text"
+                  value={country}
+                  onChange={(e) => setCountry(e.target.value)}
+                  placeholder="e.g., United States, Spain, Japan"
+                  disabled={saving}
+                  fullWidth
+                />
+              </div>
 
-        {/* Country (Optional) */}
-        <div>
-          <label className="block text-sm font-medium text-white/70 mb-2">
-            Country <span className="text-white/40 text-xs">(optional)</span>
-          </label>
-          <input
-            type="text"
-            value={country}
-            onChange={(e) => setCountry(e.target.value)}
-            placeholder="e.g., United States, Spain, Japan..."
-            className="w-full px-4 py-2 bg-white/[0.05] border border-white/[0.12] rounded-lg text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={saving}
-          />
-        </div>
+              {/* Native Language */}
+              <div className="space-y-2">
+                <label htmlFor="nativeLanguage" className="block text-body-lg font-medium text-text-secondary">
+                  Native Language
+                  <span className="text-caption text-text-quaternary ml-2">(required)</span>
+                </label>
+                <Input
+                  id="nativeLanguage"
+                  type="text"
+                  value={nativeLanguage}
+                  onChange={(e) => setNativeLanguage(e.target.value)}
+                  placeholder="e.g., Spanish, Mandarin, French"
+                  disabled={saving}
+                  fullWidth
+                />
+              </div>
+            </div>
 
-        {/* Native Language */}
-        <div>
-          <label className="block text-sm font-medium text-white/70 mb-2">
-            Native Language
-          </label>
-          <input
-            type="text"
-            value={nativeLanguage}
-            onChange={(e) => setNativeLanguage(e.target.value)}
-            placeholder="e.g., Spanish, Mandarin, French..."
-            className="w-full px-4 py-2 bg-white/[0.05] border border-white/[0.12] rounded-lg text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={saving}
-          />
-        </div>
+            {/* Error Message */}
+            {error && (
+              <div className="mt-5 p-4 bg-red-500/10 border border-red-500/30 rounded-xl">
+                <p className="text-body text-red-400">{error}</p>
+              </div>
+            )}
 
-        {/* Error Message */}
-        {error && (
-          <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400">
-            <p className="text-sm">{error}</p>
-          </div>
-        )}
+            {/* Success Message */}
+            {success && (
+              <div className="mt-5 p-4 bg-green-500/10 border border-green-500/30 rounded-xl">
+                <p className="text-body text-green-400">Profile updated successfully!</p>
+              </div>
+            )}
+          </CardContent>
 
-        {/* Success Message */}
-        {success && (
-          <div className="p-4 bg-green-500/10 border border-green-500/20 rounded-xl text-green-400">
-            <p className="text-sm">Profile updated successfully!</p>
-          </div>
-        )}
+          <CardFooter>
+            <Button
+              type="submit"
+              variant="primary"
+              size="lg"
+              fullWidth
+              disabled={saving}
+            >
+              {saving ? "Saving changes..." : "Save Changes"}
+            </Button>
+          </CardFooter>
+        </form>
+      </Card>
 
-        {/* Save Button */}
-        <button
-          type="submit"
-          disabled={saving}
-          className="w-full px-6 py-3 bg-gradient-to-r from-indigo-500 to-rose-500 text-white font-medium rounded-lg hover:from-indigo-600 hover:to-rose-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
-        >
-          {saving ? "Saving..." : "Save Profile"}
-        </button>
-      </form>
-
-      {/* Profile Info */}
+      {/* Account Information Card */}
       {profile && (
-        <div className="mt-6 pt-6 border-t border-white/[0.08]">
-          <p className="text-xs text-white/50">
-            User ID: <code className="text-white/70 bg-white/[0.05] px-2 py-1 rounded">{profile.user_id}</code>
-          </p>
-          <p className="text-xs text-white/50 mt-1">
-            Created: {new Date(profile.created_at).toLocaleDateString()}
-          </p>
-          <p className="text-xs text-white/50 mt-1">
-            Last updated: {new Date(profile.updated_at).toLocaleDateString()}
-          </p>
-        </div>
+        <Card>
+          <CardHeader>
+            <CardTitle>Account Information</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <dl className="space-y-3">
+              <div className="flex justify-between py-2 border-b border-white/[0.06]">
+                <dt className="text-body text-text-tertiary">User ID</dt>
+                <dd className="text-body-lg font-mono text-text-secondary">{profile.user_id}</dd>
+              </div>
+              <div className="flex justify-between py-2 border-b border-white/[0.06]">
+                <dt className="text-body text-text-tertiary">Account Created</dt>
+                <dd className="text-body-lg text-text-secondary">
+                  {new Date(profile.created_at).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric"
+                  })}
+                </dd>
+              </div>
+              <div className="flex justify-between py-2">
+                <dt className="text-body text-text-tertiary">Last Updated</dt>
+                <dd className="text-body-lg text-text-secondary">
+                  {new Date(profile.updated_at).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric"
+                  })}
+                </dd>
+              </div>
+            </dl>
+          </CardContent>
+        </Card>
       )}
     </div>
   );

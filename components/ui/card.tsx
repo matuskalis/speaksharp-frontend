@@ -9,8 +9,8 @@ export function Card({ className, children, ...props }: CardProps) {
   return (
     <div
       className={cn(
-        "bg-background-secondary backdrop-blur-md",
-        "rounded-2xl border border-border shadow-glow",
+        "bg-white/[0.03] backdrop-blur-md",
+        "rounded-2xl border border-white/[0.08] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)]",
         "p-6",
         className
       )}
@@ -71,7 +71,7 @@ export interface CardFooterProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export function CardFooter({ className, children, ...props }: CardFooterProps) {
   return (
-    <div className={cn("mt-6 pt-6 border-t border-border", className)} {...props}>
+    <div className={cn("mt-6 pt-6 border-t border-white/[0.08]", className)} {...props}>
       {children}
     </div>
   );
