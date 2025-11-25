@@ -60,7 +60,7 @@ export function Navbar() {
                   "flex items-center gap-2 px-4 py-3 rounded-xl font-medium transition-all duration-300",
                   isActive
                     ? "bg-gradient-to-r from-primary/20 to-accent/20 text-text-primary border border-white/[0.12] shadow-lg"
-                    : "text-text-tertiary hover:text-text-primary hover:bg-white/[0.05]"
+                    : "bg-transparent text-text-tertiary hover:text-text-primary hover:bg-white/[0.05]"
                 )}
               >
                 <Icon className="w-4 h-4" />
@@ -118,7 +118,7 @@ export function Navbar() {
                     "w-full flex items-center gap-3 px-6 py-4 font-medium transition-all duration-200 border-b border-white/[0.08] last:border-b-0",
                     isActive
                       ? "bg-gradient-to-r from-primary/10 to-accent/10 text-text-primary"
-                      : "text-text-tertiary hover:text-text-primary hover:bg-white/[0.05]"
+                      : "bg-transparent text-text-tertiary hover:text-text-primary hover:bg-white/[0.05]"
                   )}
                 >
                   <Icon className="w-5 h-5" />
