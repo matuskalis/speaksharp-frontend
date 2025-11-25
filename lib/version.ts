@@ -1,2 +1,2 @@
 // Version tracking for deployments
-export const VERSION = "5";
+export const VERSION = "6";

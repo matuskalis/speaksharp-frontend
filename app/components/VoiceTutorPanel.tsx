@@ -107,6 +107,14 @@ export default function VoiceTutorPanel() {
       audioChunksRef.current = [];
       setRecordingTime(0);
 
+      // Log available audio input devices
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      const audioInputs = devices.filter(device => device.kind === 'audioinput');
+      console.log('[VoiceTutor] Available microphones:');
+      audioInputs.forEach((device, index) => {
+        console.log(`  ${index + 1}. ${device.label || `Microphone ${index + 1}`} (${device.deviceId.substring(0, 20)}...)`);
+      });
+
       // Request high-quality audio with specific constraints
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: {
@@ -116,6 +124,12 @@ export default function VoiceTutorPanel() {
           channelCount: 1,
         }
       });
+
+      // Log which device is actually being used
+      const audioTrack = stream.getAudioTracks()[0];
+      const settings = audioTrack.getSettings();
+      console.log(`[VoiceTutor] Using microphone: ${audioTrack.label}`);
+      console.log(`[VoiceTutor] Mic settings:`, settings);
 
       // Set up audio level monitoring
       const audioContext = new AudioContext();
