@@ -127,6 +127,9 @@ export default function VoiceTutorPanel() {
 
       mediaRecorder.onstop = async () => {
         console.log("[VoiceTutor] Recording stopped");
+        console.log(`[VoiceTutor] Collected ${audioChunksRef.current.length} audio chunks`);
+        const totalBytes = audioChunksRef.current.reduce((sum, chunk) => sum + chunk.size, 0);
+        console.log(`[VoiceTutor] Total audio data: ${totalBytes} bytes`);
         stream.getTracks().forEach((track) => track.stop());
         await processRecording();
       };
