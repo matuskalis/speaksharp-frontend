@@ -40,6 +40,9 @@ export default function VoiceTutorPanel() {
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const selectedMimeTypeRef = useRef<string | null>(null);
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const analyserRef = useRef<AnalyserNode | null>(null);
+  const animationFrameRef = useRef<number | null>(null);
 
   // Check browser capability on mount
   useEffect(() => {
@@ -114,6 +117,27 @@ export default function VoiceTutorPanel() {
         }
       });
 
+      // Set up audio level monitoring
+      const audioContext = new AudioContext();
+      audioContextRef.current = audioContext;
+      const source = audioContext.createMediaStreamSource(stream);
+      const analyser = audioContext.createAnalyser();
+      analyser.fftSize = 256;
+      source.connect(analyser);
+      analyserRef.current = analyser;
+
+      // Monitor audio levels
+      const dataArray = new Uint8Array(analyser.frequencyBinCount);
+      const checkAudioLevel = () => {
+        analyser.getByteFrequencyData(dataArray);
+        const average = dataArray.reduce((sum, value) => sum + value, 0) / dataArray.length;
+        if (average > 5) {
+          console.log(`[VoiceTutor] Audio level: ${average.toFixed(1)} (detecting sound)`);
+        }
+        animationFrameRef.current = requestAnimationFrame(checkAudioLevel);
+      };
+      checkAudioLevel();
+
       // Create MediaRecorder with defensive MIME type
       const mediaRecorderOptions = selectedMimeTypeRef.current
         ? { mimeType: selectedMimeTypeRef.current }
@@ -180,6 +204,15 @@ export default function VoiceTutorPanel() {
       mediaRecorderRef.current.stop();
       if (timerRef.current) {
         clearInterval(timerRef.current);
+      }
+      // Stop audio level monitoring
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+        animationFrameRef.current = null;
+      }
+      if (audioContextRef.current) {
+        audioContextRef.current.close();
+        audioContextRef.current = null;
       }
     }
   };
