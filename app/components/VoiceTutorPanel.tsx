@@ -104,7 +104,15 @@ export default function VoiceTutorPanel() {
       audioChunksRef.current = [];
       setRecordingTime(0);
 
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      // Request high-quality audio with specific constraints
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          sampleRate: 48000,
+          channelCount: 1,
+        }
+      });
 
       // Create MediaRecorder with defensive MIME type
       const mediaRecorderOptions = selectedMimeTypeRef.current
