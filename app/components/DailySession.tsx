@@ -10,6 +10,10 @@ import {
   Drama,
   Dumbbell,
   ArrowRight,
+  Cpu,
+  MessageSquare,
+  Zap,
+  Check,
 } from "lucide-react";
 
 type SessionStep = "review" | "lesson" | "scenario" | "drill" | "complete";
@@ -26,6 +30,7 @@ export default function DailySession() {
       title: "Review",
       icon: RotateCcw,
       description: "Practice your SRS flashcards",
+      aiBenefit: "Spaced repetition powered by adaptive AI scheduling",
       route: "/review",
       time: "5-10 min",
     },
@@ -34,6 +39,7 @@ export default function DailySession() {
       title: "Lesson",
       icon: BookOpen,
       description: "Learn new grammar concepts",
+      aiBenefit: "Personalized grammar lessons based on your errors",
       route: "/lessons",
       time: "5-10 min",
     },
@@ -42,6 +48,7 @@ export default function DailySession() {
       title: "Scenario",
       icon: Drama,
       description: "Practice real conversations",
+      aiBenefit: "Real-world conversations with AI correction engine",
       route: "/scenarios",
       time: "10-15 min",
     },
@@ -50,6 +57,7 @@ export default function DailySession() {
       title: "Drill",
       icon: Dumbbell,
       description: "Speaking or writing exercise",
+      aiBenefit: "Targeted practice for your weakest skills",
       route: "/drills",
       time: "5-10 min",
     },
@@ -109,42 +117,87 @@ export default function DailySession() {
 
   return (
     <div>
-      {/* Hero Section - Massive visual weight */}
-      <div className="text-center mb-24">
-        <h1 className="text-7xl font-bold text-gray-900 mb-6">
-          Daily Practice
-        </h1>
-        <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-12">
-          Complete these activities for a balanced learning experience
+      {/* Full-Bleed Hero Section */}
+      <div className="-mx-8 bg-gradient-to-b from-deep-blue-900 to-charcoal-900 text-white py-32 mb-32">
+        <div className="max-w-container mx-auto px-8 text-center">
+          <h1 className="text-7xl font-bold mb-6 tracking-tight">
+            The First AI Tutor Built for Real Fluency
+          </h1>
+          <p className="text-xl text-deep-blue-100 max-w-2xl mx-auto mb-12">
+            Precision-trained conversational AI that adapts to your speech, thinking, and goals
+          </p>
+          <Button
+            size="lg"
+            onClick={() => handleStepClick("review", "/review")}
+            className="text-base font-semibold px-8 py-3 bg-white text-deep-blue-900 hover:bg-deep-blue-50"
+          >
+            Start Your Session
+            <ArrowRight className="ml-2 w-5 h-5" />
+          </Button>
+        </div>
+      </div>
+
+      {/* AI Positioning - Three Pillars */}
+      <div className="mb-32">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+          <div className="text-center">
+            <div className="w-16 h-16 rounded-xl bg-deep-blue-50 flex items-center justify-center mx-auto mb-6">
+              <Zap className="w-8 h-8 text-deep-blue-600" strokeWidth={1.5} />
+            </div>
+            <h3 className="text-xl font-semibold text-charcoal-900 mb-3">AI-Precision Feedback</h3>
+            <p className="text-base text-charcoal-600 leading-relaxed">
+              Instant corrections powered by advanced linguistic models
+            </p>
+          </div>
+
+          <div className="text-center">
+            <div className="w-16 h-16 rounded-xl bg-deep-blue-50 flex items-center justify-center mx-auto mb-6">
+              <MessageSquare className="w-8 h-8 text-deep-blue-600" strokeWidth={1.5} />
+            </div>
+            <h3 className="text-xl font-semibold text-charcoal-900 mb-3">Adaptive Speaking Engine</h3>
+            <p className="text-base text-charcoal-600 leading-relaxed">
+              Personalized conversation practice that matches your level
+            </p>
+          </div>
+
+          <div className="text-center">
+            <div className="w-16 h-16 rounded-xl bg-deep-blue-50 flex items-center justify-center mx-auto mb-6">
+              <Cpu className="w-8 h-8 text-deep-blue-600" strokeWidth={1.5} />
+            </div>
+            <h3 className="text-xl font-semibold text-charcoal-900 mb-3">Human-Level Corrections</h3>
+            <p className="text-base text-charcoal-600 leading-relaxed">
+              Grammar, vocabulary, and fluency feedback in real-time
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Your Daily Practice Header */}
+      <div className="text-center mb-20">
+        <h2 className="text-5xl font-bold text-charcoal-900 mb-6">Your Daily Practice</h2>
+        <p className="text-lg text-charcoal-600 max-w-2xl mx-auto">
+          Each activity uses AI to personalize your learning path
         </p>
-        <Button
-          size="lg"
-          onClick={() => handleStepClick("review", "/review")}
-          className="text-base font-semibold px-8 py-3"
-        >
-          Start Session
-          <ArrowRight className="ml-2 w-5 h-5" />
-        </Button>
       </div>
 
       {/* Progress Indicator - Clean and minimal */}
       <div className="mb-20">
         <div className="flex items-center justify-between mb-4">
-          <span className="text-sm font-medium text-gray-500">Progress</span>
-          <span className="text-sm text-gray-400">
-            {completedSteps.size} of {steps.length}
+          <span className="text-sm font-medium text-charcoal-500">Session Progress</span>
+          <span className="text-sm text-charcoal-400">
+            {completedSteps.size} of {steps.length} completed
           </span>
         </div>
-        <div className="w-full bg-gray-100 rounded-full h-1.5">
+        <div className="w-full bg-charcoal-100 rounded-full h-1.5">
           <div
-            className="h-1.5 rounded-full bg-gray-900 transition-all duration-700 ease-out"
+            className="h-1.5 rounded-full bg-deep-blue-600 transition-all duration-700 ease-out"
             style={{ width: `${progressPercentage}%` }}
           />
         </div>
       </div>
 
-      {/* Activity Cards - Structured grid with proper card design */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {/* Activity Cards - With AI Benefits */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-32">
         {steps.map((step, index) => {
           const isCompleted = completedSteps.has(step.id);
           const isCurrent = currentStep === step.id;
@@ -181,30 +234,147 @@ export default function DailySession() {
 
               {/* Content */}
               <div className="mb-6">
-                <h3 className="text-2xl font-semibold text-gray-900 mb-2">
+                <h3 className="text-2xl font-semibold text-charcoal-900 mb-2">
                   {step.title}
                 </h3>
-                <p className="text-base text-gray-600 leading-relaxed">
+                <p className="text-base text-charcoal-600 leading-relaxed mb-3">
                   {step.description}
                 </p>
+                <div className="flex items-start gap-2">
+                  <Cpu className="w-4 h-4 text-deep-blue-600 mt-0.5 flex-shrink-0" strokeWidth={1.5} />
+                  <p className="text-sm text-deep-blue-700 italic">
+                    {step.aiBenefit}
+                  </p>
+                </div>
               </div>
 
               {/* Footer */}
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-500">{step.time}</span>
+                <span className="text-sm text-charcoal-500">{step.time}</span>
                 {!isLocked && !isCompleted && (
-                  <div className="flex items-center gap-2 text-gray-900 font-medium text-sm">
+                  <div className="flex items-center gap-2 text-deep-blue-600 font-medium text-sm">
                     <span>Start</span>
                     <ArrowRight className="w-4 h-4" strokeWidth={2} />
                   </div>
                 )}
                 {isCompleted && (
-                  <span className="text-sm text-gray-900 font-medium">✓ Complete</span>
+                  <span className="text-sm text-deep-blue-600 font-medium flex items-center gap-1">
+                    <Check className="w-4 h-4" />
+                    Complete
+                  </span>
                 )}
               </div>
             </button>
           );
         })}
+      </div>
+
+      {/* Social Proof */}
+      <div className="bg-charcoal-50 -mx-8 px-8 py-24 mb-32">
+        <div className="max-w-container mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-charcoal-900 mb-4">Trusted by learners worldwide</h2>
+            <p className="text-lg text-charcoal-600">Used by students in 32 countries</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="bg-white border border-charcoal-200 rounded-xl p-8">
+              <p className="text-base text-charcoal-700 leading-relaxed mb-6">
+                "This is the first AI tutor that actually corrects my grammar like a real teacher. The feedback is instant and precise."
+              </p>
+              <p className="text-sm text-charcoal-600 font-medium">— Maria, Spain</p>
+            </div>
+
+            <div className="bg-white border border-charcoal-200 rounded-xl p-8">
+              <p className="text-base text-charcoal-700 leading-relaxed mb-6">
+                "I've tried every language app. Vorex is different - it adapts to my mistakes and actually helps me improve."
+              </p>
+              <p className="text-sm text-charcoal-600 font-medium">— Takeshi, Japan</p>
+            </div>
+
+            <div className="bg-white border border-charcoal-200 rounded-xl p-8">
+              <p className="text-base text-charcoal-700 leading-relaxed mb-6">
+                "The AI understands context and gives me corrections I can actually use. It's like having a tutor 24/7."
+              </p>
+              <p className="text-sm text-charcoal-600 font-medium">— Luis, Brazil</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* What Powers Vorex */}
+      <div className="mb-32">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold text-charcoal-900 mb-4">What Powers Vorex</h2>
+          <p className="text-lg text-charcoal-600 max-w-2xl mx-auto">
+            Trained on advanced linguistic models built for spoken English mastery
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="bg-white border border-charcoal-200 rounded-xl p-8">
+            <h3 className="text-xl font-semibold text-charcoal-900 mb-3">Pronunciation Engine</h3>
+            <p className="text-base text-charcoal-600 leading-relaxed">
+              Real-time analysis of speech patterns with phonetic-level correction
+            </p>
+          </div>
+
+          <div className="bg-white border border-charcoal-200 rounded-xl p-8">
+            <h3 className="text-xl font-semibold text-charcoal-900 mb-3">Semantic Correction</h3>
+            <p className="text-base text-charcoal-600 leading-relaxed">
+              Context-aware grammar and vocabulary feedback that understands meaning
+            </p>
+          </div>
+
+          <div className="bg-white border border-charcoal-200 rounded-xl p-8">
+            <h3 className="text-xl font-semibold text-charcoal-900 mb-3">Personalized Pacing</h3>
+            <p className="text-base text-charcoal-600 leading-relaxed">
+              Adaptive difficulty that matches your current level and learning speed
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Pricing */}
+      <div className="bg-deep-blue-900 -mx-8 px-8 py-24 text-white">
+        <div className="max-w-container mx-auto text-center">
+          <h2 className="text-4xl font-bold mb-4">Pro Fluency Plan</h2>
+          <p className="text-xl text-deep-blue-100 mb-12 max-w-xl mx-auto">
+            Unlimited access to all features
+          </p>
+
+          <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-12 max-w-md mx-auto mb-12">
+            <div className="mb-8">
+              <span className="text-5xl font-bold">$29</span>
+              <span className="text-deep-blue-100">/month</span>
+            </div>
+
+            <div className="space-y-4 mb-8 text-left">
+              <div className="flex items-center gap-3">
+                <Check className="w-5 h-5 text-deep-blue-300 flex-shrink-0" />
+                <span className="text-base">Unlimited AI tutoring sessions</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <Check className="w-5 h-5 text-deep-blue-300 flex-shrink-0" />
+                <span className="text-base">Personalized error tracking</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <Check className="w-5 h-5 text-deep-blue-300 flex-shrink-0" />
+                <span className="text-base">Advanced pronunciation feedback</span>
+              </div>
+            </div>
+
+            <Button
+              size="lg"
+              onClick={() => router.push("/profile")}
+              className="w-full text-base font-semibold px-8 py-3 bg-white text-deep-blue-900 hover:bg-deep-blue-50"
+            >
+              Get Started
+            </Button>
+          </div>
+
+          <p className="text-sm text-deep-blue-200">7-day money-back guarantee</p>
+        </div>
       </div>
     </div>
   );

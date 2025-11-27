@@ -6,7 +6,7 @@ import { apiClient } from "@/lib/api-client";
 import { ErrorStatsResponse, SrsStatsResponse, WeakSkillsResponse, StreakResponse, UserProfileResponse } from "@/lib/types";
 import SessionSummary from "./SessionSummary";
 import DailyGoalCard from "@/components/daily-goal-card";
-import { CheckCircle2, Circle, X } from "lucide-react";
+import { CheckCircle2, Circle, X, BookOpen, Target, FolderOpen, Flame } from "lucide-react";
 
 export default function Dashboard() {
   const [loading, setLoading] = useState(true);
@@ -200,10 +200,10 @@ export default function Dashboard() {
             Dashboard
           </h2>
           {streak && streak.current_streak > 0 && (
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-full">
-              <span className="text-2xl">🔥</span>
-              <span className="text-gray-900 font-bold text-lg">{streak.current_streak}</span>
-              <span className="text-gray-600 text-sm">day streak</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-deep-blue-200 rounded-full">
+              <Flame className="w-5 h-5 text-deep-blue-600" />
+              <span className="text-deep-blue-900 font-bold text-lg">{streak.current_streak}</span>
+              <span className="text-charcoal-600 text-sm">day streak</span>
             </div>
           )}
         </div>
@@ -220,11 +220,13 @@ export default function Dashboard() {
         {/* Cards Reviewed */}
         <div className="bg-white border border-gray-200 rounded-xl p-8 hover:border-gray-300 hover:shadow-md transition-all duration-200">
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-sm font-medium text-gray-600">Cards Reviewed Today</h3>
-            <span className="text-3xl">📚</span>
+            <h3 className="text-sm font-medium text-charcoal-600">Cards Reviewed Today</h3>
+            <div className="w-10 h-10 rounded-lg bg-deep-blue-50 flex items-center justify-center">
+              <BookOpen className="w-5 h-5 text-deep-blue-600" strokeWidth={1.5} />
+            </div>
           </div>
-          <p className="text-6xl font-bold text-gray-900 mb-2">{srsStats?.reviewed_today || 0}</p>
-          <p className="text-sm text-gray-500">
+          <p className="text-6xl font-bold text-charcoal-900 mb-2">{srsStats?.reviewed_today || 0}</p>
+          <p className="text-sm text-charcoal-500">
             {srsStats?.due_today || 0} cards due today
           </p>
         </div>
@@ -232,13 +234,15 @@ export default function Dashboard() {
         {/* Accuracy */}
         <div className="bg-white border border-gray-200 rounded-xl p-8 hover:border-gray-300 hover:shadow-md transition-all duration-200">
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-sm font-medium text-gray-600">Success Rate Today</h3>
-            <span className="text-3xl">🎯</span>
+            <h3 className="text-sm font-medium text-charcoal-600">Success Rate Today</h3>
+            <div className="w-10 h-10 rounded-lg bg-deep-blue-50 flex items-center justify-center">
+              <Target className="w-5 h-5 text-deep-blue-600" strokeWidth={1.5} />
+            </div>
           </div>
-          <p className="text-6xl font-bold text-gray-900 mb-2">
+          <p className="text-6xl font-bold text-charcoal-900 mb-2">
             {srsStats?.success_rate_today.toFixed(1) || 0}%
           </p>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-charcoal-500">
             Quality score ≥ 3
           </p>
         </div>
@@ -246,11 +250,13 @@ export default function Dashboard() {
         {/* Total Cards */}
         <div className="bg-white border border-gray-200 rounded-xl p-8 hover:border-gray-300 hover:shadow-md transition-all duration-200">
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-sm font-medium text-gray-600">Total SRS Cards</h3>
-            <span className="text-3xl">🗂️</span>
+            <h3 className="text-sm font-medium text-charcoal-600">Total SRS Cards</h3>
+            <div className="w-10 h-10 rounded-lg bg-deep-blue-50 flex items-center justify-center">
+              <FolderOpen className="w-5 h-5 text-deep-blue-600" strokeWidth={1.5} />
+            </div>
           </div>
-          <p className="text-6xl font-bold text-gray-900 mb-2">{srsStats?.total_cards || 0}</p>
-          <p className="text-sm text-gray-500">
+          <p className="text-6xl font-bold text-charcoal-900 mb-2">{srsStats?.total_cards || 0}</p>
+          <p className="text-sm text-charcoal-500">
             Errors tracked: {errorStats?.total_errors || 0}
           </p>
         </div>

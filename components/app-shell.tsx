@@ -4,6 +4,7 @@ import React from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useState } from "react";
 import { Header } from "@/components/header";
+import { Footer } from "@/components/footer";
 import AuthForm from "@/app/components/AuthForm";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
@@ -33,18 +34,20 @@ export function AppShell({ children }: AppShellProps) {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white flex flex-col">
       <Header
         isAuthenticated={!!user}
         onSignOut={handleSignOut}
         onSignIn={() => setShowAuthModal(true)}
       />
 
-      <main className="py-24">
+      <main className="flex-1 py-24">
         <div className="mx-auto max-w-container px-8">
           {children}
         </div>
       </main>
+
+      <Footer />
 
       {/* Auth Modal */}
       {showAuthModal && (

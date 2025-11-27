@@ -47,41 +47,58 @@ const config: Config = {
         64: "256px",
       },
 
-      // Premium color system
+      // Premium AI-first color system
       colors: {
-        // Near blacks and grays
+        // Off-white and charcoal base
+        white: "#FFFFFF",
+        "off-white": "#FAFAF9",
         black: "#000000",
-        gray: {
-          50: "#FAFAFA",
-          100: "#F5F5F5",
-          200: "#E5E5E5",
+        charcoal: {
+          50: "#F8F8F8",
+          100: "#F0F0F0",
+          200: "#E4E4E4",
           300: "#D1D1D1",
-          400: "#A8A8A8",
-          500: "#737373",
-          600: "#525252",
-          700: "#424242",
-          800: "#292929",
-          900: "#1A1A1A",
+          400: "#9CA3AF",
+          500: "#6B7280",
+          600: "#4B5563",
+          700: "#374151",
+          800: "#1F2937",
+          900: "#111827",
           950: "#0A0A0A",
         },
-        // Apple-inspired blue
-        primary: {
-          DEFAULT: "#0071E3",
-          50: "#F0F9FF",
-          100: "#E0F2FE",
-          200: "#B9E6FE",
-          300: "#7DD3FC",
-          400: "#38BDF8",
-          500: "#0EA5E9",
-          600: "#0071E3",
-          700: "#0066CC",
-          800: "#075985",
-          900: "#0C4A6E",
+        // Deep blue accent - AI positioning
+        "deep-blue": {
+          DEFAULT: "#0F172A",
+          50: "#F8FAFC",
+          100: "#F1F5F9",
+          200: "#E2E8F0",
+          300: "#CBD5E1",
+          400: "#94A3B8",
+          500: "#64748B",
+          600: "#475569",
+          700: "#334155",
+          800: "#1E293B",
+          900: "#0F172A",
+          950: "#020617",
         },
-        // Semantic
-        success: "#10B981",
-        warning: "#F59E0B",
-        error: "#EF4444",
+        // Semantic - muted for sophistication
+        success: "#059669",
+        warning: "#D97706",
+        error: "#DC2626",
+        // Legacy gray mapping (for gradual migration)
+        gray: {
+          50: "#F8F8F8",
+          100: "#F0F0F0",
+          200: "#E4E4E4",
+          300: "#D1D1D1",
+          400: "#9CA3AF",
+          500: "#6B7280",
+          600: "#4B5563",
+          700: "#374151",
+          800: "#1F2937",
+          900: "#111827",
+          950: "#0A0A0A",
+        },
       },
 
       // Premium typography scale with line heights
