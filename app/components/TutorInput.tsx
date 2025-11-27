@@ -39,32 +39,32 @@ export default function TutorInput({ onResponse }: TutorInputProps) {
   };
 
   return (
-    <div className="max-w-3xl mx-auto">
-      <form onSubmit={handleSubmit} className="space-y-5 bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/[0.08] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] p-7">
+    <div className="max-w-[1200px] mx-auto px-8">
+      <form onSubmit={handleSubmit} className="space-y-8 bg-white border border-gray-200 rounded-xl p-10">
         <div>
-          <label className="block text-sm font-medium text-white/70 mb-2">
+          <label className="block text-sm font-medium text-gray-600 mb-2">
             Practice your English
           </label>
           <textarea
             value={text}
             onChange={(e) => setText(e.target.value)}
             placeholder="Write something in English... (e.g., 'I want order coffee.')"
-            className="w-full px-4 py-3 bg-white/[0.05] border border-white/[0.12] rounded-lg text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 resize-none disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full px-4 py-3 bg-white border border-gray-200 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-gray-900 resize-none disabled:opacity-50 disabled:cursor-not-allowed"
             rows={5}
             disabled={loading}
           />
         </div>
 
         {error && (
-          <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400">
-            <p className="text-sm">{error}</p>
+          <div className="p-10 bg-white border border-gray-200 rounded-xl text-red-600">
+            <p className="text-lg">{error}</p>
           </div>
         )}
 
         <button
           type="submit"
           disabled={loading || !text.trim()}
-          className="w-full px-6 py-3 bg-gradient-to-r from-indigo-500 to-rose-500 text-white font-medium rounded-lg hover:from-indigo-600 hover:to-rose-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
+          className="w-full px-6 py-3 bg-gray-900 text-white font-medium rounded-lg hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-900 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
         >
           {loading ? "Analyzing..." : "Submit"}
         </button>

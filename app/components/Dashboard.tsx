@@ -50,16 +50,16 @@ export default function Dashboard() {
 
   if (loading) {
     return (
-      <div className="max-w-6xl mx-auto p-6 text-center">
-        <div className="text-white/60">Loading dashboard...</div>
+      <div className="max-w-[1200px] mx-auto px-8 text-center">
+        <div className="text-gray-600">Loading dashboard...</div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="max-w-6xl mx-auto p-6">
-        <div className="p-5 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 backdrop-blur-sm">
+      <div className="max-w-[1200px] mx-auto px-8">
+        <div className="p-10 bg-white border border-gray-200 rounded-xl text-red-600">
           {error}
         </div>
       </div>
@@ -102,81 +102,81 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto space-y-10">
+    <div className="max-w-[1200px] mx-auto px-8 space-y-[80px]">
       {/* Onboarding Checklist */}
       {!isOnboardingComplete && showOnboarding && (
-        <div className="bg-gradient-to-r from-indigo-500/10 to-rose-500/10 backdrop-blur-md rounded-2xl border border-indigo-500/30 shadow-[0_8px_32px_0_rgba(99,102,241,0.15)] p-6">
-          <div className="flex items-start justify-between mb-4">
+        <div className="bg-white border border-gray-200 rounded-xl p-10">
+          <div className="flex items-start justify-between mb-8">
             <div>
-              <h3 className="text-2xl font-bold text-white mb-2">Welcome to SpeakSharp! 👋</h3>
-              <p className="text-white/70">Complete these steps to get started:</p>
+              <h3 className="text-3xl font-bold text-gray-900 mb-2">Welcome to SpeakSharp!</h3>
+              <p className="text-lg text-gray-600">Complete these steps to get started:</p>
             </div>
             <button
               onClick={() => setShowOnboarding(false)}
-              className="text-white/50 hover:text-white transition-colors"
+              className="text-gray-500 hover:text-gray-900 transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
           </div>
 
-          <div className="space-y-3">
+          <div className="space-y-8">
             {/* Placement Test */}
             <Link
               href="/placement-test"
-              className={`flex items-center gap-3 p-4 rounded-xl border transition-all ${
+              className={`flex items-center gap-3 p-10 rounded-xl border transition-all ${
                 hasCompletedPlacementTest
-                  ? "bg-green-500/10 border-green-500/30 cursor-default"
-                  : "bg-white/[0.05] border-white/[0.12] hover:bg-white/[0.08]"
+                  ? "bg-white border-gray-200 cursor-default"
+                  : "bg-white border-gray-200 hover:border-gray-300"
               }`}
             >
               {hasCompletedPlacementTest ? (
-                <CheckCircle2 className="w-5 h-5 text-green-400 flex-shrink-0" />
+                <CheckCircle2 className="w-5 h-5 text-gray-900 flex-shrink-0" />
               ) : (
-                <Circle className="w-5 h-5 text-white/40 flex-shrink-0" />
+                <Circle className="w-5 h-5 text-gray-400 flex-shrink-0" />
               )}
               <div className="flex-1">
-                <div className="text-white font-medium">Take Placement Test</div>
-                <div className="text-sm text-white/50">Find your English level (5 min)</div>
+                <div className="text-lg text-gray-900 font-medium">Take Placement Test</div>
+                <div className="text-sm text-gray-600">Find your English level (5 min)</div>
               </div>
             </Link>
 
             {/* Complete Profile */}
             <Link
               href="/profile"
-              className={`flex items-center gap-3 p-4 rounded-xl border transition-all ${
+              className={`flex items-center gap-3 p-10 rounded-xl border transition-all ${
                 hasCompletedProfile
-                  ? "bg-green-500/10 border-green-500/30 cursor-default"
-                  : "bg-white/[0.05] border-white/[0.12] hover:bg-white/[0.08]"
+                  ? "bg-white border-gray-200 cursor-default"
+                  : "bg-white border-gray-200 hover:border-gray-300"
               }`}
             >
               {hasCompletedProfile ? (
-                <CheckCircle2 className="w-5 h-5 text-green-400 flex-shrink-0" />
+                <CheckCircle2 className="w-5 h-5 text-gray-900 flex-shrink-0" />
               ) : (
-                <Circle className="w-5 h-5 text-white/40 flex-shrink-0" />
+                <Circle className="w-5 h-5 text-gray-400 flex-shrink-0" />
               )}
               <div className="flex-1">
-                <div className="text-white font-medium">Complete Your Profile</div>
-                <div className="text-sm text-white/50">Add your name and country</div>
+                <div className="text-lg text-gray-900 font-medium">Complete Your Profile</div>
+                <div className="text-sm text-gray-600">Add your name and country</div>
               </div>
             </Link>
 
             {/* First Lesson */}
             <Link
               href="/lessons"
-              className={`flex items-center gap-3 p-4 rounded-xl border transition-all ${
+              className={`flex items-center gap-3 p-10 rounded-xl border transition-all ${
                 hasCompletedFirstLesson
-                  ? "bg-green-500/10 border-green-500/30 cursor-default"
-                  : "bg-white/[0.05] border-white/[0.12] hover:bg-white/[0.08]"
+                  ? "bg-white border-gray-200 cursor-default"
+                  : "bg-white border-gray-200 hover:border-gray-300"
               }`}
             >
               {hasCompletedFirstLesson ? (
-                <CheckCircle2 className="w-5 h-5 text-green-400 flex-shrink-0" />
+                <CheckCircle2 className="w-5 h-5 text-gray-900 flex-shrink-0" />
               ) : (
-                <Circle className="w-5 h-5 text-white/40 flex-shrink-0" />
+                <Circle className="w-5 h-5 text-gray-400 flex-shrink-0" />
               )}
               <div className="flex-1">
-                <div className="text-white font-medium">Complete Your First Lesson</div>
-                <div className="text-sm text-white/50">Start learning with AI-powered lessons</div>
+                <div className="text-lg text-gray-900 font-medium">Complete Your First Lesson</div>
+                <div className="text-sm text-gray-600">Start learning with AI-powered lessons</div>
               </div>
             </Link>
           </div>
@@ -185,9 +185,9 @@ export default function Dashboard() {
           {hasCompletedPlacementTest && hasCompletedProfile && hasCompletedFirstLesson && (
             <button
               onClick={handleCompleteOnboarding}
-              className="mt-4 w-full px-6 py-3 bg-gradient-to-r from-indigo-500 to-rose-500 text-white font-medium rounded-lg hover:from-indigo-600 hover:to-rose-600 transition-all duration-300"
+              className="mt-8 w-full px-6 py-3 bg-gray-900 text-white font-medium rounded-lg hover:bg-gray-800 transition-all duration-300"
             >
-              ✨ Complete Onboarding
+              Complete Onboarding
             </button>
           )}
         </div>
@@ -195,60 +195,60 @@ export default function Dashboard() {
 
       {/* Header */}
       <div className="text-center">
-        <div className="flex items-center justify-center gap-4 mb-3">
-          <h2 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 via-white/90 to-rose-300">
+        <div className="flex items-center justify-center gap-4 mb-8">
+          <h2 className="text-6xl font-bold text-gray-900">
             Dashboard
           </h2>
           {streak && streak.current_streak > 0 && (
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-500/20 to-red-500/20 border border-orange-500/30 rounded-full">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-full">
               <span className="text-2xl">🔥</span>
-              <span className="text-white font-bold text-lg">{streak.current_streak}</span>
-              <span className="text-white/70 text-sm">day streak</span>
+              <span className="text-gray-900 font-bold text-lg">{streak.current_streak}</span>
+              <span className="text-gray-600 text-sm">day streak</span>
             </div>
           )}
         </div>
-        <p className="text-white/50 text-lg">Your learning progress at a glance</p>
+        <p className="text-lg text-gray-600">Your learning progress at a glance</p>
       </div>
 
       {/* Session Summary */}
       <SessionSummary />
 
       {/* Today Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {/* Cards Reviewed */}
-        <div className="bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/[0.08] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] p-7 hover:bg-white/[0.05] transition-all duration-300">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-sm font-medium text-white/60">Cards Reviewed Today</h3>
+        <div className="bg-white border border-gray-200 rounded-xl p-10 hover:border-gray-300 transition-all duration-300">
+          <div className="flex items-center justify-between mb-8">
+            <h3 className="text-sm font-medium text-gray-600">Cards Reviewed Today</h3>
             <span className="text-3xl">📚</span>
           </div>
-          <p className="text-4xl font-bold text-white">{srsStats?.reviewed_today || 0}</p>
-          <p className="text-xs text-white/40 mt-2">
+          <p className="text-6xl font-bold text-gray-900">{srsStats?.reviewed_today || 0}</p>
+          <p className="text-sm text-gray-500 mt-2">
             {srsStats?.due_today || 0} cards due today
           </p>
         </div>
 
         {/* Accuracy */}
-        <div className="bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/[0.08] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] p-7 hover:bg-white/[0.05] transition-all duration-300">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-sm font-medium text-white/60">Success Rate Today</h3>
+        <div className="bg-white border border-gray-200 rounded-xl p-10 hover:border-gray-300 transition-all duration-300">
+          <div className="flex items-center justify-between mb-8">
+            <h3 className="text-sm font-medium text-gray-600">Success Rate Today</h3>
             <span className="text-3xl">🎯</span>
           </div>
-          <p className="text-4xl font-bold text-white">
+          <p className="text-6xl font-bold text-gray-900">
             {srsStats?.success_rate_today.toFixed(1) || 0}%
           </p>
-          <p className="text-xs text-white/40 mt-2">
+          <p className="text-sm text-gray-500 mt-2">
             Quality score ≥ 3
           </p>
         </div>
 
         {/* Total Cards */}
-        <div className="bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/[0.08] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] p-7 hover:bg-white/[0.05] transition-all duration-300">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-sm font-medium text-white/60">Total SRS Cards</h3>
+        <div className="bg-white border border-gray-200 rounded-xl p-10 hover:border-gray-300 transition-all duration-300">
+          <div className="flex items-center justify-between mb-8">
+            <h3 className="text-sm font-medium text-gray-600">Total SRS Cards</h3>
             <span className="text-3xl">🗂️</span>
           </div>
-          <p className="text-4xl font-bold text-white">{srsStats?.total_cards || 0}</p>
-          <p className="text-xs text-white/40 mt-2">
+          <p className="text-6xl font-bold text-gray-900">{srsStats?.total_cards || 0}</p>
+          <p className="text-sm text-gray-500 mt-2">
             Errors tracked: {errorStats?.total_errors || 0}
           </p>
         </div>
@@ -258,11 +258,11 @@ export default function Dashboard() {
       <DailyGoalCard />
 
       {/* Error Breakdown */}
-      <div className="bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/[0.08] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] p-7">
-        <h3 className="text-xl font-semibold text-white mb-6">Error Breakdown</h3>
+      <div className="bg-white border border-gray-200 rounded-xl p-10">
+        <h3 className="text-3xl font-semibold text-gray-900 mb-8">Error Breakdown</h3>
 
         {errorStats && Object.keys(errorStats.errors_by_type).length > 0 ? (
-          <div className="space-y-4">
+          <div className="space-y-8">
             {Object.entries(errorStats.errors_by_type)
               .sort(([, a], [, b]) => b - a)
               .map(([type, count]) => {
@@ -270,14 +270,14 @@ export default function Dashboard() {
                 return (
                   <div key={type}>
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-medium text-white/80">
+                      <span className="text-lg font-medium text-gray-900">
                         {errorTypeLabels[type] || type}
                       </span>
-                      <span className="text-sm text-white/60">
+                      <span className="text-sm text-gray-600">
                         {count} ({percentage}%)
                       </span>
                     </div>
-                    <div className="w-full bg-white/[0.05] rounded-full h-2.5">
+                    <div className="w-full bg-gray-200 rounded-full h-2.5">
                       <div
                         className={`h-2.5 rounded-full ${errorTypeColors[type] || "bg-gray-500"}`}
                         style={{ width: `${percentage}%` }}
@@ -288,43 +288,43 @@ export default function Dashboard() {
               })}
           </div>
         ) : (
-          <p className="text-white/40 text-center py-6">No errors recorded yet</p>
+          <p className="text-gray-500 text-center py-6">No errors recorded yet</p>
         )}
       </div>
 
       {/* Weakest Skills */}
-      <div className="bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/[0.08] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] p-7">
-        <h3 className="text-xl font-semibold text-white mb-6">Areas to Improve</h3>
+      <div className="bg-white border border-gray-200 rounded-xl p-10">
+        <h3 className="text-3xl font-semibold text-gray-900 mb-8">Areas to Improve</h3>
 
         {weakSkills && weakSkills.skills.length > 0 ? (
-          <div className="space-y-4">
+          <div className="space-y-8">
             {weakSkills.skills.map((skill, index) => (
               <div
                 key={skill.skill_key}
-                className="p-5 bg-white/[0.05] rounded-xl border border-white/[0.08] hover:bg-white/[0.08] transition-all duration-300"
+                className="p-10 bg-white border border-gray-200 rounded-xl hover:border-gray-300 transition-all duration-300"
               >
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center space-x-2 mb-2">
-                      <span className="text-lg font-semibold text-white/70">
+                      <span className="text-lg font-semibold text-gray-600">
                         #{index + 1}
                       </span>
-                      <h4 className="text-base font-medium text-white">
+                      <h4 className="text-lg font-medium text-gray-900">
                         {skill.skill_key}
                       </h4>
                     </div>
-                    <p className="text-xs text-white/50 mb-3">
+                    <p className="text-sm text-gray-500 mb-8">
                       Category: {skill.skill_category}
                     </p>
                     <div className="flex items-center space-x-6 text-sm">
-                      <span className="text-white/60">
-                        Mastery: <span className="font-medium text-white/90">{skill.mastery_score.toFixed(1)}%</span>
+                      <span className="text-gray-600">
+                        Mastery: <span className="font-medium text-gray-900">{skill.mastery_score.toFixed(1)}%</span>
                       </span>
-                      <span className="text-white/60">
-                        Errors: <span className="font-medium text-red-400">{skill.error_count}</span>
+                      <span className="text-gray-600">
+                        Errors: <span className="font-medium text-red-600">{skill.error_count}</span>
                       </span>
-                      <span className="text-white/60">
-                        Practice: <span className="font-medium text-blue-400">{skill.practice_count}</span>
+                      <span className="text-gray-600">
+                        Practice: <span className="font-medium text-blue-600">{skill.practice_count}</span>
                       </span>
                     </div>
                   </div>
@@ -333,26 +333,26 @@ export default function Dashboard() {
             ))}
           </div>
         ) : (
-          <p className="text-white/40 text-center py-6">No skill data available yet</p>
+          <p className="text-gray-500 text-center py-6">No skill data available yet</p>
         )}
       </div>
 
       {/* Recent Errors */}
-      <div className="bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/[0.08] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] p-7">
-        <h3 className="text-xl font-semibold text-white mb-6">Recent Errors</h3>
+      <div className="bg-white border border-gray-200 rounded-xl p-10">
+        <h3 className="text-3xl font-semibold text-gray-900 mb-8">Recent Errors</h3>
 
         {errorStats && errorStats.last_errors.length > 0 ? (
-          <div className="space-y-4">
+          <div className="space-y-8">
             {errorStats.last_errors.map((error, index) => (
               <div
                 key={index}
-                className="p-5 bg-white/[0.05] rounded-xl border border-white/[0.08] hover:bg-white/[0.08] transition-all duration-300"
+                className="p-10 bg-white border border-gray-200 rounded-xl hover:border-gray-300 transition-all duration-300"
               >
-                <div className="flex items-start justify-between mb-3">
-                  <span className="inline-block px-3 py-1 text-xs font-medium rounded-lg bg-red-500/20 text-red-300 border border-red-500/30">
+                <div className="flex items-start justify-between mb-8">
+                  <span className="inline-block px-3 py-1 text-sm font-medium rounded-lg bg-white text-red-600 border border-gray-200">
                     {errorTypeLabels[error.type] || error.type}
                   </span>
-                  <span className="text-xs text-white/50">
+                  <span className="text-sm text-gray-500">
                     {new Date(error.timestamp).toLocaleDateString()} at{" "}
                     {new Date(error.timestamp).toLocaleTimeString([], {
                       hour: '2-digit',
@@ -361,26 +361,26 @@ export default function Dashboard() {
                   </span>
                 </div>
 
-                <div className="space-y-3">
+                <div className="space-y-8">
                   <div className="flex items-start space-x-2">
-                    <span className="text-red-400 font-medium text-sm mt-1">✗</span>
-                    <p className="text-white/60 line-through flex-1">{error.before_text}</p>
+                    <span className="text-red-600 font-medium text-sm mt-1">✗</span>
+                    <p className="text-lg text-gray-600 line-through flex-1">{error.before_text}</p>
                   </div>
 
                   <div className="flex items-start space-x-2">
-                    <span className="text-green-400 font-medium text-sm mt-1">✓</span>
-                    <p className="text-white font-medium flex-1">{error.after_text}</p>
+                    <span className="text-green-600 font-medium text-sm mt-1">✓</span>
+                    <p className="text-lg text-gray-900 font-medium flex-1">{error.after_text}</p>
                   </div>
 
-                  <div className="pl-6 pt-3 border-t border-white/[0.08]">
-                    <p className="text-sm text-white/60 italic">{error.explanation}</p>
+                  <div className="pl-6 pt-8 border-t border-gray-200">
+                    <p className="text-lg text-gray-600 italic">{error.explanation}</p>
                   </div>
                 </div>
               </div>
             ))}
           </div>
         ) : (
-          <p className="text-white/40 text-center py-6">No errors recorded yet</p>
+          <p className="text-gray-500 text-center py-6">No errors recorded yet</p>
         )}
       </div>
     </div>

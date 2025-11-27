@@ -405,10 +405,10 @@ export default function VoiceTutorPanel() {
 
   if (!user) {
     return (
-      <div className="max-w-4xl mx-auto">
-        <div className="bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/[0.08] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] p-7">
-          <h3 className="text-xl font-bold text-white mb-3">🎤 Voice Tutor</h3>
-          <p className="text-white/60 text-sm">
+      <div className="max-w-[1200px] mx-auto px-8">
+        <div className="bg-white border border-gray-200 rounded-xl p-10">
+          <h3 className="text-3xl font-bold text-gray-900 mb-8">Voice Tutor</h3>
+          <p className="text-lg text-gray-600">
             Sign in to access voice-based practice with AI feedback.
           </p>
         </div>
@@ -418,11 +418,11 @@ export default function VoiceTutorPanel() {
 
   if (!browserSupported) {
     return (
-      <div className="max-w-4xl mx-auto">
-        <div className="bg-red-500/10 border border-red-500/20 rounded-2xl p-7">
-          <h3 className="text-xl font-bold text-red-300 mb-3">🎤 Voice Recording Not Supported</h3>
-          <p className="text-red-200 mb-4">{supportError}</p>
-          <p className="text-red-200/70 text-sm">
+      <div className="max-w-[1200px] mx-auto px-8">
+        <div className="bg-red-50 border border-red-200 rounded-xl p-10">
+          <h3 className="text-3xl font-bold text-gray-900 mb-8">Voice Recording Not Supported</h3>
+          <p className="text-lg text-gray-900 mb-8">{supportError}</p>
+          <p className="text-lg text-gray-600">
             Please use Chrome or Safari on desktop for the best experience.
           </p>
         </div>
@@ -431,13 +431,13 @@ export default function VoiceTutorPanel() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="max-w-[1200px] mx-auto px-8 space-y-8">
       {/* Header */}
-      <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 via-white/90 to-rose-300 mb-3">
-          🎤 Voice Tutor
+      <div className="text-center mb-[80px]">
+        <h2 className="text-6xl font-bold text-gray-900 mb-8">
+          Voice Tutor
         </h2>
-        <p className="text-white/60">
+        <p className="text-lg text-gray-600">
           Practice speaking English and get instant AI feedback
         </p>
       </div>
@@ -464,7 +464,7 @@ export default function VoiceTutorPanel() {
       )}
 
       {/* Recording Interface */}
-      <div className="bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/[0.08] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] p-8">
+      <div className="bg-white border border-gray-200 hover:border-gray-300 rounded-xl p-10">
         {recordingState === "idle" && (
           <div className="text-center">
             <div className="mb-6">
@@ -485,17 +485,17 @@ export default function VoiceTutorPanel() {
               </div>
             </div>
 
-            <h3 className="text-xl font-bold text-white mb-2">
+            <h3 className="text-3xl font-bold text-gray-900 mb-8">
               Ready to practice speaking?
             </h3>
-            <p className="text-white/60 mb-6">
+            <p className="text-lg text-gray-600 mb-8">
               Click the button below to start recording your voice
             </p>
 
             <button
               onClick={startRecording}
               disabled={!browserSupported}
-              className="px-8 py-4 bg-gradient-to-r from-indigo-500 to-rose-500 text-white font-semibold rounded-lg hover:from-indigo-600 hover:to-rose-600 transition-all duration-300 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-8 py-4 bg-gray-900 text-white font-semibold rounded-lg hover:bg-gray-800 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Start Recording
             </button>
@@ -516,15 +516,15 @@ export default function VoiceTutorPanel() {
               </div>
             </div>
 
-            <h3 className="text-xl font-bold text-white mb-2">Recording...</h3>
-            <div className="text-4xl font-bold text-white mb-6">
+            <h3 className="text-3xl font-bold text-gray-900 mb-8">Recording...</h3>
+            <div className="text-6xl font-bold text-gray-900 mb-8">
               {formatTime(recordingTime)}
             </div>
-            <p className="text-white/60 mb-6">Speak naturally and clearly</p>
+            <p className="text-lg text-gray-600 mb-8">Speak naturally and clearly</p>
 
             <button
               onClick={stopRecording}
-              className="px-8 py-4 bg-gradient-to-r from-red-500 to-rose-500 text-white font-semibold rounded-lg hover:from-red-600 hover:to-rose-600 transition-all duration-300 shadow-lg"
+              className="px-8 py-4 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition-all duration-300"
             >
               Stop Recording
             </button>
@@ -539,27 +539,27 @@ export default function VoiceTutorPanel() {
               </div>
             </div>
 
-            <h3 className="text-xl font-bold text-white mb-2">
+            <h3 className="text-3xl font-bold text-gray-900 mb-8">
               Processing your speech...
             </h3>
-            <p className="text-white/60">
+            <p className="text-lg text-gray-600">
               AI is analyzing your pronunciation and grammar
             </p>
           </div>
         )}
 
         {recordingState === "complete" && response && (
-          <div className="space-y-6">
+          <div className="space-y-8">
             {/* Transcript */}
-            <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-6">
-              <h3 className="text-sm font-semibold text-blue-300 mb-2">
-                📝 What you said:
+            <div className="bg-blue-50 border border-blue-200 rounded-xl p-10">
+              <h3 className="text-sm font-semibold text-gray-900 mb-8">
+                What you said:
               </h3>
-              <p className="text-blue-200 text-lg">{response.transcript}</p>
+              <p className="text-gray-900 text-lg">{response.transcript}</p>
             </div>
 
             {/* Tutor Feedback */}
-            <div className="bg-green-500/10 border border-green-500/20 rounded-xl p-6">
+            <div className="bg-green-50 border border-green-200 rounded-xl p-10">
               <div className="flex items-start space-x-3">
                 <div className="flex-shrink-0">
                   <svg
@@ -577,29 +577,26 @@ export default function VoiceTutorPanel() {
                   </svg>
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-sm font-medium text-green-300 mb-1">
-                    💬 Tutor Feedback
+                  <h3 className="text-sm font-medium text-gray-900 mb-8">
+                    Tutor Feedback
                   </h3>
-                  <p className="text-green-200">{response.tutor_response.message}</p>
+                  <p className="text-gray-900">{response.tutor_response.message}</p>
                 </div>
               </div>
             </div>
 
             {/* Errors/Corrections */}
             {response.tutor_response.errors.length > 0 && (
-              <div className="space-y-3">
-                <h3 className="text-lg font-semibold text-white">
+              <div className="space-y-8">
+                <h3 className="text-3xl font-semibold text-gray-900">
                   Corrections ({response.tutor_response.errors.length})
                 </h3>
                 {response.tutor_response.errors.map((error, index) => (
                   <div
                     key={index}
-                    className={`p-5 border rounded-xl backdrop-blur-sm ${
-                      errorTypeColors[error.type] ||
-                      "bg-white/[0.05] text-white/70 border-white/[0.08]"
-                    }`}
+                    className="bg-white border border-gray-200 hover:border-gray-300 p-10 rounded-xl"
                   >
-                    <div className="space-y-3">
+                    <div className="space-y-8">
                       <div>
                         <p className="text-xs font-medium opacity-75 mb-1">
                           You said:
@@ -625,22 +622,22 @@ export default function VoiceTutorPanel() {
 
             {/* No errors */}
             {response.tutor_response.errors.length === 0 && (
-              <div className="p-5 bg-blue-500/10 border border-blue-500/20 rounded-xl backdrop-blur-sm">
-                <p className="text-blue-300 text-center">
-                  ✨ Perfect! No errors detected.
+              <div className="bg-blue-50 border border-blue-200 rounded-xl p-10">
+                <p className="text-gray-900 text-lg text-center">
+                  Perfect! No errors detected.
                 </p>
               </div>
             )}
 
             {/* Audio Response */}
             {response.audio_base64 && (
-              <div className="bg-purple-500/10 border border-purple-500/20 rounded-xl p-6">
+              <div className="bg-white border border-gray-200 hover:border-gray-300 rounded-xl p-10">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="text-sm font-semibold text-purple-300 mb-1">
-                      🔊 AI Voice Response
+                    <h3 className="text-sm font-semibold text-gray-900 mb-8">
+                      AI Voice Response
                     </h3>
-                    <p className="text-purple-200 text-sm">
+                    <p className="text-gray-600 text-lg">
                       Listen to the tutor's feedback
                     </p>
                   </div>
@@ -648,21 +645,21 @@ export default function VoiceTutorPanel() {
                     onClick={isPlayingAudio ? stopAudioPlayback : playAudioResponse}
                     className={`px-6 py-3 rounded-lg font-semibold transition-all duration-300 ${
                       isPlayingAudio
-                        ? "bg-red-500/20 text-red-300 border border-red-500/30 hover:bg-red-500/30"
-                        : "bg-purple-500/20 text-purple-300 border border-purple-500/30 hover:bg-purple-500/30"
+                        ? "bg-red-600 text-white hover:bg-red-700"
+                        : "bg-gray-900 text-white hover:bg-gray-800"
                     }`}
                   >
-                    {isPlayingAudio ? "⏸ Stop" : "▶ Play"}
+                    {isPlayingAudio ? "Stop" : "Play"}
                   </button>
                 </div>
               </div>
             )}
 
             {/* Actions */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-8">
               <button
                 onClick={reset}
-                className="flex-1 py-3 bg-gradient-to-r from-indigo-500 to-rose-500 text-white rounded-lg font-semibold hover:from-indigo-600 hover:to-rose-600 transition-all duration-300"
+                className="flex-1 py-3 bg-gray-900 text-white rounded-lg font-semibold hover:bg-gray-800 transition-all duration-300"
               >
                 Try Again
               </button>
@@ -673,7 +670,7 @@ export default function VoiceTutorPanel() {
 
       {/* Error Display */}
       {error && (
-        <div className="p-5 bg-red-500/10 border-2 border-red-500/30 rounded-xl">
+        <div className="bg-red-50 border border-red-200 rounded-xl p-10">
           <div className="flex items-start space-x-3">
             <svg
               className="w-6 h-6 text-red-400 flex-shrink-0"
@@ -689,8 +686,8 @@ export default function VoiceTutorPanel() {
               />
             </svg>
             <div className="flex-1">
-              <h4 className="text-red-300 font-semibold mb-1">Error</h4>
-              <p className="text-red-200">{error}</p>
+              <h4 className="text-gray-900 font-semibold text-lg mb-8">Error</h4>
+              <p className="text-gray-900">{error}</p>
             </div>
           </div>
         </div>
@@ -698,9 +695,9 @@ export default function VoiceTutorPanel() {
 
       {/* Tips */}
       {recordingState === "idle" && (
-        <div className="bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/[0.08] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] p-6">
-          <h4 className="text-sm font-semibold text-white/80 mb-3">💡 Tips for better results</h4>
-          <ul className="space-y-2 text-sm text-white/60">
+        <div className="bg-white border border-gray-200 hover:border-gray-300 rounded-xl p-10">
+          <h4 className="text-lg font-semibold text-gray-900 mb-8">Tips for better results</h4>
+          <ul className="space-y-8 text-lg text-gray-600">
             <li>• Speak clearly and at a moderate pace</li>
             <li>• Use a quiet environment with minimal background noise</li>
             <li>• Allow microphone access when prompted</li>

@@ -181,66 +181,66 @@ export default function DrillsPanel() {
   // List View
   if (viewMode === "list") {
     return (
-      <div className="max-w-5xl mx-auto space-y-6">
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 via-white/90 to-rose-300 mb-3">
-            💪 Practice Drills
+      <div className="max-w-[1200px] mx-auto px-8 space-y-8">
+        <div className="text-center mb-[80px]">
+          <h2 className="text-6xl font-bold text-gray-900 mb-8">
+            Practice Drills
           </h2>
-          <p className="text-white/60">
+          <p className="text-lg text-gray-600">
             Focused practice for speaking and writing skills
           </p>
         </div>
 
         {/* Mode Switcher */}
-        <div className="flex items-center justify-center gap-3">
+        <div className="flex items-center justify-center gap-8">
           <button
             onClick={() => setDrillMode("monologue")}
             className={`px-8 py-3 rounded-xl font-semibold transition-all duration-300 ${
               drillMode === "monologue"
-                ? "bg-gradient-to-r from-indigo-500 to-rose-500 text-white"
-                : "bg-white/[0.03] text-white/60 hover:text-white hover:bg-white/[0.05] border border-white/[0.08]"
+                ? "bg-gray-900 text-white"
+                : "bg-white border border-gray-200 text-gray-600 hover:text-gray-900 hover:border-gray-300"
             }`}
           >
-            🎙️ Monologue (Speaking)
+            Monologue (Speaking)
           </button>
           <button
             onClick={() => setDrillMode("journal")}
             className={`px-8 py-3 rounded-xl font-semibold transition-all duration-300 ${
               drillMode === "journal"
-                ? "bg-gradient-to-r from-indigo-500 to-rose-500 text-white"
-                : "bg-white/[0.03] text-white/60 hover:text-white hover:bg-white/[0.05] border border-white/[0.08]"
+                ? "bg-gray-900 text-white"
+                : "bg-white border border-gray-200 text-gray-600 hover:text-gray-900 hover:border-gray-300"
             }`}
           >
-            ✍️ Journal (Writing)
+            Journal (Writing)
           </button>
         </div>
 
         {error && (
-          <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400">
-            {error}
+          <div className="bg-red-50 border border-red-200 rounded-xl p-10">
+            <p className="text-gray-900 text-lg">{error}</p>
           </div>
         )}
 
         {/* Monologue Prompts */}
         {drillMode === "monologue" && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {monologuePrompts.map((prompt) => (
               <button
                 key={prompt.prompt_id}
                 onClick={() => startMonologue(prompt)}
-                className="bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/[0.08] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] p-6 hover:bg-white/[0.05] transition-all duration-300 text-left"
+                className="bg-white border border-gray-200 hover:border-gray-300 rounded-xl p-10 transition-all duration-300 text-left"
               >
-                <div className="flex items-start justify-between mb-3">
-                  <h3 className="text-lg font-semibold text-white flex-1">
+                <div className="flex items-start justify-between mb-8">
+                  <h3 className="text-lg font-semibold text-gray-900 flex-1">
                     {prompt.text}
                   </h3>
-                  <span className={`text-xs font-medium px-2 py-0.5 rounded border ${levelColors[prompt.level] || "bg-white/[0.05] text-white/60 border-white/[0.08]"}`}>
+                  <span className="text-sm font-medium px-2 py-1 rounded border border-gray-200 bg-gray-50 text-gray-900">
                     {prompt.level}
                   </span>
                 </div>
-                <div className="flex items-center justify-between text-sm text-white/60">
+                <div className="flex items-center justify-between text-lg text-gray-600">
                   <span className="capitalize">{prompt.category.replace(/_/g, " ")}</span>
-                  <span>⏱️ {formatTime(prompt.time_limit_seconds)}</span>
+                  <span>{formatTime(prompt.time_limit_seconds)}</span>
                 </div>
               </button>
             ))}
@@ -249,24 +249,24 @@ export default function DrillsPanel() {
 
         {/* Journal Prompts */}
         {drillMode === "journal" && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {journalPrompts.map((prompt) => (
               <button
                 key={prompt.prompt_id}
                 onClick={() => startJournal(prompt)}
-                className="bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/[0.08] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] p-6 hover:bg-white/[0.05] transition-all duration-300 text-left"
+                className="bg-white border border-gray-200 hover:border-gray-300 rounded-xl p-10 transition-all duration-300 text-left"
               >
-                <div className="flex items-start justify-between mb-3">
-                  <h3 className="text-lg font-semibold text-white flex-1">
+                <div className="flex items-start justify-between mb-8">
+                  <h3 className="text-lg font-semibold text-gray-900 flex-1">
                     {prompt.text}
                   </h3>
-                  <span className={`text-xs font-medium px-2 py-0.5 rounded border ${levelColors[prompt.level] || "bg-white/[0.05] text-white/60 border-white/[0.08]"}`}>
+                  <span className="text-sm font-medium px-2 py-1 rounded border border-gray-200 bg-gray-50 text-gray-900">
                     {prompt.level}
                   </span>
                 </div>
-                <div className="flex items-center justify-between text-sm text-white/60">
+                <div className="flex items-center justify-between text-lg text-gray-600">
                   <span className="capitalize">{prompt.category.replace(/_/g, " ")}</span>
-                  <span>📝 {prompt.min_words}+ words</span>
+                  <span>{prompt.min_words}+ words</span>
                 </div>
               </button>
             ))}

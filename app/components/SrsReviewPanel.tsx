@@ -100,13 +100,13 @@ export default function SrsReviewPanel() {
 
   if (loading) {
     return (
-      <div className="max-w-3xl mx-auto">
-        <div className="p-8 bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/[0.08] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] text-center">
+      <div className="max-w-[1200px] mx-auto px-8">
+        <div className="bg-white border border-gray-200 rounded-xl p-10 text-center">
           <div className="animate-pulse">
             <div className="h-8 bg-white/[0.05] rounded mb-4"></div>
             <div className="h-32 bg-white/[0.05] rounded"></div>
           </div>
-          <p className="mt-4 text-white/60">Loading your review cards...</p>
+          <p className="mt-8 text-gray-600">Loading your review cards...</p>
         </div>
       </div>
     );
@@ -114,13 +114,13 @@ export default function SrsReviewPanel() {
 
   if (error) {
     return (
-      <div className="max-w-3xl mx-auto">
-        <div className="p-6 bg-red-500/10 border border-red-500/20 rounded-xl backdrop-blur-sm">
-          <h3 className="text-lg font-semibold text-red-300 mb-2">Error</h3>
-          <p className="text-red-400 mb-4">{error}</p>
+      <div className="max-w-[1200px] mx-auto px-8">
+        <div className="bg-red-50 border border-red-200 rounded-xl p-10">
+          <h3 className="text-3xl font-semibold text-gray-900 mb-8">Error</h3>
+          <p className="text-lg text-gray-900 mb-8">{error}</p>
           <button
             onClick={fetchDueCards}
-            className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+            className="px-8 py-4 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors"
           >
             Try Again
           </button>
@@ -131,8 +131,8 @@ export default function SrsReviewPanel() {
 
   if (cards.length === 0 || currentIndex >= cards.length) {
     return (
-      <div className="max-w-3xl mx-auto">
-        <div className="p-8 bg-green-500/10 border border-green-500/20 rounded-xl backdrop-blur-sm text-center">
+      <div className="max-w-[1200px] mx-auto px-8">
+        <div className="bg-green-50 border border-green-200 rounded-xl p-10 text-center">
           <div className="mb-4">
             <svg
               className="w-16 h-16 text-green-400 mx-auto"
@@ -148,17 +148,17 @@ export default function SrsReviewPanel() {
               />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold text-green-300 mb-2">
-            You're all done for today! 🎉
+          <h2 className="text-6xl font-bold text-gray-900 mb-8">
+            You're all done for today!
           </h2>
-          <p className="text-green-200 mb-4">
+          <p className="text-lg text-gray-900 mb-8">
             {cards.length > 0
               ? `You reviewed ${cards.length} card${cards.length > 1 ? "s" : ""}. Great work!`
               : "No cards are due for review right now."}
           </p>
           <button
             onClick={fetchDueCards}
-            className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
+            className="px-8 py-4 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors"
           >
             Check Again
           </button>
@@ -171,9 +171,9 @@ export default function SrsReviewPanel() {
   const progress = ((currentIndex + 1) / cards.length) * 100;
 
   return (
-    <div className="max-w-3xl mx-auto space-y-6">
+    <div className="max-w-[1200px] mx-auto px-8 space-y-8">
       {/* Progress Bar */}
-      <div className="bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/[0.08] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] p-5">
+      <div className="bg-white border border-gray-200 hover:border-gray-300 rounded-xl p-10">
         <div className="flex items-center justify-between mb-2">
           <span className="text-sm font-medium text-white/80">
             Card {currentIndex + 1} of {cards.length}
@@ -189,8 +189,8 @@ export default function SrsReviewPanel() {
       </div>
 
       {/* Card Display */}
-      <div className="bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/[0.08] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] p-8">
-        <div className="w-full space-y-6">
+      <div className="bg-white border border-gray-200 hover:border-gray-300 rounded-xl p-10">
+        <div className="w-full space-y-8">
           <div className="text-center">
             <span className="inline-block px-3 py-1 bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-xs font-semibold rounded-full">
               {currentCard.card_type}

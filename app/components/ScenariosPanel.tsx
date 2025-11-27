@@ -129,28 +129,28 @@ export default function ScenariosPanel() {
   // Scenarios List View
   if (viewMode === "list") {
     return (
-      <div className="max-w-5xl mx-auto space-y-6">
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 via-white/90 to-rose-300 mb-3">
-            🎭 Speaking Scenarios
+      <div className="max-w-[1200px] mx-auto px-8 space-y-8">
+        <div className="text-center mb-[80px]">
+          <h2 className="text-6xl font-bold text-gray-900 mb-8">
+            Speaking Scenarios
           </h2>
-          <p className="text-white/60">
+          <p className="text-lg text-gray-600">
             Practice real-life conversations with AI roleplay
           </p>
         </div>
 
         {error && (
-          <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400">
-            {error}
+          <div className="bg-red-50 border border-red-200 rounded-xl p-10">
+            <p className="text-gray-900 text-lg">{error}</p>
           </div>
         )}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {scenarios.map((scenario) => (
             <button
               key={scenario.scenario_id}
               onClick={() => loadScenario(scenario.scenario_id)}
-              className="bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/[0.08] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] p-6 hover:bg-white/[0.05] transition-all duration-300 text-left"
+              className="bg-white border border-gray-200 hover:border-gray-300 rounded-xl p-10 transition-all duration-300 text-left"
             >
               <div className="flex items-start justify-between mb-3">
                 <h3 className="text-lg font-semibold text-white">

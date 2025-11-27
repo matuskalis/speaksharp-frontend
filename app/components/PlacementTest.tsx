@@ -75,13 +75,13 @@ export default function PlacementTest() {
   // Not Started State
   if (state === "not_started") {
     return (
-      <div className="max-w-3xl mx-auto p-6">
-        <div className="bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/[0.08] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] p-8">
+      <div className="max-w-[1200px] mx-auto px-8">
+        <div className="bg-white border border-gray-200 hover:border-gray-300 rounded-xl p-10">
           <div className="text-center">
-            <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 via-white/90 to-rose-300 mb-4">
-              📊 Placement Test
+            <h2 className="text-6xl font-bold text-gray-900 mb-8">
+              Placement Test
             </h2>
-            <p className="text-white/70 mb-6 text-lg">
+            <p className="text-lg text-gray-600 mb-8">
               Find your English level (A1-C2) in 10 minutes
             </p>
 
