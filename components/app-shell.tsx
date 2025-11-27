@@ -33,14 +33,14 @@ export function AppShell({ children }: AppShellProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       <Header
         isAuthenticated={!!user}
         onSignOut={handleSignOut}
         onSignIn={() => setShowAuthModal(true)}
       />
 
-      <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+      <main className="mx-auto max-w-7xl px-6 py-16">
         {children}
       </main>
 

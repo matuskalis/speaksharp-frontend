@@ -14,75 +14,94 @@ const config: Config = {
         mono: ["var(--font-geist-mono)", "Consolas", "monospace"],
       },
 
-      // 8px grid spacing system
+      // 4px precision grid - Apple/premium standard
       spacing: {
         0: "0px",
-        1: "8px",
-        2: "16px",
-        3: "24px",
-        4: "32px",
-        5: "40px",
-        6: "48px",
-        7: "56px",
-        8: "64px",
-        9: "72px",
-        10: "80px",
-        12: "96px",
-        14: "112px",
-        16: "128px",
-        20: "160px",
-        24: "192px",
-        32: "256px",
+        0.5: "2px",
+        1: "4px",
+        1.5: "6px",
+        2: "8px",
+        2.5: "10px",
+        3: "12px",
+        3.5: "14px",
+        4: "16px",
+        5: "20px",
+        6: "24px",
+        7: "28px",
+        8: "32px",
+        9: "36px",
+        10: "40px",
+        11: "44px",
+        12: "48px",
+        14: "56px",
+        16: "64px",
+        18: "72px",
+        20: "80px",
+        24: "96px",
+        28: "112px",
+        32: "128px",
+        36: "144px",
+        40: "160px",
+        44: "176px",
+        48: "192px",
+        52: "208px",
+        56: "224px",
+        60: "240px",
+        64: "256px",
+        72: "288px",
+        80: "320px",
+        96: "384px",
       },
 
-      // Professional brand color system
+      // Premium color system - Apple/Linear inspired
       colors: {
-        // Primary: Professional blue (inspired by Linear/Vercel)
+        // Primary: Refined blue - less saturated, more sophisticated
         primary: {
-          DEFAULT: "#2563EB", // blue-600
-          50: "#EFF6FF",
-          100: "#DBEAFE",
-          200: "#BFDBFE",
-          300: "#93C5FD",
-          400: "#60A5FA",
-          500: "#3B82F6",
-          600: "#2563EB",
-          700: "#1D4ED8",
-          800: "#1E40AF",
-          900: "#1E3A8A",
+          DEFAULT: "#0071E3", // Apple blue
+          50: "#F0F9FF",
+          100: "#E0F2FE",
+          200: "#B9E6FE",
+          300: "#7DD3FC",
+          400: "#38BDF8",
+          500: "#0EA5E9",
+          600: "#0071E3",
+          700: "#0364C4",
+          800: "#075985",
+          900: "#0C4A6E",
         },
 
-        // Accent: Complementary purple
+        // Accent: Subtle purple
         accent: {
-          DEFAULT: "#7C3AED", // violet-600
-          50: "#F5F3FF",
-          100: "#EDE9FE",
-          200: "#DDD6FE",
-          300: "#C4B5FD",
-          400: "#A78BFA",
-          500: "#8B5CF6",
-          600: "#7C3AED",
-          700: "#6D28D9",
-          800: "#5B21B6",
-          900: "#4C1D95",
+          DEFAULT: "#8B5CF6",
+          50: "#FAF5FF",
+          100: "#F3E8FF",
+          200: "#E9D5FF",
+          300: "#D8B4FE",
+          400: "#C084FC",
+          500: "#A855F7",
+          600: "#8B5CF6",
+          700: "#7C3AED",
+          800: "#6D28D9",
+          900: "#5B21B6",
         },
 
-        // Neutral system: Professional grays
+        // Neutral system: Premium near-blacks and grays
         gray: {
+          0: "#FFFFFF",
           50: "#FAFAFA",
           100: "#F5F5F5",
-          200: "#E5E5E5",
-          300: "#D4D4D4",
-          400: "#A3A3A3",
+          200: "#E8E8E8",
+          300: "#D1D1D1",
+          400: "#A8A8A8",
           500: "#737373",
           600: "#525252",
-          700: "#404040",
+          700: "#3D3D3D",
           800: "#262626",
-          900: "#171717",
-          950: "#0A0A0A",
+          900: "#1A1A1A",
+          950: "#0D0D0D",
         },
 
-        // Semantic colors
+        // Semantic colors - refined
         success: {
           DEFAULT: "#10B981",
           light: "#D1FAE5",
@@ -127,15 +146,15 @@ const config: Config = {
         full: "9999px",
       },
 
-      // Professional shadow system
+      // Premium shadow system - Apple-inspired subtlety
       boxShadow: {
-        sm: "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
-        DEFAULT: "0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1)",
-        md: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1)",
-        lg: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1)",
-        xl: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)",
-        "2xl": "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
-        inner: "inset 0 2px 4px 0 rgba(0, 0, 0, 0.05)",
+        sm: "0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 3px 0 rgba(0, 0, 0, 0.02)",
+        DEFAULT: "0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.02)",
+        md: "0 4px 6px -1px rgba(0, 0, 0, 0.06), 0 2px 4px -2px rgba(0, 0, 0, 0.03)",
+        lg: "0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04)",
+        xl: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.06)",
+        "2xl": "0 25px 50px -12px rgba(0, 0, 0, 0.18)",
+        inner: "inset 0 2px 4px 0 rgba(0, 0, 0, 0.03)",
         none: "none",
       },
 

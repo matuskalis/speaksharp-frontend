@@ -3,22 +3,14 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import {
-  Home,
-  BookOpen,
-  MessageSquare,
-  Mic,
-  BarChart3,
-  User,
-} from "lucide-react";
 
 const navigation = [
-  { name: "Session", href: "/", icon: Home },
-  { name: "Lessons", href: "/lessons", icon: BookOpen },
-  { name: "Tutor", href: "/tutor", icon: MessageSquare },
-  { name: "Voice", href: "/voice", icon: Mic },
-  { name: "Dashboard", href: "/dashboard", icon: BarChart3 },
-  { name: "Profile", href: "/profile", icon: User },
+  { name: "Session", href: "/" },
+  { name: "Lessons", href: "/lessons" },
+  { name: "Tutor", href: "/tutor" },
+  { name: "Voice", href: "/voice" },
+  { name: "Dashboard", href: "/dashboard" },
+  { name: "Profile", href: "/profile" },
 ];
 
 interface HeaderProps {
@@ -31,56 +23,54 @@ export function Header({ onSignOut, onSignIn, isAuthenticated }: HeaderProps) {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-gray-200 bg-white/80 backdrop-blur-md">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
+    <header className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-xl border-b border-gray-200/60">
+      <div className="mx-auto max-w-7xl">
+        <div className="flex h-14 items-center justify-between px-6">
           {/* Logo */}
-          <div className="flex items-center">
-            <Link href="/" className="flex items-center gap-2 group">
-              <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-white font-bold text-lg transition-transform group-hover:scale-105">
-                V
-              </div>
-              <span className="text-xl font-semibold text-gray-900">Vorex</span>
-            </Link>
-          </div>
+          <Link href="/" className="flex items-center group">
+            <span className="text-xl font-semibold text-gray-900 tracking-tight">
+              Vorex
+            </span>
+          </Link>
 
           {/* Navigation */}
-          <nav className="hidden md:flex items-center gap-1">
+          <nav className="hidden md:flex items-center gap-8">
             {navigation.map((item) => {
               const isActive = pathname === item.href;
-              const Icon = item.icon;
 
               return (
                 <Link
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    "flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-all",
+                    "text-sm font-medium transition-colors relative",
                     isActive
-                      ? "bg-gray-100 text-gray-900"
-                      : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+                      ? "text-gray-900"
+                      : "text-gray-600 hover:text-gray-900"
                   )}
                 >
-                  <Icon className="h-4 w-4" />
-                  <span>{item.name}</span>
+                  {item.name}
+                  {isActive && (
+                    <div className="absolute -bottom-[13px] left-0 right-0 h-[2px] bg-gray-900" />
+                  )}
                 </Link>
               );
             })}
           </nav>
 
           {/* Auth Actions */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center">
             {isAuthenticated ? (
               <button
                 onClick={onSignOut}
-                className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
+                className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors"
               >
                 Sign Out
               </button>
             ) : (
               <button
                 onClick={onSignIn}
-                className="px-4 py-2 text-sm font-medium text-white bg-primary rounded-md hover:bg-primary-700 transition-colors"
+                className="px-4 py-1.5 text-sm font-medium text-white bg-gray-900 rounded-lg hover:bg-gray-800 transition-colors"
               >
                 Sign In
               </button>

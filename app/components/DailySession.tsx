@@ -9,10 +9,8 @@ import {
   BookOpen,
   Drama,
   Dumbbell,
-  Clock,
-  CheckCircle2,
-  ArrowRight,
   PartyPopper,
+  ArrowRight,
 } from "lucide-react";
 
 type SessionStep = "review" | "lesson" | "scenario" | "drill" | "complete";
@@ -80,9 +78,11 @@ export default function DailySession() {
 
   if (!user) {
     return (
-      <div className="max-w-4xl mx-auto">
-        <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-8">
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">Daily Practice Session</h3>
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="text-center max-w-md">
+          <h3 className="text-2xl font-semibold text-gray-900 mb-3">
+            Daily Practice Session
+          </h3>
           <p className="text-gray-600">
             Sign in to access your personalized daily learning session.
           </p>
@@ -93,35 +93,23 @@ export default function DailySession() {
 
   if (currentStep === "complete") {
     return (
-      <div className="max-w-2xl mx-auto">
-        <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-12 text-center">
-          <div className="mx-auto w-16 h-16 bg-success-light rounded-full flex items-center justify-center mb-6">
-            <PartyPopper className="w-8 h-8 text-success" />
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="text-center max-w-2xl px-6">
+          <div className="mx-auto w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-8">
+            <PartyPopper className="w-10 h-10 text-gray-900" />
           </div>
-          <h2 className="text-3xl font-bold text-gray-900 mb-3">Session Complete!</h2>
-          <p className="text-lg text-gray-600 mb-8">
+          <h2 className="text-5xl font-semibold text-gray-900 mb-4 tracking-tight">
+            Session Complete
+          </h2>
+          <p className="text-xl text-gray-600 mb-12 max-w-lg mx-auto">
             Excellent work completing today's practice session.
           </p>
 
-          <div className="flex items-center justify-center gap-4 mb-8">
-            {steps.map((step) => {
-              const Icon = step.icon;
-              return (
-                <div key={step.id} className="flex flex-col items-center">
-                  <div className="w-12 h-12 rounded-full bg-success-light border-2 border-success flex items-center justify-center mb-2">
-                    <Icon className="w-5 h-5 text-success" />
-                  </div>
-                  <div className="text-xs text-gray-600">{step.title}</div>
-                </div>
-              );
-            })}
-          </div>
-
-          <div className="flex items-center justify-center gap-3">
-            <Button variant="outline" onClick={resetSession}>
+          <div className="flex items-center justify-center gap-4">
+            <Button variant="outline" onClick={resetSession} size="lg">
               Start New Session
             </Button>
-            <Button onClick={() => router.push("/dashboard")}>
+            <Button onClick={() => router.push("/dashboard")} size="lg">
               View Progress
             </Button>
           </div>
@@ -133,33 +121,37 @@ export default function DailySession() {
   const progressPercentage = (completedSteps.size / steps.length) * 100;
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
-      {/* Header Section */}
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Daily Practice Session</h1>
-        <p className="text-gray-600">
+    <div className="max-w-6xl mx-auto">
+      {/* Hero Section */}
+      <div className="text-center mb-20">
+        <h1 className="text-6xl font-semibold text-gray-900 mb-4 tracking-tight">
+          Daily Practice
+        </h1>
+        <p className="text-xl text-gray-600 max-w-2xl mx-auto">
           Complete these activities for a balanced learning experience
         </p>
       </div>
 
-      {/* Progress Bar */}
-      <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-6">
-        <div className="flex items-center justify-between mb-3">
-          <div className="text-sm font-medium text-gray-700">Session Progress</div>
-          <div className="text-sm text-gray-500">
+      {/* Progress Indicator - Minimal */}
+      <div className="mb-16">
+        <div className="flex items-center justify-between mb-4 px-1">
+          <div className="text-sm font-medium text-gray-500">
             {completedSteps.size} of {steps.length} complete
           </div>
+          <div className="text-sm text-gray-400">
+            {Math.round(progressPercentage)}%
+          </div>
         </div>
-        <div className="w-full bg-gray-100 rounded-full h-2">
+        <div className="w-full bg-gray-100 rounded-full h-1">
           <div
-            className="h-2 rounded-full bg-primary transition-all duration-500 ease-out"
+            className="h-1 rounded-full bg-gray-900 transition-all duration-700 ease-out"
             style={{ width: `${progressPercentage}%` }}
           />
         </div>
       </div>
 
-      {/* Steps Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {/* Steps Grid - Premium Layout */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-20">
         {steps.map((step, index) => {
           const isCompleted = completedSteps.has(step.id);
           const isCurrent = currentStep === step.id;
@@ -167,105 +159,86 @@ export default function DailySession() {
           const Icon = step.icon;
 
           return (
-            <div
+            <button
               key={step.id}
-              className={`
-                bg-white rounded-lg border shadow-sm p-6 transition-all duration-200
-                ${
-                  isCompleted
-                    ? "border-success bg-success-light/20"
-                    : isCurrent
-                    ? "border-primary bg-primary-50/30 shadow-md"
-                    : isLocked
-                    ? "border-gray-200 opacity-60"
-                    : "border-gray-200 hover:border-gray-300 hover:shadow-md"
-                }
-                ${!isLocked ? "cursor-pointer" : "cursor-not-allowed"}
-              `}
               onClick={() => !isLocked && handleStepClick(step.id, step.route)}
+              disabled={isLocked}
+              className={`
+                group relative bg-white rounded-2xl p-8 text-left transition-all duration-200
+                ${
+                  isLocked
+                    ? "opacity-40 cursor-not-allowed"
+                    : "hover:shadow-lg cursor-pointer"
+                }
+                ${isCurrent && !isCompleted ? "shadow-md" : "shadow-sm"}
+              `}
             >
-              <div className="flex items-start gap-4">
-                {/* Icon */}
+              {/* Icon */}
+              <div className="mb-6">
                 <div
                   className={`
-                    flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center
+                    inline-flex items-center justify-center w-14 h-14 rounded-2xl
+                    transition-all duration-200
                     ${
                       isCompleted
-                        ? "bg-success text-white"
+                        ? "bg-gray-900 text-white"
                         : isCurrent
                         ? "bg-primary text-white"
-                        : "bg-gray-100 text-gray-600"
+                        : "bg-gray-100 text-gray-600 group-hover:bg-gray-200"
                     }
                   `}
                 >
-                  {isCompleted ? (
-                    <CheckCircle2 className="w-6 h-6" />
-                  ) : (
-                    <Icon className="w-6 h-6" />
-                  )}
-                </div>
-
-                {/* Content */}
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-1">
-                    <h3 className="text-base font-semibold text-gray-900">{step.title}</h3>
-                    {isCurrent && !isCompleted && (
-                      <span className="px-2 py-0.5 text-xs font-medium bg-primary-100 text-primary-700 rounded">
-                        Current
-                      </span>
-                    )}
-                  </div>
-                  <p className="text-sm text-gray-600 mb-3">{step.description}</p>
-
-                  <div className="flex items-center justify-between text-xs text-gray-500">
-                    <div className="flex items-center gap-1">
-                      <Clock className="w-3.5 h-3.5" />
-                      <span>{step.time}</span>
-                    </div>
-                    {!isLocked && !isCompleted && (
-                      <div className="flex items-center gap-1 text-primary font-medium">
-                        <span>Start</span>
-                        <ArrowRight className="w-3.5 h-3.5" />
-                      </div>
-                    )}
-                    {isLocked && (
-                      <span className="text-gray-400">Complete previous step</span>
-                    )}
-                  </div>
-
-                  {/* Mark Complete Button */}
-                  {isCurrent && !isCompleted && (
-                    <div className="mt-4 pt-4 border-t border-gray-200">
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        fullWidth
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          markStepComplete(step.id);
-                        }}
-                        className="text-success border-success hover:bg-success-light"
-                      >
-                        <CheckCircle2 className="w-4 h-4 mr-2" />
-                        Mark Complete
-                      </Button>
-                    </div>
-                  )}
+                  <Icon className="w-7 h-7" strokeWidth={1.5} />
                 </div>
               </div>
-            </div>
+
+              {/* Content */}
+              <div className="mb-6">
+                <h3 className="text-2xl font-semibold text-gray-900 mb-2">
+                  {step.title}
+                </h3>
+                <p className="text-gray-600 text-base leading-relaxed">
+                  {step.description}
+                </p>
+              </div>
+
+              {/* Footer */}
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-gray-500">{step.time}</span>
+                {!isLocked && !isCompleted && (
+                  <div className="flex items-center gap-2 text-gray-900 font-medium group-hover:gap-3 transition-all">
+                    <span>{isCurrent ? "Continue" : "Start"}</span>
+                    <ArrowRight className="w-4 h-4" strokeWidth={2} />
+                  </div>
+                )}
+                {isCompleted && (
+                  <span className="text-gray-900 font-medium">Complete</span>
+                )}
+              </div>
+
+              {/* Completion Indicator - Subtle */}
+              {isCompleted && (
+                <div className="absolute top-8 right-8">
+                  <div className="w-6 h-6 rounded-full bg-gray-900 flex items-center justify-center">
+                    <svg
+                      className="w-4 h-4 text-white"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={3}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              )}
+            </button>
           );
         })}
-      </div>
-
-      {/* Tips Section */}
-      <div className="bg-gray-50 rounded-lg border border-gray-200 p-6">
-        <h4 className="text-sm font-semibold text-gray-900 mb-3">Practice Tips</h4>
-        <ul className="space-y-2 text-sm text-gray-600">
-          <li>• Complete activities in order for optimal learning progression</li>
-          <li>• Take short breaks between activities to stay focused</li>
-          <li>• You can practice freely at any time from the navigation menu</li>
-        </ul>
       </div>
     </div>
   );

@@ -15,12 +15,11 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 
 const buttonVariants: Record<ButtonVariant, string> = {
   primary: [
-    "bg-primary text-white",
-    "hover:bg-primary-700",
-    "active:bg-primary-800",
-    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
-    "disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-primary",
-    "shadow-sm",
+    "bg-gray-900 text-white",
+    "hover:bg-gray-800",
+    "active:bg-gray-700",
+    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:ring-offset-2",
+    "disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-gray-900",
     "transition-all duration-150",
   ].join(" "),
   secondary: [
@@ -32,8 +31,8 @@ const buttonVariants: Record<ButtonVariant, string> = {
     "transition-all duration-150",
   ].join(" "),
   outline: [
-    "bg-white text-gray-700 border border-gray-300",
-    "hover:bg-gray-50 hover:border-gray-400",
+    "bg-white text-gray-700 border border-gray-200",
+    "hover:bg-gray-50 hover:border-gray-300",
     "active:bg-gray-100",
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2",
     "disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white",
@@ -50,9 +49,9 @@ const buttonVariants: Record<ButtonVariant, string> = {
 };
 
 const buttonSizes: Record<ButtonSize, string> = {
-  sm: "px-3 py-1.5 text-sm rounded-md",
-  md: "px-4 py-2 text-sm rounded-md",
-  lg: "px-6 py-2.5 text-base rounded-md",
+  sm: "px-3 py-1.5 text-sm rounded-lg",
+  md: "px-4 py-2 text-sm rounded-lg",
+  lg: "px-5 py-2.5 text-base rounded-lg",
 };
 
 export function Button({
