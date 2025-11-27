@@ -8,10 +8,11 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      // Premium font system
+      // Bespoke type pairing - Display + System
       fontFamily: {
-        sans: ["var(--font-inter)", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "sans-serif"],
-        mono: ["var(--font-geist-mono)", "SF Mono", "Consolas", "monospace"],
+        display: ["var(--font-inter)", "-apple-system", "BlinkMacSystemFont", "sans-serif"], // Headlines, numbers
+        sans: ["var(--font-inter)", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "sans-serif"], // Body
+        mono: ["SF Mono", "Consolas", "Monaco", "monospace"], // Code, technical
       },
 
       // Strict spacing scale - Apple standard
@@ -47,57 +48,83 @@ const config: Config = {
         64: "256px",
       },
 
-      // Premium AI-first color system
+      // Bespoke color system - Single dominant accent
       colors: {
-        // Off-white and charcoal base
+        // Neutral foundation
         white: "#FFFFFF",
-        "off-white": "#FAFAF9",
         black: "#000000",
-        charcoal: {
-          50: "#F8F8F8",
-          100: "#F0F0F0",
-          200: "#E4E4E4",
-          300: "#D1D1D1",
-          400: "#9CA3AF",
-          500: "#6B7280",
-          600: "#4B5563",
-          700: "#374151",
-          800: "#1F2937",
-          900: "#111827",
+        neutral: {
+          50: "#FAFAFA",
+          100: "#F5F5F5",
+          200: "#E5E5E5",
+          300: "#D4D4D4",
+          400: "#A3A3A3",
+          500: "#737373",
+          600: "#525252",
+          700: "#404040",
+          800: "#262626",
+          900: "#171717",
           950: "#0A0A0A",
         },
-        // Deep blue accent - AI positioning
-        "deep-blue": {
-          DEFAULT: "#0F172A",
-          50: "#F8FAFC",
-          100: "#F1F5F9",
-          200: "#E2E8F0",
-          300: "#CBD5E1",
-          400: "#94A3B8",
-          500: "#64748B",
-          600: "#475569",
-          700: "#334155",
-          800: "#1E293B",
-          900: "#0F172A",
-          950: "#020617",
+        // Electric Blue - THE brand accent (AI intelligence + trust)
+        electric: {
+          DEFAULT: "#0066FF",
+          50: "#EBF4FF",
+          100: "#D6E9FF",
+          200: "#B3D7FF",
+          300: "#80BFFF",
+          400: "#4DA6FF",
+          500: "#0066FF", // Primary
+          600: "#0052CC",
+          700: "#003D99",
+          800: "#002966",
+          900: "#001433",
+          950: "#000A1A",
         },
-        // Semantic - muted for sophistication
-        success: "#059669",
-        warning: "#D97706",
-        error: "#DC2626",
-        // Legacy gray mapping (for gradual migration)
+        // Semantic (subdued, not competing with electric)
+        success: "#10B981",
+        warning: "#F59E0B",
+        error: "#EF4444",
+        // Legacy mappings for gradual migration
         gray: {
-          50: "#F8F8F8",
-          100: "#F0F0F0",
-          200: "#E4E4E4",
-          300: "#D1D1D1",
-          400: "#9CA3AF",
-          500: "#6B7280",
-          600: "#4B5563",
-          700: "#374151",
-          800: "#1F2937",
-          900: "#111827",
+          50: "#FAFAFA",
+          100: "#F5F5F5",
+          200: "#E5E5E5",
+          300: "#D4D4D4",
+          400: "#A3A3A3",
+          500: "#737373",
+          600: "#525252",
+          700: "#404040",
+          800: "#262626",
+          900: "#171717",
           950: "#0A0A0A",
+        },
+        charcoal: {
+          50: "#FAFAFA",
+          100: "#F5F5F5",
+          200: "#E5E5E5",
+          300: "#D4D4D4",
+          400: "#A3A3A3",
+          500: "#737373",
+          600: "#525252",
+          700: "#404040",
+          800: "#262626",
+          900: "#171717",
+          950: "#0A0A0A",
+        },
+        "deep-blue": {
+          DEFAULT: "#0066FF",
+          50: "#EBF4FF",
+          100: "#D6E9FF",
+          200: "#B3D7FF",
+          300: "#80BFFF",
+          400: "#4DA6FF",
+          500: "#0066FF",
+          600: "#0052CC",
+          700: "#003D99",
+          800: "#002966",
+          900: "#001433",
+          950: "#000A1A",
         },
       },
 
