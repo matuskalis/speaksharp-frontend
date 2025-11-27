@@ -1,8 +1,19 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
+import { Button } from "@/components/ui/button";
+import {
+  RotateCcw,
+  BookOpen,
+  Drama,
+  Dumbbell,
+  Clock,
+  CheckCircle2,
+  ArrowRight,
+  PartyPopper,
+} from "lucide-react";
 
 type SessionStep = "review" | "lesson" | "scenario" | "drill" | "complete";
 
@@ -16,23 +27,23 @@ export default function DailySession() {
     {
       id: "review" as SessionStep,
       title: "Review",
-      icon: "🔄",
-      description: "Practice your SRS cards",
+      icon: RotateCcw,
+      description: "Practice your SRS flashcards",
       route: "/review",
       time: "5-10 min",
     },
     {
       id: "lesson" as SessionStep,
       title: "Lesson",
-      icon: "📚",
-      description: "Learn new concepts",
+      icon: BookOpen,
+      description: "Learn new grammar concepts",
       route: "/lessons",
       time: "5-10 min",
     },
     {
       id: "scenario" as SessionStep,
       title: "Scenario",
-      icon: "🎭",
+      icon: Drama,
       description: "Practice real conversations",
       route: "/scenarios",
       time: "10-15 min",
@@ -40,8 +51,8 @@ export default function DailySession() {
     {
       id: "drill" as SessionStep,
       title: "Drill",
-      icon: "💪",
-      description: "Speaking or writing practice",
+      icon: Dumbbell,
+      description: "Speaking or writing exercise",
       route: "/drills",
       time: "5-10 min",
     },
@@ -49,8 +60,6 @@ export default function DailySession() {
 
   const markStepComplete = (stepId: SessionStep) => {
     setCompletedSteps((prev) => new Set(prev).add(stepId));
-
-    // Auto-advance to next step
     const currentIndex = steps.findIndex((s) => s.id === stepId);
     if (currentIndex < steps.length - 1) {
       setCurrentStep(steps[currentIndex + 1].id);
@@ -72,9 +81,9 @@ export default function DailySession() {
   if (!user) {
     return (
       <div className="max-w-4xl mx-auto">
-        <div className="bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/[0.08] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] p-7">
-          <h3 className="text-xl font-bold text-white mb-3">📅 Daily Session</h3>
-          <p className="text-white/60 text-sm">
+        <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-8">
+          <h3 className="text-xl font-semibold text-gray-900 mb-2">Daily Practice Session</h3>
+          <p className="text-gray-600">
             Sign in to access your personalized daily learning session.
           </p>
         </div>
@@ -84,149 +93,178 @@ export default function DailySession() {
 
   if (currentStep === "complete") {
     return (
-      <div className="max-w-4xl mx-auto">
-        <div className="bg-gradient-to-br from-green-500/10 to-blue-500/10 backdrop-blur-md rounded-2xl border border-green-500/20 shadow-[0_8px_32px_0_rgba(0,255,0,0.1)] p-10 text-center">
-          <div className="text-6xl mb-4">🎉</div>
-          <h3 className="text-3xl font-bold text-white mb-3">Session Complete!</h3>
-          <p className="text-white/70 text-lg mb-6">
-            Excellent work! You've completed today's recommended practice.
+      <div className="max-w-2xl mx-auto">
+        <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-12 text-center">
+          <div className="mx-auto w-16 h-16 bg-success-light rounded-full flex items-center justify-center mb-6">
+            <PartyPopper className="w-8 h-8 text-success" />
+          </div>
+          <h2 className="text-3xl font-bold text-gray-900 mb-3">Session Complete!</h2>
+          <p className="text-lg text-gray-600 mb-8">
+            Excellent work completing today's practice session.
           </p>
 
           <div className="flex items-center justify-center gap-4 mb-8">
-            {steps.map((step) => (
-              <div
-                key={step.id}
-                className="flex flex-col items-center"
-              >
-                <div className="w-12 h-12 rounded-full bg-green-500/20 border-2 border-green-500/50 flex items-center justify-center text-2xl mb-2">
-                  {step.icon}
+            {steps.map((step) => {
+              const Icon = step.icon;
+              return (
+                <div key={step.id} className="flex flex-col items-center">
+                  <div className="w-12 h-12 rounded-full bg-success-light border-2 border-success flex items-center justify-center mb-2">
+                    <Icon className="w-5 h-5 text-success" />
+                  </div>
+                  <div className="text-xs text-gray-600">{step.title}</div>
                 </div>
-                <div className="text-xs text-green-300">✓ {step.title}</div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
-          <div className="flex items-center justify-center gap-4">
-            <button
-              onClick={resetSession}
-              className="px-6 py-3 bg-white/[0.05] text-white border border-white/[0.12] rounded-lg hover:bg-white/[0.08] transition-all duration-300"
-            >
+          <div className="flex items-center justify-center gap-3">
+            <Button variant="outline" onClick={resetSession}>
               Start New Session
-            </button>
-            <button
-              onClick={() => router.push("/dashboard")}
-              className="px-6 py-3 bg-gradient-to-r from-indigo-500 to-rose-500 text-white rounded-lg hover:from-indigo-600 hover:to-rose-600 transition-all duration-300"
-            >
+            </Button>
+            <Button onClick={() => router.push("/dashboard")}>
               View Progress
-            </button>
+            </Button>
           </div>
         </div>
       </div>
     );
   }
 
+  const progressPercentage = (completedSteps.size / steps.length) * 100;
+
   return (
-    <div className="max-w-5xl mx-auto space-y-6">
-      {/* Header */}
-      <div className="text-center">
-        <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 via-white/90 to-rose-300 mb-3">
-          📅 Daily Learning Session
-        </h2>
-        <p className="text-white/60">
-          Complete these steps for a balanced practice session
+    <div className="max-w-4xl mx-auto space-y-6">
+      {/* Header Section */}
+      <div>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Daily Practice Session</h1>
+        <p className="text-gray-600">
+          Complete these activities for a balanced learning experience
         </p>
       </div>
 
       {/* Progress Bar */}
-      <div className="bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/[0.08] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] p-6">
-        <div className="flex items-center justify-between mb-2">
-          <div className="text-sm font-medium text-white/70">Session Progress</div>
-          <div className="text-sm text-white/60">
-            {completedSteps.size} / {steps.length} steps
+      <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-6">
+        <div className="flex items-center justify-between mb-3">
+          <div className="text-sm font-medium text-gray-700">Session Progress</div>
+          <div className="text-sm text-gray-500">
+            {completedSteps.size} of {steps.length} complete
           </div>
         </div>
-        <div className="w-full bg-white/[0.05] rounded-full h-2.5">
+        <div className="w-full bg-gray-100 rounded-full h-2">
           <div
-            className="h-2.5 rounded-full bg-gradient-to-r from-indigo-500 to-rose-500 transition-all duration-500"
-            style={{ width: `${(completedSteps.size / steps.length) * 100}%` }}
-          ></div>
+            className="h-2 rounded-full bg-primary transition-all duration-500 ease-out"
+            style={{ width: `${progressPercentage}%` }}
+          />
         </div>
       </div>
 
-      {/* Steps */}
+      {/* Steps Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {steps.map((step, index) => {
           const isCompleted = completedSteps.has(step.id);
           const isCurrent = currentStep === step.id;
           const isLocked = index > 0 && !completedSteps.has(steps[index - 1].id);
+          const Icon = step.icon;
 
           return (
-            <button
+            <div
               key={step.id}
+              className={`
+                bg-white rounded-lg border shadow-sm p-6 transition-all duration-200
+                ${
+                  isCompleted
+                    ? "border-success bg-success-light/20"
+                    : isCurrent
+                    ? "border-primary bg-primary-50/30 shadow-md"
+                    : isLocked
+                    ? "border-gray-200 opacity-60"
+                    : "border-gray-200 hover:border-gray-300 hover:shadow-md"
+                }
+                ${!isLocked ? "cursor-pointer" : "cursor-not-allowed"}
+              `}
               onClick={() => !isLocked && handleStepClick(step.id, step.route)}
-              disabled={isLocked}
-              className={`p-6 rounded-2xl border transition-all duration-300 text-left ${
-                isCompleted
-                  ? "bg-green-500/10 border-green-500/30 hover:bg-green-500/15"
-                  : isCurrent
-                  ? "bg-gradient-to-r from-indigo-500/20 to-rose-500/20 border-white/20 shadow-lg"
-                  : isLocked
-                  ? "bg-white/[0.02] border-white/[0.05] opacity-50 cursor-not-allowed"
-                  : "bg-white/[0.03] border-white/[0.08] hover:bg-white/[0.05]"
-              }`}
             >
-              <div className="flex items-start justify-between mb-3">
-                <div className="flex items-center space-x-3">
-                  <div className={`text-4xl ${isLocked ? "grayscale opacity-50" : ""}`}>
-                    {step.icon}
+              <div className="flex items-start gap-4">
+                {/* Icon */}
+                <div
+                  className={`
+                    flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center
+                    ${
+                      isCompleted
+                        ? "bg-success text-white"
+                        : isCurrent
+                        ? "bg-primary text-white"
+                        : "bg-gray-100 text-gray-600"
+                    }
+                  `}
+                >
+                  {isCompleted ? (
+                    <CheckCircle2 className="w-6 h-6" />
+                  ) : (
+                    <Icon className="w-6 h-6" />
+                  )}
+                </div>
+
+                {/* Content */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-1">
+                    <h3 className="text-base font-semibold text-gray-900">{step.title}</h3>
+                    {isCurrent && !isCompleted && (
+                      <span className="px-2 py-0.5 text-xs font-medium bg-primary-100 text-primary-700 rounded">
+                        Current
+                      </span>
+                    )}
                   </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-white flex items-center space-x-2">
-                      <span>{step.title}</span>
-                      {isCompleted && <span className="text-green-400 text-sm">✓</span>}
-                      {isCurrent && !isCompleted && (
-                        <span className="text-xs bg-indigo-500/20 text-indigo-300 px-2 py-0.5 rounded">
-                          Current
-                        </span>
-                      )}
-                    </h3>
-                    <p className="text-sm text-white/60 mt-1">{step.description}</p>
+                  <p className="text-sm text-gray-600 mb-3">{step.description}</p>
+
+                  <div className="flex items-center justify-between text-xs text-gray-500">
+                    <div className="flex items-center gap-1">
+                      <Clock className="w-3.5 h-3.5" />
+                      <span>{step.time}</span>
+                    </div>
+                    {!isLocked && !isCompleted && (
+                      <div className="flex items-center gap-1 text-primary font-medium">
+                        <span>Start</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </div>
+                    )}
+                    {isLocked && (
+                      <span className="text-gray-400">Complete previous step</span>
+                    )}
                   </div>
+
+                  {/* Mark Complete Button */}
+                  {isCurrent && !isCompleted && (
+                    <div className="mt-4 pt-4 border-t border-gray-200">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        fullWidth
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          markStepComplete(step.id);
+                        }}
+                        className="text-success border-success hover:bg-success-light"
+                      >
+                        <CheckCircle2 className="w-4 h-4 mr-2" />
+                        Mark Complete
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </div>
-
-              <div className="flex items-center justify-between text-xs text-white/50">
-                <span>⏱️ {step.time}</span>
-                {isLocked && <span className="text-white/40">🔒 Complete previous step</span>}
-                {!isLocked && !isCompleted && <span className="text-indigo-300">Click to start →</span>}
-              </div>
-
-              {isCurrent && !isCompleted && (
-                <div className="mt-4 pt-4 border-t border-white/[0.08]">
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      markStepComplete(step.id);
-                    }}
-                    className="w-full py-2 bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/30 text-green-300 rounded-lg hover:from-green-500/30 hover:to-emerald-500/30 transition-all duration-300 text-sm font-medium"
-                  >
-                    ✓ Mark as Complete
-                  </button>
-                </div>
-              )}
-            </button>
+            </div>
           );
         })}
       </div>
 
-      {/* Quick Actions */}
-      <div className="bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/[0.08] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] p-6">
-        <h4 className="text-sm font-semibold text-white/80 mb-3">💡 Quick Tips</h4>
-        <ul className="space-y-2 text-sm text-white/60">
-          <li>• Complete steps in order for the best learning experience</li>
-          <li>• Take breaks between steps if needed</li>
-          <li>• You can skip the session and practice freely anytime</li>
-          <li>• Review your progress on the Dashboard tab</li>
+      {/* Tips Section */}
+      <div className="bg-gray-50 rounded-lg border border-gray-200 p-6">
+        <h4 className="text-sm font-semibold text-gray-900 mb-3">Practice Tips</h4>
+        <ul className="space-y-2 text-sm text-gray-600">
+          <li>• Complete activities in order for optimal learning progression</li>
+          <li>• Take short breaks between activities to stay focused</li>
+          <li>• You can practice freely at any time from the navigation menu</li>
         </ul>
       </div>
     </div>
