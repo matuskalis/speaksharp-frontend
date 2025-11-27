@@ -50,7 +50,7 @@ export default function Dashboard() {
 
   if (loading) {
     return (
-      <div className="max-w-[1200px] mx-auto px-8 text-center">
+      <div className="max-w-container mx-auto px-8 text-center">
         <div className="text-gray-600">Loading dashboard...</div>
       </div>
     );
@@ -58,8 +58,8 @@ export default function Dashboard() {
 
   if (error) {
     return (
-      <div className="max-w-[1200px] mx-auto px-8">
-        <div className="p-10 bg-white border border-gray-200 rounded-xl text-red-600">
+      <div className="max-w-container mx-auto px-8">
+        <div className="p-8 bg-white border border-gray-200 rounded-xl text-red-600">
           {error}
         </div>
       </div>
@@ -102,14 +102,14 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="max-w-[1200px] mx-auto px-8 space-y-[80px]">
+    <div className="max-w-container mx-auto px-8">
       {/* Onboarding Checklist */}
       {!isOnboardingComplete && showOnboarding && (
-        <div className="bg-white border border-gray-200 rounded-xl p-10">
-          <div className="flex items-start justify-between mb-8">
+        <div className="bg-white border border-gray-200 rounded-xl p-8 mb-20">
+          <div className="flex items-start justify-between mb-6">
             <div>
-              <h3 className="text-3xl font-bold text-gray-900 mb-2">Welcome to SpeakSharp!</h3>
-              <p className="text-lg text-gray-600">Complete these steps to get started:</p>
+              <h3 className="text-3xl font-semibold text-gray-900 mb-2">Welcome to SpeakSharp!</h3>
+              <p className="text-base text-gray-600">Complete these steps to get started:</p>
             </div>
             <button
               onClick={() => setShowOnboarding(false)}
@@ -119,14 +119,14 @@ export default function Dashboard() {
             </button>
           </div>
 
-          <div className="space-y-8">
+          <div className="space-y-6">
             {/* Placement Test */}
             <Link
               href="/placement-test"
-              className={`flex items-center gap-3 p-10 rounded-xl border transition-all ${
+              className={`flex items-center gap-3 p-8 rounded-xl border transition-all duration-200 ${
                 hasCompletedPlacementTest
                   ? "bg-white border-gray-200 cursor-default"
-                  : "bg-white border-gray-200 hover:border-gray-300"
+                  : "bg-white border-gray-200 hover:border-gray-300 hover:shadow-md"
               }`}
             >
               {hasCompletedPlacementTest ? (
@@ -135,7 +135,7 @@ export default function Dashboard() {
                 <Circle className="w-5 h-5 text-gray-400 flex-shrink-0" />
               )}
               <div className="flex-1">
-                <div className="text-lg text-gray-900 font-medium">Take Placement Test</div>
+                <div className="text-base text-gray-900 font-medium">Take Placement Test</div>
                 <div className="text-sm text-gray-600">Find your English level (5 min)</div>
               </div>
             </Link>
@@ -143,10 +143,10 @@ export default function Dashboard() {
             {/* Complete Profile */}
             <Link
               href="/profile"
-              className={`flex items-center gap-3 p-10 rounded-xl border transition-all ${
+              className={`flex items-center gap-3 p-8 rounded-xl border transition-all duration-200 ${
                 hasCompletedProfile
                   ? "bg-white border-gray-200 cursor-default"
-                  : "bg-white border-gray-200 hover:border-gray-300"
+                  : "bg-white border-gray-200 hover:border-gray-300 hover:shadow-md"
               }`}
             >
               {hasCompletedProfile ? (
@@ -155,7 +155,7 @@ export default function Dashboard() {
                 <Circle className="w-5 h-5 text-gray-400 flex-shrink-0" />
               )}
               <div className="flex-1">
-                <div className="text-lg text-gray-900 font-medium">Complete Your Profile</div>
+                <div className="text-base text-gray-900 font-medium">Complete Your Profile</div>
                 <div className="text-sm text-gray-600">Add your name and country</div>
               </div>
             </Link>
@@ -163,10 +163,10 @@ export default function Dashboard() {
             {/* First Lesson */}
             <Link
               href="/lessons"
-              className={`flex items-center gap-3 p-10 rounded-xl border transition-all ${
+              className={`flex items-center gap-3 p-8 rounded-xl border transition-all duration-200 ${
                 hasCompletedFirstLesson
                   ? "bg-white border-gray-200 cursor-default"
-                  : "bg-white border-gray-200 hover:border-gray-300"
+                  : "bg-white border-gray-200 hover:border-gray-300 hover:shadow-md"
               }`}
             >
               {hasCompletedFirstLesson ? (
@@ -175,7 +175,7 @@ export default function Dashboard() {
                 <Circle className="w-5 h-5 text-gray-400 flex-shrink-0" />
               )}
               <div className="flex-1">
-                <div className="text-lg text-gray-900 font-medium">Complete Your First Lesson</div>
+                <div className="text-base text-gray-900 font-medium">Complete Your First Lesson</div>
                 <div className="text-sm text-gray-600">Start learning with AI-powered lessons</div>
               </div>
             </Link>
@@ -185,7 +185,7 @@ export default function Dashboard() {
           {hasCompletedPlacementTest && hasCompletedProfile && hasCompletedFirstLesson && (
             <button
               onClick={handleCompleteOnboarding}
-              className="mt-8 w-full px-6 py-3 bg-gray-900 text-white font-medium rounded-lg hover:bg-gray-800 transition-all duration-300"
+              className="mt-6 w-full px-6 py-3 bg-gray-900 text-white font-medium rounded-lg hover:bg-gray-800 transition-all duration-200"
             >
               Complete Onboarding
             </button>
@@ -193,9 +193,9 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* Header */}
-      <div className="text-center">
-        <div className="flex items-center justify-center gap-4 mb-8">
+      {/* Hero Header */}
+      <div className="text-center mb-24">
+        <div className="flex items-center justify-center gap-4 mb-6">
           <h2 className="text-6xl font-bold text-gray-900">
             Dashboard
           </h2>
@@ -207,62 +207,66 @@ export default function Dashboard() {
             </div>
           )}
         </div>
-        <p className="text-lg text-gray-600">Your learning progress at a glance</p>
+        <p className="text-xl text-gray-600">Your learning progress at a glance</p>
       </div>
 
       {/* Session Summary */}
-      <SessionSummary />
+      <div className="mb-20">
+        <SessionSummary />
+      </div>
 
       {/* Today Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-20">
         {/* Cards Reviewed */}
-        <div className="bg-white border border-gray-200 rounded-xl p-10 hover:border-gray-300 transition-all duration-300">
-          <div className="flex items-center justify-between mb-8">
+        <div className="bg-white border border-gray-200 rounded-xl p-8 hover:border-gray-300 hover:shadow-md transition-all duration-200">
+          <div className="flex items-center justify-between mb-6">
             <h3 className="text-sm font-medium text-gray-600">Cards Reviewed Today</h3>
             <span className="text-3xl">📚</span>
           </div>
-          <p className="text-6xl font-bold text-gray-900">{srsStats?.reviewed_today || 0}</p>
-          <p className="text-sm text-gray-500 mt-2">
+          <p className="text-6xl font-bold text-gray-900 mb-2">{srsStats?.reviewed_today || 0}</p>
+          <p className="text-sm text-gray-500">
             {srsStats?.due_today || 0} cards due today
           </p>
         </div>
 
         {/* Accuracy */}
-        <div className="bg-white border border-gray-200 rounded-xl p-10 hover:border-gray-300 transition-all duration-300">
-          <div className="flex items-center justify-between mb-8">
+        <div className="bg-white border border-gray-200 rounded-xl p-8 hover:border-gray-300 hover:shadow-md transition-all duration-200">
+          <div className="flex items-center justify-between mb-6">
             <h3 className="text-sm font-medium text-gray-600">Success Rate Today</h3>
             <span className="text-3xl">🎯</span>
           </div>
-          <p className="text-6xl font-bold text-gray-900">
+          <p className="text-6xl font-bold text-gray-900 mb-2">
             {srsStats?.success_rate_today.toFixed(1) || 0}%
           </p>
-          <p className="text-sm text-gray-500 mt-2">
+          <p className="text-sm text-gray-500">
             Quality score ≥ 3
           </p>
         </div>
 
         {/* Total Cards */}
-        <div className="bg-white border border-gray-200 rounded-xl p-10 hover:border-gray-300 transition-all duration-300">
-          <div className="flex items-center justify-between mb-8">
+        <div className="bg-white border border-gray-200 rounded-xl p-8 hover:border-gray-300 hover:shadow-md transition-all duration-200">
+          <div className="flex items-center justify-between mb-6">
             <h3 className="text-sm font-medium text-gray-600">Total SRS Cards</h3>
             <span className="text-3xl">🗂️</span>
           </div>
-          <p className="text-6xl font-bold text-gray-900">{srsStats?.total_cards || 0}</p>
-          <p className="text-sm text-gray-500 mt-2">
+          <p className="text-6xl font-bold text-gray-900 mb-2">{srsStats?.total_cards || 0}</p>
+          <p className="text-sm text-gray-500">
             Errors tracked: {errorStats?.total_errors || 0}
           </p>
         </div>
       </div>
 
       {/* Daily Goals */}
-      <DailyGoalCard />
+      <div className="mb-20">
+        <DailyGoalCard />
+      </div>
 
       {/* Error Breakdown */}
-      <div className="bg-white border border-gray-200 rounded-xl p-10">
-        <h3 className="text-3xl font-semibold text-gray-900 mb-8">Error Breakdown</h3>
+      <div className="bg-white border border-gray-200 rounded-xl p-8 mb-20">
+        <h3 className="text-3xl font-semibold text-gray-900 mb-6">Error Breakdown</h3>
 
         {errorStats && Object.keys(errorStats.errors_by_type).length > 0 ? (
-          <div className="space-y-8">
+          <div className="space-y-6">
             {Object.entries(errorStats.errors_by_type)
               .sort(([, a], [, b]) => b - a)
               .map(([type, count]) => {
@@ -293,27 +297,27 @@ export default function Dashboard() {
       </div>
 
       {/* Weakest Skills */}
-      <div className="bg-white border border-gray-200 rounded-xl p-10">
-        <h3 className="text-3xl font-semibold text-gray-900 mb-8">Areas to Improve</h3>
+      <div className="bg-white border border-gray-200 rounded-xl p-8 mb-20">
+        <h3 className="text-3xl font-semibold text-gray-900 mb-6">Areas to Improve</h3>
 
         {weakSkills && weakSkills.skills.length > 0 ? (
-          <div className="space-y-8">
+          <div className="space-y-6">
             {weakSkills.skills.map((skill, index) => (
               <div
                 key={skill.skill_key}
-                className="p-10 bg-white border border-gray-200 rounded-xl hover:border-gray-300 transition-all duration-300"
+                className="p-8 bg-white border border-gray-200 rounded-xl hover:border-gray-300 hover:shadow-md transition-all duration-200"
               >
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center space-x-2 mb-2">
-                      <span className="text-lg font-semibold text-gray-600">
+                      <span className="text-base font-semibold text-gray-600">
                         #{index + 1}
                       </span>
-                      <h4 className="text-lg font-medium text-gray-900">
+                      <h4 className="text-base font-medium text-gray-900">
                         {skill.skill_key}
                       </h4>
                     </div>
-                    <p className="text-sm text-gray-500 mb-8">
+                    <p className="text-sm text-gray-500 mb-6">
                       Category: {skill.skill_category}
                     </p>
                     <div className="flex items-center space-x-6 text-sm">
@@ -338,17 +342,17 @@ export default function Dashboard() {
       </div>
 
       {/* Recent Errors */}
-      <div className="bg-white border border-gray-200 rounded-xl p-10">
-        <h3 className="text-3xl font-semibold text-gray-900 mb-8">Recent Errors</h3>
+      <div className="bg-white border border-gray-200 rounded-xl p-8">
+        <h3 className="text-3xl font-semibold text-gray-900 mb-6">Recent Errors</h3>
 
         {errorStats && errorStats.last_errors.length > 0 ? (
-          <div className="space-y-8">
+          <div className="space-y-6">
             {errorStats.last_errors.map((error, index) => (
               <div
                 key={index}
-                className="p-10 bg-white border border-gray-200 rounded-xl hover:border-gray-300 transition-all duration-300"
+                className="p-8 bg-white border border-gray-200 rounded-xl hover:border-gray-300 hover:shadow-md transition-all duration-200"
               >
-                <div className="flex items-start justify-between mb-8">
+                <div className="flex items-start justify-between mb-6">
                   <span className="inline-block px-3 py-1 text-sm font-medium rounded-lg bg-white text-red-600 border border-gray-200">
                     {errorTypeLabels[error.type] || error.type}
                   </span>
@@ -361,19 +365,19 @@ export default function Dashboard() {
                   </span>
                 </div>
 
-                <div className="space-y-8">
+                <div className="space-y-6">
                   <div className="flex items-start space-x-2">
                     <span className="text-red-600 font-medium text-sm mt-1">✗</span>
-                    <p className="text-lg text-gray-600 line-through flex-1">{error.before_text}</p>
+                    <p className="text-base text-gray-600 line-through flex-1">{error.before_text}</p>
                   </div>
 
                   <div className="flex items-start space-x-2">
                     <span className="text-green-600 font-medium text-sm mt-1">✓</span>
-                    <p className="text-lg text-gray-900 font-medium flex-1">{error.after_text}</p>
+                    <p className="text-base text-gray-900 font-medium flex-1">{error.after_text}</p>
                   </div>
 
-                  <div className="pl-6 pt-8 border-t border-gray-200">
-                    <p className="text-lg text-gray-600 italic">{error.explanation}</p>
+                  <div className="pl-6 pt-6 border-t border-gray-200">
+                    <p className="text-base text-gray-600 italic">{error.explanation}</p>
                   </div>
                 </div>
               </div>

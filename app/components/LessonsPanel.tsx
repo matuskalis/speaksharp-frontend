@@ -100,8 +100,8 @@ export default function LessonsPanel() {
 
   if (loading && !selectedLesson) {
     return (
-      <div className="max-w-[1200px] mx-auto px-8 text-center">
-        <div className="text-white/60">Loading lessons...</div>
+      <div className="max-w-container mx-auto px-8 text-center">
+        <div className="text-gray-600">Loading lessons...</div>
       </div>
     );
   }
@@ -109,36 +109,37 @@ export default function LessonsPanel() {
   // Lessons List View
   if (viewMode === "list") {
     return (
-      <div className="max-w-[1200px] mx-auto px-8 space-y-8">
-        <div className="text-center mb-[80px]">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8">Grammar Lessons</h2>
-          <p className="text-lg text-gray-600">
+      <div className="max-w-container mx-auto px-8">
+        {/* Hero Section */}
+        <div className="text-center mb-24">
+          <h2 className="text-6xl font-bold text-gray-900 mb-6">Grammar Lessons</h2>
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
             11 structured lessons covering A1-A2 English grammar
           </p>
         </div>
 
         {error && (
-          <div className="p-10 bg-white border border-gray-200 rounded-xl text-red-600">
+          <div className="mb-12 p-8 bg-white border border-gray-200 rounded-xl text-red-600">
             {error}
           </div>
         )}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {lessons.map((lesson) => (
             <button
               key={lesson.lesson_id}
               onClick={() => loadLesson(lesson.lesson_id)}
-              className="bg-white border border-gray-200 rounded-xl p-10 hover:border-gray-300 transition-all duration-300 text-left"
+              className="bg-white border border-gray-200 rounded-xl p-8 hover:border-gray-300 hover:shadow-md transition-all duration-200 text-left"
             >
-              <div className="flex items-start justify-between mb-8">
-                <h3 className="text-lg font-semibold text-gray-900">
+              <div className="flex items-start justify-between mb-6">
+                <h3 className="text-2xl font-semibold text-gray-900">
                   {lesson.title}
                 </h3>
-                <span className="bg-gray-100 text-gray-900 border border-gray-200 text-sm font-medium px-2.5 py-0.5 rounded">
+                <span className="bg-gray-100 text-gray-900 border border-gray-200 text-sm font-medium px-2.5 py-1 rounded">
                   {lesson.level}
                 </span>
               </div>
-              <div className="flex flex-wrap gap-2 mb-8">
+              <div className="flex flex-wrap gap-2 mb-6">
                 {lesson.skill_targets.map((skill, idx) => (
                   <span
                     key={idx}
@@ -170,9 +171,9 @@ export default function LessonsPanel() {
   const progress = ((currentTaskIndex + 1) / totalTasks) * 100;
 
   return (
-    <div className="max-w-[1200px] mx-auto px-8 space-y-8">
+    <div className="max-w-container mx-auto px-8">
       {/* Header with back button */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex items-center justify-between mb-12">
         <button
           onClick={backToList}
           className="text-gray-900 hover:text-gray-600 font-medium"
@@ -185,13 +186,13 @@ export default function LessonsPanel() {
       </div>
 
       {/* Lesson Title */}
-      <div className="bg-white border border-gray-200 rounded-xl p-10">
-        <h2 className="text-3xl font-bold text-gray-900 mb-8">
+      <div className="bg-white border border-gray-200 rounded-xl p-8 mb-12">
+        <h2 className="text-3xl font-semibold text-gray-900 mb-6">
           {selectedLesson.title}
         </h2>
 
         {/* Progress Bar */}
-        <div className="mb-8">
+        <div className="mb-6">
           <div className="flex justify-between text-sm text-gray-600 mb-2">
             <span>Task {currentTaskIndex + 1} of {totalTasks}</span>
             <span>{Math.round(progress)}% Complete</span>
@@ -207,26 +208,26 @@ export default function LessonsPanel() {
         {/* Context and Explanation (first task only) */}
         {currentTaskIndex === 0 && (
           <>
-            <div className="mb-8 p-10 bg-white border border-gray-200 rounded-xl">
+            <div className="mb-6 p-8 bg-white border border-gray-200 rounded-xl">
               <h3 className="font-semibold text-gray-900 mb-2">Context:</h3>
-              <p className="text-lg text-gray-600">{selectedLesson.context}</p>
+              <p className="text-base text-gray-600">{selectedLesson.context}</p>
             </div>
 
-            <div className="mb-8 p-10 bg-white border border-gray-200 rounded-xl">
+            <div className="mb-6 p-8 bg-white border border-gray-200 rounded-xl">
               <h3 className="font-semibold text-gray-900 mb-2">Target Language:</h3>
-              <p className="text-lg text-gray-600">{selectedLesson.target_language}</p>
+              <p className="text-base text-gray-600">{selectedLesson.target_language}</p>
             </div>
 
-            <div className="mb-8">
+            <div className="mb-6">
               <h3 className="font-semibold text-gray-900 mb-2">Explanation:</h3>
-              <p className="text-lg text-gray-600">{selectedLesson.explanation}</p>
+              <p className="text-base text-gray-600">{selectedLesson.explanation}</p>
             </div>
 
-            <div className="mb-8">
+            <div className="mb-6">
               <h3 className="font-semibold text-gray-900 mb-2">Examples:</h3>
               <ul className="space-y-1">
                 {selectedLesson.examples.map((example, idx) => (
-                  <li key={idx} className="text-lg text-gray-600 flex items-start">
+                  <li key={idx} className="text-base text-gray-600 flex items-start">
                     <span className="mr-2">•</span>
                     <span>{example}</span>
                   </li>
@@ -238,9 +239,9 @@ export default function LessonsPanel() {
       </div>
 
       {/* Current Task */}
-      <div className="bg-white border border-gray-200 rounded-xl p-10">
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-8">
+      <div className="bg-white border border-gray-200 rounded-xl p-8 mb-12">
+        <div className="mb-6">
+          <div className="flex items-center justify-between mb-6">
             <h3 className="text-3xl font-semibold text-gray-900">
               {isFreerProduction ? "Free Production Task" : "Practice Task"}
             </h3>
@@ -248,16 +249,16 @@ export default function LessonsPanel() {
               {currentTask.task_type}
             </span>
           </div>
-          <p className="text-lg text-gray-900">{currentTask.prompt}</p>
+          <p className="text-base text-gray-900 mb-2">{currentTask.prompt}</p>
           {currentTask.example_answer && (
-            <p className="text-sm text-gray-600 mt-2">
+            <p className="text-sm text-gray-600">
               Example: {currentTask.example_answer}
             </p>
           )}
         </div>
 
         {/* Answer Input */}
-        <div className="mb-8">
+        <div className="mb-6">
           <textarea
             value={userAnswer}
             onChange={(e) => setUserAnswer(e.target.value)}
@@ -272,7 +273,7 @@ export default function LessonsPanel() {
         <button
           onClick={submitTask}
           disabled={!userAnswer.trim() || submitting}
-          className={`w-full py-3 rounded-lg font-semibold transition-all duration-300 ${
+          className={`w-full py-3 rounded-lg font-semibold transition-all duration-200 ${
             !userAnswer.trim() || submitting
               ? "bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200"
               : "bg-gray-900 text-white hover:bg-gray-800"
@@ -284,9 +285,9 @@ export default function LessonsPanel() {
 
       {/* Feedback */}
       {taskFeedback && (
-        <div className="space-y-8">
+        <div className="space-y-12">
           {/* Tutor Message */}
-          <div className="bg-white border border-gray-200 rounded-xl p-10">
+          <div className="bg-white border border-gray-200 rounded-xl p-8">
             <div className="flex items-start space-x-3">
               <div className="flex-shrink-0">
                 <svg
@@ -307,50 +308,52 @@ export default function LessonsPanel() {
                 <h3 className="text-sm font-medium text-gray-900 mb-1">
                   Tutor Feedback
                 </h3>
-                <p className="text-lg text-gray-600">{taskFeedback.message}</p>
+                <p className="text-base text-gray-600">{taskFeedback.message}</p>
               </div>
             </div>
           </div>
 
           {/* Errors */}
           {taskFeedback.errors.length > 0 && (
-            <div className="space-y-8">
-              <h3 className="text-3xl font-semibold text-gray-900">
+            <div>
+              <h3 className="text-3xl font-semibold text-gray-900 mb-6">
                 Corrections ({taskFeedback.errors.length})
               </h3>
-              {taskFeedback.errors.map((error, index) => (
-                <div
-                  key={index}
-                  className="p-10 bg-white border border-gray-200 rounded-xl"
-                >
-                  <div className="space-y-8">
-                    <div>
-                      <p className="text-sm font-medium text-gray-600 mb-1">
-                        You said:
-                      </p>
-                      <p className="text-lg text-gray-900 line-through">{error.user_sentence}</p>
-                    </div>
+              <div className="space-y-6">
+                {taskFeedback.errors.map((error, index) => (
+                  <div
+                    key={index}
+                    className="p-8 bg-white border border-gray-200 rounded-xl hover:border-gray-300 hover:shadow-md transition-all duration-200"
+                  >
+                    <div className="space-y-6">
+                      <div>
+                        <p className="text-sm font-medium text-gray-600 mb-1">
+                          You said:
+                        </p>
+                        <p className="text-base text-gray-900 line-through">{error.user_sentence}</p>
+                      </div>
 
-                    <div>
-                      <p className="text-sm font-medium text-gray-600 mb-1">
-                        Corrected:
-                      </p>
-                      <p className="text-lg font-medium text-gray-900">{error.corrected_sentence}</p>
-                    </div>
+                      <div>
+                        <p className="text-sm font-medium text-gray-600 mb-1">
+                          Corrected:
+                        </p>
+                        <p className="text-base font-medium text-gray-900">{error.corrected_sentence}</p>
+                      </div>
 
-                    <div className="pt-8 border-t border-gray-200">
-                      <p className="text-lg italic text-gray-600">{error.explanation}</p>
+                      <div className="pt-6 border-t border-gray-200">
+                        <p className="text-base italic text-gray-600">{error.explanation}</p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           )}
 
           {/* No errors */}
           {taskFeedback.errors.length === 0 && (
-            <div className="p-10 bg-white border border-gray-200 rounded-xl">
-              <p className="text-lg text-gray-900 text-center">
+            <div className="p-8 bg-white border border-gray-200 rounded-xl">
+              <p className="text-base text-gray-900 text-center">
                 Perfect! No errors detected.
               </p>
             </div>
@@ -360,7 +363,7 @@ export default function LessonsPanel() {
           {currentTaskIndex < totalTasks - 1 && (
             <button
               onClick={nextTask}
-              className="w-full py-3 bg-gray-900 text-white rounded-lg font-semibold hover:bg-gray-800 transition-all duration-300"
+              className="w-full py-3 bg-gray-900 text-white rounded-lg font-semibold hover:bg-gray-800 transition-all duration-200"
             >
               Next Task →
             </button>
@@ -368,14 +371,14 @@ export default function LessonsPanel() {
 
           {/* Complete Button */}
           {currentTaskIndex === totalTasks - 1 && (
-            <div className="bg-white border border-gray-200 rounded-xl p-10 text-center">
-              <h3 className="text-3xl font-bold text-gray-900 mb-8">
+            <div className="bg-white border border-gray-200 rounded-xl p-8 text-center">
+              <h3 className="text-3xl font-semibold text-gray-900 mb-6">
                 Lesson Complete!
               </h3>
-              <p className="text-lg text-gray-600 mb-8">{selectedLesson.summary}</p>
+              <p className="text-base text-gray-600 mb-6">{selectedLesson.summary}</p>
               <button
                 onClick={backToList}
-                className="px-6 py-3 bg-gray-900 text-white rounded-lg font-semibold hover:bg-gray-800 transition-all duration-300"
+                className="px-6 py-3 bg-gray-900 text-white rounded-lg font-semibold hover:bg-gray-800 transition-all duration-200"
               >
                 Back to Lessons
               </button>
@@ -385,7 +388,7 @@ export default function LessonsPanel() {
       )}
 
       {error && (
-        <div className="p-10 bg-white border border-gray-200 rounded-xl text-red-600">
+        <div className="p-8 bg-white border border-gray-200 rounded-xl text-red-600 mt-12">
           {error}
         </div>
       )}

@@ -55,25 +55,25 @@ export default function AuthForm() {
   };
 
   return (
-    <div className="max-w-[1200px] mx-auto px-8">
-      <div className="max-w-md mx-auto p-10 bg-white border border-gray-200 rounded-xl">
-        <h2 className="text-3xl font-bold mb-8 text-gray-900 text-center">
+    <div className="max-w-container mx-auto px-8">
+      <div className="max-w-md mx-auto p-8 bg-white border border-gray-200 rounded-xl">
+        <h2 className="text-3xl font-semibold mb-6 text-gray-900 text-center">
           {mode === "signin" ? "Sign In" : "Create Account"}
         </h2>
 
         {error && (
-          <div className="mb-8 p-10 bg-white border border-gray-200 rounded-xl text-red-600 text-sm">
+          <div className="mb-6 p-8 bg-white border border-gray-200 rounded-xl text-red-600 text-sm">
             {error}
           </div>
         )}
 
         {success && (
-          <div className="mb-8 p-10 bg-white border border-gray-200 rounded-xl text-green-600 text-sm">
+          <div className="mb-6 p-8 bg-white border border-gray-200 rounded-xl text-green-600 text-sm">
             {success}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-8">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label className="block text-sm font-medium text-gray-600 mb-2">
               Email
@@ -108,13 +108,13 @@ export default function AuthForm() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full px-6 py-3 bg-gray-900 text-white font-medium rounded-lg hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-900 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
+            className="w-full px-6 py-3 bg-gray-900 text-white font-medium rounded-lg hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-900 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
           >
             {loading ? "..." : mode === "signin" ? "Sign In" : "Create Account"}
           </button>
         </form>
 
-        <div className="mt-8 text-center">
+        <div className="mt-6 text-center">
           <button
             onClick={() => {
               setMode(mode === "signin" ? "signup" : "signin");

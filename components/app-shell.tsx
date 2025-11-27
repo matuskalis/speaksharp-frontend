@@ -41,7 +41,9 @@ export function AppShell({ children }: AppShellProps) {
       />
 
       <main className="py-24">
-        {children}
+        <div className="mx-auto max-w-container px-8">
+          {children}
+        </div>
       </main>
 
       {/* Auth Modal */}

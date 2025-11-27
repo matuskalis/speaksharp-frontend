@@ -8,22 +8,22 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      // Professional font system
+      // Premium font system
       fontFamily: {
-        sans: ["var(--font-inter)", "system-ui", "sans-serif"],
-        mono: ["var(--font-geist-mono)", "Consolas", "monospace"],
+        sans: ["var(--font-inter)", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "sans-serif"],
+        mono: ["var(--font-geist-mono)", "SF Mono", "Consolas", "monospace"],
       },
 
-      // 4px precision grid - Apple/premium standard
+      // Strict spacing scale - Apple standard
       spacing: {
+        // Micro spacing
         0: "0px",
+        px: "1px",
         0.5: "2px",
         1: "4px",
         1.5: "6px",
         2: "8px",
-        2.5: "10px",
         3: "12px",
-        3.5: "14px",
         4: "16px",
         5: "20px",
         6: "24px",
@@ -33,31 +33,40 @@ const config: Config = {
         10: "40px",
         11: "44px",
         12: "48px",
+        // Macro spacing
         14: "56px",
         16: "64px",
-        18: "72px",
         20: "80px",
         24: "96px",
         28: "112px",
         32: "128px",
         36: "144px",
         40: "160px",
-        44: "176px",
         48: "192px",
-        52: "208px",
         56: "224px",
-        60: "240px",
         64: "256px",
-        72: "288px",
-        80: "320px",
-        96: "384px",
       },
 
-      // Premium color system - Apple/Linear inspired
+      // Premium color system
       colors: {
-        // Primary: Refined blue - less saturated, more sophisticated
+        // Near blacks and grays
+        black: "#000000",
+        gray: {
+          50: "#FAFAFA",
+          100: "#F5F5F5",
+          200: "#E5E5E5",
+          300: "#D1D1D1",
+          400: "#A8A8A8",
+          500: "#737373",
+          600: "#525252",
+          700: "#424242",
+          800: "#292929",
+          900: "#1A1A1A",
+          950: "#0A0A0A",
+        },
+        // Apple-inspired blue
         primary: {
-          DEFAULT: "#0071E3", // Apple blue
+          DEFAULT: "#0071E3",
           50: "#F0F9FF",
           100: "#E0F2FE",
           200: "#B9E6FE",
@@ -65,143 +74,70 @@ const config: Config = {
           400: "#38BDF8",
           500: "#0EA5E9",
           600: "#0071E3",
-          700: "#0364C4",
+          700: "#0066CC",
           800: "#075985",
           900: "#0C4A6E",
         },
-
-        // Accent: Subtle purple
-        accent: {
-          DEFAULT: "#8B5CF6",
-          50: "#FAF5FF",
-          100: "#F3E8FF",
-          200: "#E9D5FF",
-          300: "#D8B4FE",
-          400: "#C084FC",
-          500: "#A855F7",
-          600: "#8B5CF6",
-          700: "#7C3AED",
-          800: "#6D28D9",
-          900: "#5B21B6",
-        },
-
-        // Neutral system: Premium near-blacks and grays
-        gray: {
-          0: "#FFFFFF",
-          50: "#FAFAFA",
-          100: "#F5F5F5",
-          200: "#E8E8E8",
-          300: "#D1D1D1",
-          400: "#A8A8A8",
-          500: "#737373",
-          600: "#525252",
-          700: "#3D3D3D",
-          800: "#262626",
-          900: "#1A1A1A",
-          950: "#0D0D0D",
-        },
-
-        // Semantic colors - refined
-        success: {
-          DEFAULT: "#10B981",
-          light: "#D1FAE5",
-          dark: "#065F46",
-        },
-        warning: {
-          DEFAULT: "#F59E0B",
-          light: "#FEF3C7",
-          dark: "#92400E",
-        },
-        error: {
-          DEFAULT: "#EF4444",
-          light: "#FEE2E2",
-          dark: "#991B1B",
-        },
+        // Semantic
+        success: "#10B981",
+        warning: "#F59E0B",
+        error: "#EF4444",
       },
 
-      // Premium typography scale - strict hierarchy
+      // Premium typography scale with line heights
       fontSize: {
-        xs: ["0.75rem", { lineHeight: "1.125rem" }],     // 12px / 18px
-        sm: ["0.875rem", { lineHeight: "1.25rem" }],     // 14px / 20px
-        base: ["1rem", { lineHeight: "1.5rem" }],        // 16px / 24px - body
-        lg: ["1.125rem", { lineHeight: "1.625rem" }],    // 18px / 26px - large body
-        xl: ["1.25rem", { lineHeight: "1.75rem" }],      // 20px / 28px
-        "2xl": ["1.5rem", { lineHeight: "2rem" }],       // 24px / 32px
-        "3xl": ["1.875rem", { lineHeight: "2.25rem" }],  // 30px / 36px - section headers
-        "4xl": ["2.25rem", { lineHeight: "2.5rem" }],    // 36px / 40px
-        "5xl": ["3rem", { lineHeight: "3.25rem" }],      // 48px / 52px - hero
-        "6xl": ["4rem", { lineHeight: "4.25rem" }],      // 64px / 68px - large hero
+        // Small text
+        xs: ["12px", { lineHeight: "16px", letterSpacing: "0.01em" }],
+        sm: ["14px", { lineHeight: "20px", letterSpacing: "0" }],
+        base: ["16px", { lineHeight: "24px", letterSpacing: "0" }],
+        // Body sizes
+        lg: ["18px", { lineHeight: "28px", letterSpacing: "-0.01em" }],
+        xl: ["20px", { lineHeight: "28px", letterSpacing: "-0.01em" }],
+        // Headlines
+        "2xl": ["24px", { lineHeight: "32px", letterSpacing: "-0.02em" }],
+        "3xl": ["32px", { lineHeight: "40px", letterSpacing: "-0.02em" }],
+        "4xl": ["40px", { lineHeight: "48px", letterSpacing: "-0.03em" }],
+        "5xl": ["56px", { lineHeight: "64px", letterSpacing: "-0.04em" }],
+        "6xl": ["72px", { lineHeight: "80px", letterSpacing: "-0.05em" }],
+        "7xl": ["96px", { lineHeight: "104px", letterSpacing: "-0.06em" }],
       },
 
-      // Consistent border radius (6-8px system)
+      // Premium font weights
+      fontWeight: {
+        light: "300",
+        normal: "400",
+        medium: "500",
+        semibold: "600",
+        bold: "700",
+      },
+
+      // Precise border radius
       borderRadius: {
-        none: "0px",
+        none: "0",
         sm: "4px",
-        DEFAULT: "6px",
-        md: "8px",
-        lg: "12px",
-        xl: "16px",
-        "2xl": "20px",
-        "3xl": "24px",
+        DEFAULT: "8px",
+        md: "12px",
+        lg: "16px",
+        xl: "20px",
+        "2xl": "24px",
         full: "9999px",
       },
 
-      // Premium shadow system - Apple-inspired subtlety
+      // Subtle shadow system
       boxShadow: {
-        sm: "0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 3px 0 rgba(0, 0, 0, 0.02)",
-        DEFAULT: "0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.02)",
-        md: "0 4px 6px -1px rgba(0, 0, 0, 0.06), 0 2px 4px -2px rgba(0, 0, 0, 0.03)",
+        sm: "0 1px 2px 0 rgba(0, 0, 0, 0.04)",
+        DEFAULT: "0 1px 3px 0 rgba(0, 0, 0, 0.06), 0 1px 2px -1px rgba(0, 0, 0, 0.04)",
+        md: "0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.04)",
         lg: "0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04)",
-        xl: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.06)",
-        "2xl": "0 25px 50px -12px rgba(0, 0, 0, 0.18)",
-        inner: "inset 0 2px 4px 0 rgba(0, 0, 0, 0.03)",
+        xl: "0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04)",
         none: "none",
       },
 
-      // Animation system
-      animation: {
-        "fade-in": "fadeIn 0.2s ease-in-out",
-        "slide-up": "slideUp 0.3s ease-out",
-        "slide-down": "slideDown 0.3s ease-out",
-        "scale-in": "scaleIn 0.2s ease-out",
-      },
-
-      keyframes: {
-        fadeIn: {
-          "0%": { opacity: "0" },
-          "100%": { opacity: "1" },
-        },
-        slideUp: {
-          "0%": { transform: "translateY(10px)", opacity: "0" },
-          "100%": { transform: "translateY(0)", opacity: "1" },
-        },
-        slideDown: {
-          "0%": { transform: "translateY(-10px)", opacity: "0" },
-          "100%": { transform: "translateY(0)", opacity: "1" },
-        },
-        scaleIn: {
-          "0%": { transform: "scale(0.95)", opacity: "0" },
-          "100%": { transform: "scale(1)", opacity: "1" },
-        },
-      },
-
-      // Container configuration for layout grid
-      container: {
-        center: true,
-        padding: {
-          DEFAULT: "1rem",
-          sm: "1.5rem",
-          lg: "2rem",
-          xl: "3rem",
-          "2xl": "4rem",
-        },
-        screens: {
-          sm: "640px",
-          md: "768px",
-          lg: "1024px",
-          xl: "1280px",
-          "2xl": "1400px",
-        },
+      // Container system - centered column
+      maxWidth: {
+        container: "1080px",
+        "container-lg": "1280px",
+        "container-xl": "1440px",
       },
     },
   },

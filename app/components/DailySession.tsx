@@ -78,11 +78,11 @@ export default function DailySession() {
   if (currentStep === "complete") {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="text-center max-w-[600px] px-8">
-          <h2 className="text-5xl font-semibold text-gray-900 mb-6">
+        <div className="text-center max-w-xl">
+          <h2 className="text-5xl font-bold text-gray-900 mb-6">
             Session Complete
           </h2>
-          <p className="text-lg text-gray-600 mb-12">
+          <p className="text-xl text-gray-600 mb-12">
             Excellent work completing today's practice session.
           </p>
           <div className="flex items-center justify-center gap-4">
@@ -108,39 +108,43 @@ export default function DailySession() {
   const progressPercentage = (completedSteps.size / steps.length) * 100;
 
   return (
-    <div className="w-full max-w-[1200px] mx-auto px-8">
-      {/* Hero Section - 120px bottom spacing */}
-      <div className="text-center mb-[120px]">
-        <h1 className="text-6xl font-semibold text-gray-900 mb-6 tracking-tight leading-tight">
+    <div>
+      {/* Hero Section - Massive visual weight */}
+      <div className="text-center mb-24">
+        <h1 className="text-7xl font-bold text-gray-900 mb-6">
           Daily Practice
         </h1>
-        <p className="text-lg text-gray-600 max-w-[600px] mx-auto mb-12">
+        <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-12">
           Complete these activities for a balanced learning experience
         </p>
-        <Button size="lg" onClick={() => handleStepClick("review", "/review")}>
+        <Button
+          size="lg"
+          onClick={() => handleStepClick("review", "/review")}
+          className="text-base font-semibold px-8 py-3"
+        >
           Start Session
           <ArrowRight className="ml-2 w-5 h-5" />
         </Button>
       </div>
 
-      {/* Progress Section - 80px bottom spacing */}
-      <div className="mb-[80px]">
-        <div className="flex items-center justify-between mb-3">
+      {/* Progress Indicator - Clean and minimal */}
+      <div className="mb-20">
+        <div className="flex items-center justify-between mb-4">
           <span className="text-sm font-medium text-gray-500">Progress</span>
           <span className="text-sm text-gray-400">
             {completedSteps.size} of {steps.length}
           </span>
         </div>
-        <div className="w-full bg-gray-100 rounded-full h-2">
+        <div className="w-full bg-gray-100 rounded-full h-1.5">
           <div
-            className="h-2 rounded-full bg-gray-900 transition-all duration-500"
+            className="h-1.5 rounded-full bg-gray-900 transition-all duration-700 ease-out"
             style={{ width: `${progressPercentage}%` }}
           />
         </div>
       </div>
 
-      {/* Cards Grid - Strict uniform layout */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      {/* Activity Cards - Structured grid with proper card design */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {steps.map((step, index) => {
           const isCompleted = completedSteps.has(step.id);
           const isCurrent = currentStep === step.id;
@@ -152,52 +156,50 @@ export default function DailySession() {
               key={step.id}
               onClick={() => !isLocked && handleStepClick(step.id, step.route)}
               disabled={isLocked}
-              className={`
-                group relative bg-white border border-gray-200 rounded-xl p-10 text-left
-                transition-all duration-200 h-full flex flex-col
-                ${isLocked ? "opacity-40 cursor-not-allowed" : "hover:border-gray-300 hover:shadow-md cursor-pointer"}
-                ${isCurrent && !isCompleted ? "border-gray-900" : ""}
-              `}
+              className={cn(
+                "group relative bg-white rounded-xl p-8 text-left transition-all duration-200",
+                "border border-gray-200 hover:border-gray-300 hover:shadow-md",
+                isLocked && "opacity-40 cursor-not-allowed hover:border-gray-200 hover:shadow-none",
+                isCurrent && !isCompleted && "border-gray-900"
+              )}
             >
-              {/* Icon - Fixed size */}
-              <div className="mb-8">
+              {/* Icon Container */}
+              <div className="mb-6">
                 <div
-                  className={`
-                    inline-flex items-center justify-center w-16 h-16 rounded-xl
-                    ${
-                      isCompleted
-                        ? "bg-gray-900 text-white"
-                        : isCurrent
-                        ? "bg-gray-900 text-white"
-                        : "bg-gray-100 text-gray-600"
-                    }
-                  `}
+                  className={cn(
+                    "inline-flex items-center justify-center w-14 h-14 rounded-xl transition-colors",
+                    isCompleted
+                      ? "bg-gray-900 text-white"
+                      : isCurrent
+                      ? "bg-gray-900 text-white"
+                      : "bg-gray-100 text-gray-600 group-hover:bg-gray-200"
+                  )}
                 >
-                  <Icon className="w-8 h-8" strokeWidth={1.5} />
+                  <Icon className="w-7 h-7" strokeWidth={1.5} />
                 </div>
               </div>
 
-              {/* Content - Flexible grow */}
-              <div className="flex-grow mb-8">
-                <h3 className="text-3xl font-semibold text-gray-900 mb-3">
+              {/* Content */}
+              <div className="mb-6">
+                <h3 className="text-2xl font-semibold text-gray-900 mb-2">
                   {step.title}
                 </h3>
-                <p className="text-lg text-gray-600 leading-relaxed">
+                <p className="text-base text-gray-600 leading-relaxed">
                   {step.description}
                 </p>
               </div>
 
-              {/* Footer - Fixed at bottom */}
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-500">{step.time}</span>
+              {/* Footer */}
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-gray-500">{step.time}</span>
                 {!isLocked && !isCompleted && (
-                  <div className="flex items-center gap-2 text-gray-900 font-medium">
+                  <div className="flex items-center gap-2 text-gray-900 font-medium text-sm">
                     <span>Start</span>
                     <ArrowRight className="w-4 h-4" strokeWidth={2} />
                   </div>
                 )}
                 {isCompleted && (
-                  <span className="text-gray-900 font-medium">✓ Complete</span>
+                  <span className="text-sm text-gray-900 font-medium">✓ Complete</span>
                 )}
               </div>
             </button>
@@ -206,4 +208,9 @@ export default function DailySession() {
       </div>
     </div>
   );
+}
+
+// Helper function for className composition
+function cn(...classes: (string | boolean | undefined)[]) {
+  return classes.filter(Boolean).join(" ");
 }

@@ -26,9 +26,9 @@ export default function TutorResponse({ response }: TutorResponseProps) {
   const { message, errors, micro_task, session_id } = response;
 
   return (
-    <div className="max-w-[1200px] mx-auto px-8 space-y-8">
+    <div className="max-w-container mx-auto px-8">
       {/* Tutor Message */}
-      <div className="p-10 bg-white border border-gray-200 rounded-xl">
+      <div className="p-8 bg-white border border-gray-200 rounded-xl mb-12">
         <div className="flex items-start space-x-3">
           <div className="flex-shrink-0">
             <svg
@@ -49,56 +49,58 @@ export default function TutorResponse({ response }: TutorResponseProps) {
             <h3 className="text-sm font-medium text-gray-900 mb-1">
               Tutor Feedback
             </h3>
-            <p className="text-lg text-gray-600">{message}</p>
+            <p className="text-base text-gray-600">{message}</p>
           </div>
         </div>
       </div>
 
       {/* Errors */}
       {errors.length > 0 && (
-        <div className="space-y-8">
-          <h3 className="text-3xl font-semibold text-gray-900">
+        <div className="mb-12">
+          <h3 className="text-3xl font-semibold text-gray-900 mb-6">
             Corrections ({errors.length})
           </h3>
-          {errors.map((error, index) => (
-            <div
-              key={index}
-              className="p-10 bg-white border border-gray-200 rounded-xl"
-            >
-              <div className="flex items-center justify-between mb-8">
-                <span className="text-sm font-semibold uppercase tracking-wide text-gray-900">
-                  {errorTypeLabels[error.type]}
-                </span>
+          <div className="space-y-6">
+            {errors.map((error, index) => (
+              <div
+                key={index}
+                className="p-8 bg-white border border-gray-200 rounded-xl hover:border-gray-300 hover:shadow-md transition-all duration-200"
+              >
+                <div className="flex items-center justify-between mb-6">
+                  <span className="text-sm font-semibold uppercase tracking-wide text-gray-900">
+                    {errorTypeLabels[error.type]}
+                  </span>
+                </div>
+
+                <div className="space-y-6">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600 mb-1">
+                      You wrote:
+                    </p>
+                    <p className="text-base text-gray-900 line-through">{error.user_sentence}</p>
+                  </div>
+
+                  <div>
+                    <p className="text-sm font-medium text-gray-600 mb-1">
+                      Corrected:
+                    </p>
+                    <p className="text-base font-medium text-gray-900">{error.corrected_sentence}</p>
+                  </div>
+
+                  <div className="pt-6 border-t border-gray-200">
+                    <p className="text-base italic text-gray-600">{error.explanation}</p>
+                  </div>
+                </div>
               </div>
-
-              <div className="space-y-8">
-                <div>
-                  <p className="text-sm font-medium text-gray-600 mb-1">
-                    You wrote:
-                  </p>
-                  <p className="text-lg text-gray-900 line-through">{error.user_sentence}</p>
-                </div>
-
-                <div>
-                  <p className="text-sm font-medium text-gray-600 mb-1">
-                    Corrected:
-                  </p>
-                  <p className="text-lg font-medium text-gray-900">{error.corrected_sentence}</p>
-                </div>
-
-                <div className="pt-8 border-t border-gray-200">
-                  <p className="text-lg italic text-gray-600">{error.explanation}</p>
-                </div>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       )}
 
       {/* No errors */}
       {errors.length === 0 && (
-        <div className="p-10 bg-white border border-gray-200 rounded-xl">
-          <p className="text-lg text-gray-900 text-center">
+        <div className="p-8 bg-white border border-gray-200 rounded-xl mb-12">
+          <p className="text-base text-gray-900 text-center">
             Great job! No errors detected.
           </p>
         </div>
@@ -106,7 +108,7 @@ export default function TutorResponse({ response }: TutorResponseProps) {
 
       {/* Micro Task */}
       {micro_task && (
-        <div className="p-10 bg-white border border-gray-200 rounded-xl">
+        <div className="p-8 bg-white border border-gray-200 rounded-xl mb-12">
           <div className="flex items-start space-x-3">
             <div className="flex-shrink-0">
               <svg
@@ -127,14 +129,14 @@ export default function TutorResponse({ response }: TutorResponseProps) {
               <h3 className="text-sm font-medium text-gray-900 mb-1">
                 Practice Task
               </h3>
-              <p className="text-lg text-gray-600">{micro_task}</p>
+              <p className="text-base text-gray-600">{micro_task}</p>
             </div>
           </div>
         </div>
       )}
 
       {/* Session Info */}
-      <div className="pt-8 border-t border-gray-200">
+      <div className="pt-6 border-t border-gray-200">
         <p className="text-sm text-gray-500">
           Session ID: <code className="text-gray-600 bg-gray-100 px-2 py-1 rounded">{session_id}</code>
         </p>

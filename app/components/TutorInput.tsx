@@ -39,8 +39,8 @@ export default function TutorInput({ onResponse }: TutorInputProps) {
   };
 
   return (
-    <div className="max-w-[1200px] mx-auto px-8">
-      <form onSubmit={handleSubmit} className="space-y-8 bg-white border border-gray-200 rounded-xl p-10">
+    <div className="max-w-container mx-auto px-8">
+      <form onSubmit={handleSubmit} className="space-y-6 bg-white border border-gray-200 rounded-xl p-8">
         <div>
           <label className="block text-sm font-medium text-gray-600 mb-2">
             Practice your English
@@ -56,15 +56,15 @@ export default function TutorInput({ onResponse }: TutorInputProps) {
         </div>
 
         {error && (
-          <div className="p-10 bg-white border border-gray-200 rounded-xl text-red-600">
-            <p className="text-lg">{error}</p>
+          <div className="p-8 bg-white border border-gray-200 rounded-xl text-red-600">
+            <p className="text-base">{error}</p>
           </div>
         )}
 
         <button
           type="submit"
           disabled={loading || !text.trim()}
-          className="w-full px-6 py-3 bg-gray-900 text-white font-medium rounded-lg hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-900 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
+          className="w-full px-6 py-3 bg-gray-900 text-white font-medium rounded-lg hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-900 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
         >
           {loading ? "Analyzing..." : "Submit"}
         </button>
