@@ -9,7 +9,6 @@ import {
   BookOpen,
   Drama,
   Dumbbell,
-  PartyPopper,
   ArrowRight,
 } from "lucide-react";
 
@@ -56,34 +55,19 @@ export default function DailySession() {
     },
   ];
 
-  const markStepComplete = (stepId: SessionStep) => {
-    setCompletedSteps((prev) => new Set(prev).add(stepId));
-    const currentIndex = steps.findIndex((s) => s.id === stepId);
-    if (currentIndex < steps.length - 1) {
-      setCurrentStep(steps[currentIndex + 1].id);
-    } else {
-      setCurrentStep("complete");
-    }
-  };
-
   const handleStepClick = (stepId: SessionStep, route: string) => {
     setCurrentStep(stepId);
     router.push(route);
-  };
-
-  const resetSession = () => {
-    setCurrentStep("review");
-    setCompletedSteps(new Set());
   };
 
   if (!user) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center max-w-md">
-          <h3 className="text-2xl font-semibold text-gray-900 mb-3">
+          <h3 className="text-3xl font-semibold text-gray-900 mb-4">
             Daily Practice Session
           </h3>
-          <p className="text-gray-600">
+          <p className="text-lg text-gray-600">
             Sign in to access your personalized daily learning session.
           </p>
         </div>
@@ -94,19 +78,22 @@ export default function DailySession() {
   if (currentStep === "complete") {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="text-center max-w-2xl px-6">
-          <div className="mx-auto w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-8">
-            <PartyPopper className="w-10 h-10 text-gray-900" />
-          </div>
-          <h2 className="text-5xl font-semibold text-gray-900 mb-4 tracking-tight">
+        <div className="text-center max-w-[600px] px-8">
+          <h2 className="text-5xl font-semibold text-gray-900 mb-6">
             Session Complete
           </h2>
-          <p className="text-xl text-gray-600 mb-12 max-w-lg mx-auto">
+          <p className="text-lg text-gray-600 mb-12">
             Excellent work completing today's practice session.
           </p>
-
           <div className="flex items-center justify-center gap-4">
-            <Button variant="outline" onClick={resetSession} size="lg">
+            <Button
+              variant="outline"
+              onClick={() => {
+                setCurrentStep("review");
+                setCompletedSteps(new Set());
+              }}
+              size="lg"
+            >
               Start New Session
             </Button>
             <Button onClick={() => router.push("/dashboard")} size="lg">
@@ -121,37 +108,39 @@ export default function DailySession() {
   const progressPercentage = (completedSteps.size / steps.length) * 100;
 
   return (
-    <div className="max-w-6xl mx-auto">
-      {/* Hero Section */}
-      <div className="text-center mb-20">
-        <h1 className="text-6xl font-semibold text-gray-900 mb-4 tracking-tight">
+    <div className="w-full max-w-[1200px] mx-auto px-8">
+      {/* Hero Section - 120px bottom spacing */}
+      <div className="text-center mb-[120px]">
+        <h1 className="text-6xl font-semibold text-gray-900 mb-6 tracking-tight leading-tight">
           Daily Practice
         </h1>
-        <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+        <p className="text-lg text-gray-600 max-w-[600px] mx-auto mb-12">
           Complete these activities for a balanced learning experience
         </p>
+        <Button size="lg" onClick={() => handleStepClick("review", "/review")}>
+          Start Session
+          <ArrowRight className="ml-2 w-5 h-5" />
+        </Button>
       </div>
 
-      {/* Progress Indicator - Minimal */}
-      <div className="mb-16">
-        <div className="flex items-center justify-between mb-4 px-1">
-          <div className="text-sm font-medium text-gray-500">
-            {completedSteps.size} of {steps.length} complete
-          </div>
-          <div className="text-sm text-gray-400">
-            {Math.round(progressPercentage)}%
-          </div>
+      {/* Progress Section - 80px bottom spacing */}
+      <div className="mb-[80px]">
+        <div className="flex items-center justify-between mb-3">
+          <span className="text-sm font-medium text-gray-500">Progress</span>
+          <span className="text-sm text-gray-400">
+            {completedSteps.size} of {steps.length}
+          </span>
         </div>
-        <div className="w-full bg-gray-100 rounded-full h-1">
+        <div className="w-full bg-gray-100 rounded-full h-2">
           <div
-            className="h-1 rounded-full bg-gray-900 transition-all duration-700 ease-out"
+            className="h-2 rounded-full bg-gray-900 transition-all duration-500"
             style={{ width: `${progressPercentage}%` }}
           />
         </div>
       </div>
 
-      {/* Steps Grid - Premium Layout */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-20">
+      {/* Cards Grid - Strict uniform layout */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {steps.map((step, index) => {
           const isCompleted = completedSteps.has(step.id);
           const isCurrent = currentStep === step.id;
@@ -164,78 +153,53 @@ export default function DailySession() {
               onClick={() => !isLocked && handleStepClick(step.id, step.route)}
               disabled={isLocked}
               className={`
-                group relative bg-white rounded-2xl p-8 text-left transition-all duration-200
-                ${
-                  isLocked
-                    ? "opacity-40 cursor-not-allowed"
-                    : "hover:shadow-lg cursor-pointer"
-                }
-                ${isCurrent && !isCompleted ? "shadow-md" : "shadow-sm"}
+                group relative bg-white border border-gray-200 rounded-xl p-10 text-left
+                transition-all duration-200 h-full flex flex-col
+                ${isLocked ? "opacity-40 cursor-not-allowed" : "hover:border-gray-300 hover:shadow-md cursor-pointer"}
+                ${isCurrent && !isCompleted ? "border-gray-900" : ""}
               `}
             >
-              {/* Icon */}
-              <div className="mb-6">
+              {/* Icon - Fixed size */}
+              <div className="mb-8">
                 <div
                   className={`
-                    inline-flex items-center justify-center w-14 h-14 rounded-2xl
-                    transition-all duration-200
+                    inline-flex items-center justify-center w-16 h-16 rounded-xl
                     ${
                       isCompleted
                         ? "bg-gray-900 text-white"
                         : isCurrent
-                        ? "bg-primary text-white"
-                        : "bg-gray-100 text-gray-600 group-hover:bg-gray-200"
+                        ? "bg-gray-900 text-white"
+                        : "bg-gray-100 text-gray-600"
                     }
                   `}
                 >
-                  <Icon className="w-7 h-7" strokeWidth={1.5} />
+                  <Icon className="w-8 h-8" strokeWidth={1.5} />
                 </div>
               </div>
 
-              {/* Content */}
-              <div className="mb-6">
-                <h3 className="text-2xl font-semibold text-gray-900 mb-2">
+              {/* Content - Flexible grow */}
+              <div className="flex-grow mb-8">
+                <h3 className="text-3xl font-semibold text-gray-900 mb-3">
                   {step.title}
                 </h3>
-                <p className="text-gray-600 text-base leading-relaxed">
+                <p className="text-lg text-gray-600 leading-relaxed">
                   {step.description}
                 </p>
               </div>
 
-              {/* Footer */}
+              {/* Footer - Fixed at bottom */}
               <div className="flex items-center justify-between text-sm">
                 <span className="text-gray-500">{step.time}</span>
                 {!isLocked && !isCompleted && (
-                  <div className="flex items-center gap-2 text-gray-900 font-medium group-hover:gap-3 transition-all">
-                    <span>{isCurrent ? "Continue" : "Start"}</span>
+                  <div className="flex items-center gap-2 text-gray-900 font-medium">
+                    <span>Start</span>
                     <ArrowRight className="w-4 h-4" strokeWidth={2} />
                   </div>
                 )}
                 {isCompleted && (
-                  <span className="text-gray-900 font-medium">Complete</span>
+                  <span className="text-gray-900 font-medium">✓ Complete</span>
                 )}
               </div>
-
-              {/* Completion Indicator - Subtle */}
-              {isCompleted && (
-                <div className="absolute top-8 right-8">
-                  <div className="w-6 h-6 rounded-full bg-gray-900 flex items-center justify-center">
-                    <svg
-                      className="w-4 h-4 text-white"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth={3}
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                  </div>
-                </div>
-              )}
             </button>
           );
         })}

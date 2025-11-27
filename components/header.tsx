@@ -23,18 +23,18 @@ export function Header({ onSignOut, onSignIn, isAuthenticated }: HeaderProps) {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-xl border-b border-gray-200/60">
-      <div className="mx-auto max-w-7xl">
-        <div className="flex h-14 items-center justify-between px-6">
+    <header className="sticky top-0 z-50 w-full bg-white border-b border-gray-200">
+      <div className="mx-auto max-w-[1200px] px-8">
+        <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center group">
-            <span className="text-xl font-semibold text-gray-900 tracking-tight">
+          <Link href="/" className="flex items-center">
+            <span className="text-xl font-semibold text-gray-900">
               Vorex
             </span>
           </Link>
 
-          {/* Navigation */}
-          <nav className="hidden md:flex items-center gap-8">
+          {/* Navigation - Centered */}
+          <nav className="hidden md:flex items-center gap-10">
             {navigation.map((item) => {
               const isActive = pathname === item.href;
 
@@ -43,16 +43,13 @@ export function Header({ onSignOut, onSignIn, isAuthenticated }: HeaderProps) {
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    "text-sm font-medium transition-colors relative",
+                    "text-sm font-medium transition-colors py-1",
                     isActive
                       ? "text-gray-900"
-                      : "text-gray-600 hover:text-gray-900"
+                      : "text-gray-500 hover:text-gray-900"
                   )}
                 >
                   {item.name}
-                  {isActive && (
-                    <div className="absolute -bottom-[13px] left-0 right-0 h-[2px] bg-gray-900" />
-                  )}
                 </Link>
               );
             })}
@@ -63,14 +60,14 @@ export function Header({ onSignOut, onSignIn, isAuthenticated }: HeaderProps) {
             {isAuthenticated ? (
               <button
                 onClick={onSignOut}
-                className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors"
+                className="text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors"
               >
                 Sign Out
               </button>
             ) : (
               <button
                 onClick={onSignIn}
-                className="px-4 py-1.5 text-sm font-medium text-white bg-gray-900 rounded-lg hover:bg-gray-800 transition-colors"
+                className="px-5 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg hover:bg-gray-800 transition-colors"
               >
                 Sign In
               </button>

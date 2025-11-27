@@ -40,7 +40,7 @@ export function AppShell({ children }: AppShellProps) {
         onSignIn={() => setShowAuthModal(true)}
       />
 
-      <main className="mx-auto max-w-7xl px-6 py-16">
+      <main className="py-24">
         {children}
       </main>
 
