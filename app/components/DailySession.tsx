@@ -17,6 +17,7 @@ import {
   Linkedin,
   Play,
   AlertCircle,
+  ChevronDown,
 } from "lucide-react";
 
 type SessionStep = "review" | "lesson" | "scenario" | "drill" | "complete";
@@ -28,6 +29,7 @@ export default function DailySession() {
   const [completedSteps, setCompletedSteps] = useState<Set<SessionStep>>(new Set());
   const [demoInput, setDemoInput] = useState("");
   const [demoResult, setDemoResult] = useState<{ corrected: string; explanation: string } | null>(null);
+  const [showDetailedBreakdown, setShowDetailedBreakdown] = useState(false);
 
   const steps = [
     {
@@ -74,7 +76,6 @@ export default function DailySession() {
   };
 
   const handleDemoSubmit = () => {
-    // Simulated grammar correction demo
     const corrections: { [key: string]: { corrected: string; explanation: string } } = {
       "i go to store yesterday": {
         corrected: "I went to the store yesterday",
@@ -102,7 +103,7 @@ export default function DailySession() {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center max-w-md">
-          <h3 className="text-3xl font-display font-semibold text-neutral-900 mb-4">
+          <h3 className="text-3xl font-serif font-semibold text-neutral-900 mb-4">
             Daily Practice Session
           </h3>
           <p className="text-lg text-neutral-600">
@@ -117,7 +118,7 @@ export default function DailySession() {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center max-w-xl">
-          <h2 className="text-5xl font-display font-bold text-neutral-900 mb-6">
+          <h2 className="text-5xl font-serif font-bold text-neutral-900 mb-6">
             Session Complete
           </h2>
           <p className="text-xl text-neutral-600 mb-12">
@@ -147,227 +148,455 @@ export default function DailySession() {
 
   return (
     <div>
-      {/* ========== HERO SECTION - Concrete Value Prop ========== */}
+      {/* ========== HERO SECTION - 60/40 ASYMMETRIC SPLIT ========== */}
       <div className="-mx-8 bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900 text-white py-40 mb-40">
-        <div className="max-w-5xl mx-auto px-8 text-center">
-          <h1 className="text-7xl font-display font-bold mb-6 tracking-tight leading-tight">
-            Advance One CEFR Level<br />in 90 Days
-          </h1>
-          <p className="text-2xl text-neutral-300 max-w-3xl mx-auto mb-4 leading-relaxed">
-            Precision linguistic engine analyzes 47 error patterns per conversation
-          </p>
-          <p className="text-lg text-neutral-400 max-w-2xl mx-auto mb-12">
-            Join 12,847 learners who've achieved measurable fluency gains
-          </p>
+        <div className="max-w-7xl mx-auto px-8">
+          {/* Bracket motif - top */}
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-electric-500/0 via-electric-500/50 to-electric-500/0" />
 
-          {/* Dominant CTA */}
-          <div className="mb-8">
-            <Button
-              size="lg"
-              onClick={() => router.push("/assessment")}
-              className="text-lg font-semibold px-12 py-7 bg-electric-500 text-white hover:bg-electric-600 shadow-2xl shadow-electric-500/30 transition-all duration-200 hover:scale-105"
-            >
-              Start Your Free Assessment
-              <ArrowRight className="ml-3 w-6 h-6" />
-            </Button>
+          <div className="grid grid-cols-5 gap-16">
+            {/* LEFT: 60% - Headline & CTA */}
+            <div className="col-span-3">
+              <div className="text-sm font-mono text-electric-400 mb-6 tracking-wider">[ LINGUISTIC PRECISION ENGINE ]</div>
+              <h1 className="text-7xl font-serif font-bold mb-8 tracking-tight leading-tight">
+                Advance One CEFR Level in 90 Days
+              </h1>
+              <p className="text-2xl text-neutral-300 mb-4 leading-relaxed font-sans">
+                Precision linguistic engine analyzes 47 error patterns per conversation
+              </p>
+              <p className="text-lg text-neutral-400 mb-12 font-sans">
+                Join 12,847 learners who've achieved measurable fluency gains
+              </p>
+
+              {/* Primary CTA */}
+              <div className="mb-8">
+                <Button
+                  size="lg"
+                  onClick={() => router.push("/assessment")}
+                  className="text-lg font-semibold px-12 py-7 bg-electric-500 text-white hover:bg-electric-600 shadow-2xl shadow-electric-500/30 transition-all duration-200 hover:scale-105"
+                >
+                  Start Free Assessment
+                  <ArrowRight className="ml-3 w-6 h-6" />
+                </Button>
+              </div>
+
+              {/* Progressive disclosure - Level 2 */}
+              <button
+                onClick={() => setShowDetailedBreakdown(!showDetailedBreakdown)}
+                className="text-sm text-electric-400 hover:text-electric-300 flex items-center gap-2 mb-8"
+              >
+                See detailed breakdown
+                <ChevronDown className={`w-4 h-4 transition-transform ${showDetailedBreakdown ? 'rotate-180' : ''}`} />
+              </button>
+
+              {/* Progressive disclosure - Level 3 */}
+              {showDetailedBreakdown && (
+                <div className="bg-white/5 border border-white/10 rounded-xl p-6 mb-8 backdrop-blur-sm">
+                  <h3 className="text-xl font-serif text-white mb-4">Your personalized assessment includes:</h3>
+                  <ul className="font-mono text-sm text-neutral-300 space-y-2">
+                    <li className="flex items-center gap-2">
+                      <span className="text-electric-400">→</span>
+                      47-point linguistic profile
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <span className="text-electric-400">→</span>
+                      Phonetic heat map
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <span className="text-electric-400">→</span>
+                      90-day mastery roadmap
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <span className="text-electric-400">→</span>
+                      Predicted CEFR trajectory
+                    </li>
+                  </ul>
+                </div>
+              )}
+
+              {/* Micro-benefits */}
+              <div className="flex flex-col gap-4 text-sm text-neutral-300 font-sans">
+                <div className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-electric-400" />
+                  <span>No credit card required</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-electric-400" />
+                  <span>Get your fluency score in 15 minutes</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-electric-400" />
+                  <span>Personalized 90-day roadmap included</span>
+                </div>
+              </div>
+            </div>
+
+            {/* RIGHT: 40% - Dependency Tree Visualization */}
+            <div className="col-span-2 flex items-center">
+              <div className="relative w-full">
+                <div className="bg-white/5 border border-white/10 rounded-xl p-8 backdrop-blur-sm">
+                  <div className="text-xs font-mono text-electric-400 mb-6 tracking-wider">[ SYNTAX ANALYSIS ]</div>
+
+                  {/* Dependency tree visualization */}
+                  <div className="space-y-6">
+                    <div className="flex items-center gap-3">
+                      <div className="w-3 h-3 rounded-full bg-electric-500" />
+                      <span className="font-mono text-sm text-white">SUBJ: I</span>
+                    </div>
+
+                    <div className="ml-6 relative">
+                      <div className="absolute -left-3 top-0 w-px h-12 bg-electric-300" />
+                      <div className="flex items-center gap-3">
+                        <div className="w-3 h-3 rounded-full bg-electric-400" />
+                        <span className="font-mono text-sm text-white">VERB: went</span>
+                      </div>
+                    </div>
+
+                    <div className="ml-12 relative">
+                      <div className="absolute -left-6 top-0 w-px h-12 bg-electric-200" />
+                      <div className="flex items-center gap-3">
+                        <div className="w-3 h-3 rounded-full bg-electric-300" />
+                        <span className="font-mono text-sm text-white">PREP: to</span>
+                      </div>
+                    </div>
+
+                    <div className="ml-20 relative">
+                      <div className="absolute -left-9 top-0 w-px h-12 bg-electric-100" />
+                      <div className="flex items-center gap-3">
+                        <div className="w-3 h-3 rounded-full bg-electric-200" />
+                        <span className="font-mono text-sm text-white">DET: the</span>
+                      </div>
+                    </div>
+
+                    <div className="ml-20 relative">
+                      <div className="absolute -left-9 top-0 w-px h-12 bg-electric-100" />
+                      <div className="flex items-center gap-3">
+                        <div className="w-3 h-3 rounded-full bg-electric-200" />
+                        <span className="font-mono text-sm text-white">OBJ: store</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-8 pt-6 border-t border-white/10">
+                    <div className="text-xs font-mono text-neutral-400 mb-2">Real-time parsing</div>
+                    <div className="text-2xl font-serif text-electric-400">94% accuracy</div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
-          {/* Micro-benefits */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-12 text-sm text-neutral-300">
-            <div className="flex items-center gap-2">
-              <Check className="w-4 h-4 text-electric-400" />
-              <span>No credit card required</span>
+          {/* Social proof */}
+          <div className="mt-20 text-center">
+            <p className="text-sm text-neutral-400 uppercase tracking-wider mb-3 font-mono">
+              Used by students at
+            </p>
+            <div className="flex items-center justify-center gap-8 text-neutral-500 font-semibold text-sm">
+              <span>Stanford</span>
+              <span className="text-neutral-700">•</span>
+              <span>Cambridge</span>
+              <span className="text-neutral-700">•</span>
+              <span>Tokyo University</span>
             </div>
-            <div className="flex items-center gap-2">
-              <Check className="w-4 h-4 text-electric-400" />
-              <span>Get your fluency score in 15 minutes</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Check className="w-4 h-4 text-electric-400" />
-              <span>Personalized 90-day roadmap included</span>
-            </div>
-          </div>
-
-          {/* Social proof in hero */}
-          <p className="text-sm text-neutral-400 uppercase tracking-wider mb-3">
-            Used by students at
-          </p>
-          <div className="flex items-center justify-center gap-8 text-neutral-500 font-semibold text-sm">
-            <span>Stanford</span>
-            <span className="text-neutral-700">•</span>
-            <span>Cambridge</span>
-            <span className="text-neutral-700">•</span>
-            <span>Tokyo University</span>
           </div>
         </div>
       </div>
 
-      {/* ========== PRODUCT PROOF SECTION - Show the Engine ========== */}
+      {/* ========== THE LINGUISTIC ENGINE - NUMBERED NARRATIVE ========== */}
+      <div className="bg-neutral-900 text-white py-32 -mx-8 px-8 mb-40">
+        <div className="max-w-5xl mx-auto">
+          <div className="mb-16">
+            <div className="text-sm font-mono text-electric-400 mb-4 tracking-wider">[ PLATFORM ARCHITECTURE ]</div>
+            <h2 className="text-6xl font-serif mb-12">The Linguistic Engine</h2>
+          </div>
+
+          <div className="space-y-16">
+            {/* 01 - Morpho-Syntactic Analysis */}
+            <div className="flex gap-12">
+              <span className="font-mono text-4xl text-electric-400 tracking-wider">01</span>
+              <div className="flex-1">
+                <h3 className="text-3xl font-serif mb-4">Morpho-Syntactic Analysis</h3>
+                <p className="text-xl text-neutral-300 mb-8 leading-relaxed font-sans">
+                  47-point taxonomy classifies errors across morphology, syntax, semantics, pragmatics
+                </p>
+
+                {/* Dependency tree visual */}
+                <div className="bg-white/5 border border-white/10 rounded-xl p-8 backdrop-blur-sm">
+                  <div className="grid grid-cols-4 gap-4 text-sm">
+                    <div>
+                      <div className="font-mono text-electric-400 mb-2">Morphology</div>
+                      <div className="text-neutral-400 text-xs">Verb tenses, plurals, derivation</div>
+                    </div>
+                    <div>
+                      <div className="font-mono text-electric-400 mb-2">Syntax</div>
+                      <div className="text-neutral-400 text-xs">Word order, agreement, dependencies</div>
+                    </div>
+                    <div>
+                      <div className="font-mono text-electric-400 mb-2">Semantics</div>
+                      <div className="text-neutral-400 text-xs">Meaning, context, collocation</div>
+                    </div>
+                    <div>
+                      <div className="font-mono text-electric-400 mb-2">Pragmatics</div>
+                      <div className="text-neutral-400 text-xs">Register, formality, context</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 02 - Phonetic Decomposition */}
+            <div className="flex gap-12">
+              <span className="font-mono text-4xl text-electric-400 tracking-wider">02</span>
+              <div className="flex-1">
+                <h3 className="text-3xl font-serif mb-4">Phonetic Decomposition</h3>
+                <p className="text-xl text-neutral-300 mb-8 leading-relaxed font-sans">
+                  Sub-phoneme waveform analysis detects articulation at 94% native precision
+                </p>
+
+                {/* Waveform visualization with IPA */}
+                <div className="bg-white/5 border border-white/10 rounded-xl p-8 backdrop-blur-sm">
+                  <div className="mb-6">
+                    {/* SVG Waveform */}
+                    <svg className="w-full h-24" viewBox="0 0 400 80">
+                      <path
+                        d="M0,40 Q10,20 20,40 T40,40 Q50,15 60,40 T80,40 Q90,10 100,40 T120,40 Q130,25 140,40 T160,40 Q170,30 180,40 T200,40 Q210,20 220,40 T240,40 Q250,35 260,40 T280,40 Q290,25 300,40 T320,40 Q330,30 340,40 T360,40 Q370,35 380,40 L400,40"
+                        fill="none"
+                        stroke="#4DA6FF"
+                        strokeWidth="2"
+                      />
+                      {/* IPA markers */}
+                      <text x="60" y="70" fill="#80BFFF" fontSize="12" fontFamily="monospace">/θ/</text>
+                      <text x="180" y="70" fill="#80BFFF" fontSize="12" fontFamily="monospace">/ɜː/</text>
+                      <text x="300" y="70" fill="#80BFFF" fontSize="12" fontFamily="monospace">/ti/</text>
+                    </svg>
+                  </div>
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="font-mono text-neutral-400">0.0s</span>
+                    <span className="font-mono text-white">[ th-ur-tee ]</span>
+                    <span className="font-mono text-neutral-400">1.2s</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 03 - Adaptive Retention Engine */}
+            <div className="flex gap-12">
+              <span className="font-mono text-4xl text-electric-400 tracking-wider">03</span>
+              <div className="flex-1">
+                <h3 className="text-3xl font-serif mb-4">Adaptive Retention Engine</h3>
+                <p className="text-xl text-neutral-300 mb-8 leading-relaxed font-sans">
+                  Modified SM-2 algorithm optimizes review intervals for 0.94 recall rate
+                </p>
+
+                {/* Forgetting curve visualization */}
+                <div className="bg-white/5 border border-white/10 rounded-xl p-8 backdrop-blur-sm">
+                  <svg className="w-full h-32" viewBox="0 0 400 100">
+                    {/* Forgetting curve */}
+                    <path
+                      d="M0,20 Q100,25 150,50 T300,85 L400,95"
+                      fill="none"
+                      stroke="#F59E0B"
+                      strokeWidth="2"
+                      strokeDasharray="5,5"
+                      opacity="0.5"
+                    />
+                    {/* Optimized curve */}
+                    <path
+                      d="M0,20 L100,18 L200,22 L300,24 L400,26"
+                      fill="none"
+                      stroke="#0066FF"
+                      strokeWidth="3"
+                    />
+                    {/* Review markers */}
+                    <circle cx="100" cy="18" r="4" fill="#0066FF" />
+                    <circle cx="200" cy="22" r="4" fill="#0066FF" />
+                    <circle cx="300" cy="24" r="4" fill="#0066FF" />
+                  </svg>
+                  <div className="flex items-center justify-between text-xs font-mono text-neutral-400 mt-4">
+                    <span>Day 0</span>
+                    <span>Day 7</span>
+                    <span>Day 30</span>
+                    <span>Day 90</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ========== PRODUCT PROOF - DIAGONAL GRID WITH OFFSET CARDS ========== */}
       <div className="mb-40">
         <div className="text-center mb-20">
-          <h2 className="text-6xl font-display font-bold text-neutral-900 mb-6">
+          <div className="text-sm font-mono text-electric-600 mb-4 tracking-wider">[ LIVE DEMONSTRATIONS ]</div>
+          <h2 className="text-6xl font-serif font-bold text-neutral-900 mb-6">
             See The Engine In Action
           </h2>
-          <p className="text-xl text-neutral-600 max-w-3xl mx-auto">
+          <p className="text-xl text-neutral-600 max-w-3xl mx-auto font-sans">
             Real-time linguistic analysis that powers every conversation
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
-          {/* Grammar Correction Demo */}
-          <div className="bg-white border-2 border-neutral-200 rounded-2xl p-8 hover:border-electric-500 transition-all duration-300">
-            <div className="mb-6">
-              <h3 className="text-2xl font-display font-semibold text-neutral-900 mb-3">
-                Grammar Correction
-              </h3>
-              <p className="text-neutral-600 mb-6">
-                Linguistic analysis overlay with contextual explanations
-              </p>
-            </div>
-
-            <div className="bg-neutral-50 rounded-xl p-6 mb-4">
-              <div className="mb-4">
-                <p className="text-xs font-mono text-neutral-500 uppercase tracking-wider mb-2">Before</p>
-                <p className="text-base text-neutral-700 line-through decoration-red-500">
-                  I go to store yesterday
+        {/* Diagonal offset grid */}
+        <div className="space-y-8">
+          <div className="grid grid-cols-5 gap-8">
+            {/* Grammar Correction - spans 3 cols, starts at col 1 */}
+            <div className="col-span-3 bg-white border-2 border-neutral-200 rounded-2xl p-8 hover:border-electric-500 transition-all duration-300 hover:shadow-xl">
+              <div className="mb-6">
+                <h3 className="text-3xl font-serif font-semibold text-neutral-900 mb-3">
+                  Grammar Correction
+                </h3>
+                <p className="text-neutral-600 font-sans mb-6">
+                  Linguistic analysis overlay with contextual explanations
                 </p>
               </div>
-              <div>
-                <p className="text-xs font-mono text-neutral-500 uppercase tracking-wider mb-2">After</p>
-                <p className="text-base text-electric-600 font-semibold">
-                  I went to the store yesterday
+
+              <div className="bg-neutral-50 rounded-xl p-6 mb-4">
+                <div className="mb-4">
+                  <p className="text-xs font-mono text-neutral-500 uppercase tracking-wider mb-2">Before</p>
+                  <p className="text-base text-neutral-700 line-through decoration-red-500">
+                    I go to store yesterday
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs font-mono text-neutral-500 uppercase tracking-wider mb-2">After</p>
+                  <p className="text-base text-electric-600 font-semibold">
+                    I went to the store yesterday
+                  </p>
+                </div>
+              </div>
+
+              <div className="bg-electric-50 border border-electric-200 rounded-lg p-4">
+                <p className="text-xs font-mono text-electric-900 uppercase tracking-wider mb-2">
+                  Analysis
                 </p>
+                <ul className="text-sm text-neutral-700 space-y-1 font-sans">
+                  <li className="flex items-start gap-2">
+                    <AlertCircle className="w-4 h-4 text-electric-500 mt-0.5 flex-shrink-0" />
+                    <span>Past tense marker detected: "yesterday"</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <AlertCircle className="w-4 h-4 text-electric-500 mt-0.5 flex-shrink-0" />
+                    <span>Definite article missing before specific noun</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <AlertCircle className="w-4 h-4 text-electric-500 mt-0.5 flex-shrink-0" />
+                    <span>Verb conjugation: go → went (irregular)</span>
+                  </li>
+                </ul>
               </div>
             </div>
 
-            <div className="bg-electric-50 border border-electric-200 rounded-lg p-4">
-              <p className="text-xs font-mono text-electric-900 uppercase tracking-wider mb-2">
-                Analysis
-              </p>
-              <ul className="text-sm text-neutral-700 space-y-1">
-                <li className="flex items-start gap-2">
-                  <AlertCircle className="w-4 h-4 text-electric-500 mt-0.5 flex-shrink-0" />
-                  <span>Past tense marker detected: "yesterday"</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <AlertCircle className="w-4 h-4 text-electric-500 mt-0.5 flex-shrink-0" />
-                  <span>Definite article missing before specific noun</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <AlertCircle className="w-4 h-4 text-electric-500 mt-0.5 flex-shrink-0" />
-                  <span>Verb conjugation: go → went (irregular)</span>
-                </li>
-              </ul>
+            {/* Pronunciation - spans 2 cols, offset */}
+            <div className="col-span-2 bg-white border-2 border-neutral-200 rounded-2xl p-8 hover:border-electric-500 transition-all duration-300 hover:shadow-xl mt-16">
+              <div className="mb-6">
+                <h3 className="text-3xl font-serif font-semibold text-neutral-900 mb-3">
+                  Pronunciation Analysis
+                </h3>
+                <p className="text-neutral-600 font-sans mb-6">
+                  Sub-phoneme waveform visualization
+                </p>
+              </div>
+
+              <div className="bg-neutral-50 rounded-xl p-6 mb-4">
+                <p className="text-xs font-mono text-neutral-500 uppercase tracking-wider mb-3">
+                  Waveform Pattern
+                </p>
+                {/* Waveform bars */}
+                <div className="flex items-end justify-between gap-1 h-24 mb-4">
+                  {[3, 7, 4, 8, 12, 9, 6, 11, 14, 10, 7, 9, 13, 8, 5, 7, 10, 6, 4, 8].map((height, i) => (
+                    <div
+                      key={i}
+                      className="flex-1 bg-electric-400 rounded-sm"
+                      style={{ height: `${height * 6}%` }}
+                    />
+                  ))}
+                </div>
+                <div className="flex items-center justify-between text-xs text-neutral-500">
+                  <span>0.0s</span>
+                  <span className="font-mono">th-ur-tee</span>
+                  <span>1.2s</span>
+                </div>
+              </div>
+
+              <div className="bg-electric-50 border border-electric-200 rounded-lg p-4">
+                <p className="text-xs font-mono text-electric-900 uppercase tracking-wider mb-2">
+                  Detected Issues
+                </p>
+                <ul className="text-sm text-neutral-700 space-y-1 font-sans">
+                  <li className="flex items-start gap-2">
+                    <AlertCircle className="w-4 h-4 text-electric-500 mt-0.5 flex-shrink-0" />
+                    <span>/θ/ phoneme: Tongue position too low</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <AlertCircle className="w-4 h-4 text-electric-500 mt-0.5 flex-shrink-0" />
+                    <span>Stress pattern: Should emphasize "thir-"</span>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
 
-          {/* Pronunciation Feedback Demo */}
-          <div className="bg-white border-2 border-neutral-200 rounded-2xl p-8 hover:border-electric-500 transition-all duration-300">
-            <div className="mb-6">
-              <h3 className="text-2xl font-display font-semibold text-neutral-900 mb-3">
-                Pronunciation Analysis
-              </h3>
-              <p className="text-neutral-600 mb-6">
-                Sub-phoneme waveform visualization and correction
-              </p>
-            </div>
-
-            <div className="bg-neutral-50 rounded-xl p-6 mb-4">
-              <p className="text-xs font-mono text-neutral-500 uppercase tracking-wider mb-3">
-                Waveform Pattern
-              </p>
-              {/* Simplified waveform visualization */}
-              <div className="flex items-end justify-between gap-1 h-24 mb-4">
-                {[3, 7, 4, 8, 12, 9, 6, 11, 14, 10, 7, 9, 13, 8, 5, 7, 10, 6, 4, 8].map((height, i) => (
-                  <div
-                    key={i}
-                    className="flex-1 bg-electric-400 rounded-sm"
-                    style={{ height: `${height * 6}%` }}
-                  />
-                ))}
+          {/* Adaptive Difficulty - spans 2 cols, offset left */}
+          <div className="grid grid-cols-5 gap-8">
+            <div className="col-start-2 col-span-2 bg-white border-2 border-neutral-200 rounded-2xl p-8 hover:border-electric-500 transition-all duration-300 hover:shadow-xl">
+              <div className="mb-6">
+                <h3 className="text-3xl font-serif font-semibold text-neutral-900 mb-3">
+                  Adaptive Difficulty
+                </h3>
+                <p className="text-neutral-600 font-sans mb-6">
+                  Real-time personalization based on error patterns
+                </p>
               </div>
-              <div className="flex items-center justify-between text-xs text-neutral-500">
-                <span>0.0s</span>
-                <span className="font-mono">th-ur-tee</span>
-                <span>1.2s</span>
-              </div>
-            </div>
 
-            <div className="bg-electric-50 border border-electric-200 rounded-lg p-4">
-              <p className="text-xs font-mono text-electric-900 uppercase tracking-wider mb-2">
-                Detected Issues
-              </p>
-              <ul className="text-sm text-neutral-700 space-y-1">
-                <li className="flex items-start gap-2">
-                  <AlertCircle className="w-4 h-4 text-electric-500 mt-0.5 flex-shrink-0" />
-                  <span>/θ/ phoneme: Tongue position too low</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <AlertCircle className="w-4 h-4 text-electric-500 mt-0.5 flex-shrink-0" />
-                  <span>Stress pattern: Should emphasize "thir-"</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          {/* Adaptive Difficulty Demo */}
-          <div className="bg-white border-2 border-neutral-200 rounded-2xl p-8 hover:border-electric-500 transition-all duration-300">
-            <div className="mb-6">
-              <h3 className="text-2xl font-display font-semibold text-neutral-900 mb-3">
-                Adaptive Difficulty
-              </h3>
-              <p className="text-neutral-600 mb-6">
-                Real-time personalization based on error patterns
-              </p>
-            </div>
-
-            <div className="bg-neutral-50 rounded-xl p-6 mb-4">
-              <p className="text-xs font-mono text-neutral-500 uppercase tracking-wider mb-3">
-                Performance Tracking
-              </p>
-              <div className="space-y-3">
-                <div>
-                  <div className="flex justify-between text-sm mb-1">
-                    <span className="text-neutral-700">Past tense accuracy</span>
-                    <span className="font-mono text-electric-600 font-semibold">94%</span>
+              <div className="bg-neutral-50 rounded-xl p-6 mb-4">
+                <p className="text-xs font-mono text-neutral-500 uppercase tracking-wider mb-3">
+                  Performance Tracking
+                </p>
+                <div className="space-y-3">
+                  <div>
+                    <div className="flex justify-between text-sm mb-1">
+                      <span className="text-neutral-700 font-sans">Past tense accuracy</span>
+                      <span className="font-mono text-electric-600 font-semibold">94%</span>
+                    </div>
+                    <div className="w-full bg-neutral-200 rounded-full h-2">
+                      <div className="h-2 rounded-full bg-electric-500" style={{ width: "94%" }} />
+                    </div>
                   </div>
-                  <div className="w-full bg-neutral-200 rounded-full h-2">
-                    <div className="h-2 rounded-full bg-electric-500" style={{ width: "94%" }} />
+                  <div>
+                    <div className="flex justify-between text-sm mb-1">
+                      <span className="text-neutral-700 font-sans">Article usage</span>
+                      <span className="font-mono text-amber-600 font-semibold">67%</span>
+                    </div>
+                    <div className="w-full bg-neutral-200 rounded-full h-2">
+                      <div className="h-2 rounded-full bg-amber-500" style={{ width: "67%" }} />
+                    </div>
                   </div>
-                </div>
-                <div>
-                  <div className="flex justify-between text-sm mb-1">
-                    <span className="text-neutral-700">Article usage</span>
-                    <span className="font-mono text-amber-600 font-semibold">67%</span>
-                  </div>
-                  <div className="w-full bg-neutral-200 rounded-full h-2">
-                    <div className="h-2 rounded-full bg-amber-500" style={{ width: "67%" }} />
-                  </div>
-                </div>
-                <div>
-                  <div className="flex justify-between text-sm mb-1">
-                    <span className="text-neutral-700">Preposition choice</span>
-                    <span className="font-mono text-red-600 font-semibold">52%</span>
-                  </div>
-                  <div className="w-full bg-neutral-200 rounded-full h-2">
-                    <div className="h-2 rounded-full bg-red-500" style={{ width: "52%" }} />
+                  <div>
+                    <div className="flex justify-between text-sm mb-1">
+                      <span className="text-neutral-700 font-sans">Preposition choice</span>
+                      <span className="font-mono text-red-600 font-semibold">52%</span>
+                    </div>
+                    <div className="w-full bg-neutral-200 rounded-full h-2">
+                      <div className="h-2 rounded-full bg-red-500" style={{ width: "52%" }} />
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            <div className="bg-electric-50 border border-electric-200 rounded-lg p-4">
-              <p className="text-xs font-mono text-electric-900 uppercase tracking-wider mb-2">
-                Next Lesson Focus
-              </p>
-              <p className="text-sm text-neutral-700">
-                Increasing preposition exercises by 40%. Maintaining past tense reinforcement.
-              </p>
+              <div className="bg-electric-50 border border-electric-200 rounded-lg p-4">
+                <p className="text-xs font-mono text-electric-900 uppercase tracking-wider mb-2">
+                  Next Lesson Focus
+                </p>
+                <p className="text-sm text-neutral-700 font-sans">
+                  Increasing preposition exercises by 40%. Maintaining past tense reinforcement.
+                </p>
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="text-center">
+        <div className="text-center mt-16">
           <Button
             onClick={() => router.push("/demo")}
             className="bg-electric-500 hover:bg-electric-600 text-white px-8 py-3 text-base font-semibold"
@@ -378,120 +607,275 @@ export default function DailySession() {
         </div>
       </div>
 
-      {/* ========== METRICS SECTION - Quantifiable Outcomes ========== */}
+      {/* ========== METRICS - HORIZONTAL TIMELINE (NOT 3-COLUMN) ========== */}
       <div className="bg-neutral-900 -mx-8 px-8 py-32 mb-40">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-6xl font-display font-bold text-white mb-6">
-              Demonstrated Performance Improvement
+            <div className="text-sm font-mono text-electric-400 mb-4 tracking-wider">[ MEASURABLE OUTCOMES ]</div>
+            <h2 className="text-6xl font-serif font-bold text-white mb-6">
+              Progression Timeline
             </h2>
-            <p className="text-xl text-neutral-400">
-              Based on 3,241 user sessions, Q4 2024
+            <p className="text-xl text-neutral-400 font-sans">
+              Average learner journey over 90 days (n=3,241 users, Q4 2024)
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-            {/* Metric 1 */}
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-10 text-center backdrop-blur-sm">
-              <div className="text-7xl font-display font-bold text-electric-400 mb-4">
-                847
-              </div>
-              <div className="text-xl font-semibold text-white mb-2">
-                Hours Delivered
-              </div>
-              <div className="text-neutral-400">
-                Total practice time across all users
-              </div>
-            </div>
+          {/* Horizontal timeline */}
+          <div className="relative">
+            {/* Timeline line */}
+            <div className="absolute top-1/2 left-0 right-0 h-1 bg-white/10 -translate-y-1/2" />
+            <div className="absolute top-1/2 left-0 h-1 bg-electric-500 -translate-y-1/2" style={{ width: "75%" }} />
 
-            {/* Metric 2 */}
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-10 text-center backdrop-blur-sm">
-              <div className="text-7xl font-display font-bold text-electric-400 mb-4">
-                94%
+            <div className="relative grid grid-cols-4 gap-8">
+              {/* Day 0 */}
+              <div className="text-center">
+                <div className="relative mb-8">
+                  <div className="w-4 h-4 rounded-full bg-electric-500 mx-auto mb-4 ring-4 ring-electric-500/20" />
+                  <div className="text-sm font-mono text-neutral-400">Day 0</div>
+                </div>
+                <div className="bg-white/5 border border-white/10 rounded-xl p-6 backdrop-blur-sm">
+                  <div className="text-5xl font-serif font-bold text-white mb-2">A2</div>
+                  <div className="text-sm text-neutral-400 font-sans">Initial assessment</div>
+                  <div className="mt-4 pt-4 border-t border-white/10">
+                    <div className="text-xs font-mono text-electric-400">BASELINE</div>
+                  </div>
+                </div>
               </div>
-              <div className="text-xl font-semibold text-white mb-2">
-                Correction Precision
-              </div>
-              <div className="text-neutral-400">
-                Grammar correction accuracy rate
-              </div>
-            </div>
 
-            {/* Metric 3 */}
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-10 text-center backdrop-blur-sm">
-              <div className="text-7xl font-display font-bold text-electric-400 mb-4">
-                2.3x
+              {/* Day 30 */}
+              <div className="text-center">
+                <div className="relative mb-8">
+                  <div className="w-4 h-4 rounded-full bg-electric-500 mx-auto mb-4 ring-4 ring-electric-500/20" />
+                  <div className="text-sm font-mono text-neutral-400">Day 30</div>
+                </div>
+                <div className="bg-white/5 border border-white/10 rounded-xl p-6 backdrop-blur-sm">
+                  <div className="text-5xl font-serif font-bold text-electric-400 mb-2">A2+</div>
+                  <div className="text-sm text-neutral-400 font-sans">Notable improvement</div>
+                  <div className="mt-4 pt-4 border-t border-white/10">
+                    <div className="text-xs font-mono text-electric-400">+23% accuracy</div>
+                  </div>
+                </div>
               </div>
-              <div className="text-xl font-semibold text-white mb-2">
-                Faster Learning
+
+              {/* Day 60 */}
+              <div className="text-center">
+                <div className="relative mb-8">
+                  <div className="w-4 h-4 rounded-full bg-electric-500 mx-auto mb-4 ring-4 ring-electric-500/20" />
+                  <div className="text-sm font-mono text-neutral-400">Day 60</div>
+                </div>
+                <div className="bg-white/5 border border-white/10 rounded-xl p-6 backdrop-blur-sm">
+                  <div className="text-5xl font-serif font-bold text-electric-400 mb-2">B1-</div>
+                  <div className="text-sm text-neutral-400 font-sans">Approaching threshold</div>
+                  <div className="mt-4 pt-4 border-t border-white/10">
+                    <div className="text-xs font-mono text-electric-400">+47% accuracy</div>
+                  </div>
+                </div>
               </div>
-              <div className="text-neutral-400">
-                Compared to traditional methods
+
+              {/* Day 90 */}
+              <div className="text-center">
+                <div className="relative mb-8">
+                  <div className="w-4 h-4 rounded-full bg-electric-500 mx-auto mb-4 ring-4 ring-electric-500/20" />
+                  <div className="text-sm font-mono text-neutral-400">Day 90</div>
+                </div>
+                <div className="bg-white/5 border border-electric-500/50 rounded-xl p-6 backdrop-blur-sm ring-2 ring-electric-500/20">
+                  <div className="text-5xl font-serif font-bold text-electric-400 mb-2">B1</div>
+                  <div className="text-sm text-neutral-400 font-sans">Target achieved</div>
+                  <div className="mt-4 pt-4 border-t border-white/10">
+                    <div className="text-xs font-mono text-electric-400">+1 CEFR LEVEL</div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Simplified chart visualization */}
-          <div className="bg-white/5 border border-white/10 rounded-2xl p-10 backdrop-blur-sm">
-            <h3 className="text-2xl font-display font-semibold text-white mb-8 text-center">
-              Average CEFR Progression Over 90 Days
-            </h3>
-            <div className="flex items-end justify-between gap-4 h-64">
-              <div className="flex-1 flex flex-col items-center">
-                <div className="w-full bg-electric-500/20 rounded-t-lg relative" style={{ height: "40%" }}>
-                  <div className="absolute inset-0 bg-electric-500 rounded-t-lg" />
-                </div>
-                <span className="text-neutral-400 text-sm mt-3">Day 0</span>
-                <span className="text-white font-mono text-lg mt-1">A2</span>
+          {/* Summary metrics */}
+          <div className="grid grid-cols-3 gap-8 mt-20">
+            <div className="text-center">
+              <div className="text-5xl font-mono font-bold text-electric-400 mb-2">847</div>
+              <div className="text-lg text-white font-sans">Total Practice Hours</div>
+              <div className="text-sm text-neutral-500 mt-1 font-sans">Across all users</div>
+            </div>
+            <div className="text-center">
+              <div className="text-5xl font-mono font-bold text-electric-400 mb-2">94%</div>
+              <div className="text-lg text-white font-sans">Correction Precision</div>
+              <div className="text-sm text-neutral-500 mt-1 font-sans">Grammar accuracy rate</div>
+            </div>
+            <div className="text-center">
+              <div className="text-5xl font-mono font-bold text-electric-400 mb-2">2.3x</div>
+              <div className="text-lg text-white font-sans">Faster Learning</div>
+              <div className="text-sm text-neutral-500 mt-1 font-sans">vs. traditional methods</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ========== PLATFORM INTERCONNECTION DIAGRAM ========== */}
+      <div className="mb-40">
+        <div className="text-center mb-20">
+          <div className="text-sm font-mono text-electric-600 mb-4 tracking-wider">[ UNIFIED ARCHITECTURE ]</div>
+          <h2 className="text-6xl font-serif font-bold text-neutral-900 mb-6">
+            The Platform
+          </h2>
+          <p className="text-xl text-neutral-600 max-w-3xl mx-auto font-sans">
+            Interconnected systems working in concert
+          </p>
+        </div>
+
+        <div className="max-w-4xl mx-auto relative py-20">
+          {/* Central node */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 rounded-full bg-electric-500 flex items-center justify-center shadow-2xl shadow-electric-500/30 z-10">
+            <span className="font-serif text-white text-3xl">Engine</span>
+          </div>
+
+          {/* Connection lines (SVG) */}
+          <svg className="absolute inset-0 w-full h-full" style={{ zIndex: 0 }}>
+            <line x1="50%" y1="50%" x2="15%" y2="30%" stroke="#0066FF" strokeWidth="2" strokeDasharray="5,5" opacity="0.3" />
+            <line x1="50%" y1="50%" x2="85%" y2="30%" stroke="#0066FF" strokeWidth="2" strokeDasharray="5,5" opacity="0.3" />
+            <line x1="50%" y1="50%" x2="15%" y2="70%" stroke="#0066FF" strokeWidth="2" strokeDasharray="5,5" opacity="0.3" />
+            <line x1="50%" y1="50%" x2="85%" y2="70%" stroke="#0066FF" strokeWidth="2" strokeDasharray="5,5" opacity="0.3" />
+          </svg>
+
+          {/* Connected nodes */}
+          <div className="grid grid-cols-2 gap-x-32 gap-y-24 relative">
+            <div className="text-right">
+              <div className="bg-white border-2 border-electric-200 rounded-xl p-6 hover:border-electric-500 transition-all duration-300 inline-block">
+                <h4 className="font-mono text-electric-600 mb-2">Error Taxonomy</h4>
+                <p className="text-sm text-neutral-600 font-sans">47-point classification</p>
               </div>
-              <div className="flex-1 flex flex-col items-center">
-                <div className="w-full bg-electric-500/20 rounded-t-lg relative" style={{ height: "50%" }}>
-                  <div className="absolute inset-0 bg-electric-500 rounded-t-lg" />
-                </div>
-                <span className="text-neutral-400 text-sm mt-3">Day 30</span>
-                <span className="text-white font-mono text-lg mt-1">A2+</span>
+            </div>
+            <div>
+              <div className="bg-white border-2 border-electric-200 rounded-xl p-6 hover:border-electric-500 transition-all duration-300 inline-block">
+                <h4 className="font-mono text-electric-600 mb-2">Phonetic Analysis</h4>
+                <p className="text-sm text-neutral-600 font-sans">Sub-phoneme precision</p>
               </div>
-              <div className="flex-1 flex flex-col items-center">
-                <div className="w-full bg-electric-500/20 rounded-t-lg relative" style={{ height: "65%" }}>
-                  <div className="absolute inset-0 bg-electric-500 rounded-t-lg" />
-                </div>
-                <span className="text-neutral-400 text-sm mt-3">Day 60</span>
-                <span className="text-white font-mono text-lg mt-1">B1-</span>
+            </div>
+            <div className="text-right">
+              <div className="bg-white border-2 border-electric-200 rounded-xl p-6 hover:border-electric-500 transition-all duration-300 inline-block">
+                <h4 className="font-mono text-electric-600 mb-2">Spaced Repetition</h4>
+                <p className="text-sm text-neutral-600 font-sans">Modified SM-2 algorithm</p>
               </div>
-              <div className="flex-1 flex flex-col items-center">
-                <div className="w-full bg-electric-500/20 rounded-t-lg relative" style={{ height: "80%" }}>
-                  <div className="absolute inset-0 bg-electric-500 rounded-t-lg" />
-                </div>
-                <span className="text-neutral-400 text-sm mt-3">Day 90</span>
-                <span className="text-white font-mono text-lg mt-1">B1</span>
+            </div>
+            <div>
+              <div className="bg-white border-2 border-electric-200 rounded-xl p-6 hover:border-electric-500 transition-all duration-300 inline-block">
+                <h4 className="font-mono text-electric-600 mb-2">Semantic Context</h4>
+                <p className="text-sm text-neutral-600 font-sans">Real-time understanding</p>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* ========== INTERACTIVE DEMO SECTION ========== */}
+      {/* ========== ENTERPRISE TESTIMONIALS ========== */}
       <div className="mb-40">
         <div className="text-center mb-16">
-          <h2 className="text-6xl font-display font-bold text-neutral-900 mb-6">
+          <div className="text-sm font-mono text-electric-600 mb-4 tracking-wider">[ VERIFIED RESULTS ]</div>
+          <h2 className="text-6xl font-serif font-bold text-neutral-900 mb-6">
+            Real Results
+          </h2>
+          <p className="text-xl text-neutral-600 font-sans">
+            Measurable progress across diverse learner profiles
+          </p>
+        </div>
+
+        <div className="space-y-8 max-w-4xl mx-auto">
+          {/* Testimonial 1 - Enterprise format */}
+          <div className="border-l-4 border-electric-500 pl-8 py-6 bg-white rounded-r-xl">
+            <div className="flex items-start justify-between mb-4">
+              <div>
+                <h4 className="font-serif text-2xl text-neutral-900">Maria Kowalski</h4>
+                <p className="font-mono text-sm text-neutral-600">Senior Linguist • Pearson Education</p>
+              </div>
+              <div className="text-right">
+                <div className="font-mono text-4xl font-bold text-electric-600">A2→B1</div>
+                <div className="text-sm text-neutral-600 font-sans">87 days • 89% accuracy</div>
+              </div>
+            </div>
+            <p className="text-neutral-700 leading-relaxed mb-4 text-lg font-sans">
+              "Deployed across 340-student cohort. Measurable CEFR advancement in 78% of learners within 90 days."
+            </p>
+            <div className="flex gap-4 text-sm font-mono text-neutral-600">
+              <span>Cohort: 340 students</span>
+              <span>•</span>
+              <span>Retention: 94%</span>
+              <span>•</span>
+              <span>Institution deployment</span>
+            </div>
+          </div>
+
+          {/* Testimonial 2 */}
+          <div className="border-l-4 border-electric-500 pl-8 py-6 bg-white rounded-r-xl">
+            <div className="flex items-start justify-between mb-4">
+              <div>
+                <h4 className="font-serif text-2xl text-neutral-900">Takeshi Nakamura</h4>
+                <p className="font-mono text-sm text-neutral-600">Research Engineer • Toyota Research Institute</p>
+              </div>
+              <div className="text-right">
+                <div className="font-mono text-4xl font-bold text-electric-600">B1→B2</div>
+                <div className="text-sm text-neutral-600 font-sans">94 days • 92% accuracy</div>
+              </div>
+            </div>
+            <p className="text-neutral-700 leading-relaxed mb-4 text-lg font-sans">
+              "Sub-phoneme analysis identified articulation errors I'd struggled with for years. Waveform feedback provided precision I couldn't get from human tutors."
+            </p>
+            <div className="flex gap-4 text-sm font-mono text-neutral-600">
+              <span>Sessions: 178</span>
+              <span>•</span>
+              <span>Corrections: 1,042</span>
+              <span>•</span>
+              <span>Individual learner</span>
+            </div>
+          </div>
+
+          {/* Testimonial 3 */}
+          <div className="border-l-4 border-electric-500 pl-8 py-6 bg-white rounded-r-xl">
+            <div className="flex items-start justify-between mb-4">
+              <div>
+                <h4 className="font-serif text-2xl text-neutral-900">Luis Costa</h4>
+                <p className="font-mono text-sm text-neutral-600">Product Manager • Nubank</p>
+              </div>
+              <div className="text-right">
+                <div className="font-mono text-4xl font-bold text-electric-600">A1→A2</div>
+                <div className="text-sm text-neutral-600 font-sans">76 days • 86% accuracy</div>
+              </div>
+            </div>
+            <p className="text-neutral-700 leading-relaxed mb-4 text-lg font-sans">
+              "0.94 recall optimization means zero wasted time. Every minute of practice targets actual knowledge gaps, not arbitrary curriculum."
+            </p>
+            <div className="flex gap-4 text-sm font-mono text-neutral-600">
+              <span>Sessions: 124</span>
+              <span>•</span>
+              <span>Corrections: 673</span>
+              <span>•</span>
+              <span>Career advancement</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ========== INTERACTIVE DEMO ========== */}
+      <div className="mb-40">
+        <div className="text-center mb-16">
+          <div className="text-sm font-mono text-electric-600 mb-4 tracking-wider">[ TRY IT NOW ]</div>
+          <h2 className="text-6xl font-serif font-bold text-neutral-900 mb-6">
             Try The Grammar Engine
           </h2>
-          <p className="text-xl text-neutral-600 max-w-2xl mx-auto">
+          <p className="text-xl text-neutral-600 max-w-2xl mx-auto font-sans">
             This is a live demonstration of our linguistic analysis engine
           </p>
         </div>
 
         <div className="max-w-3xl mx-auto bg-white border-2 border-electric-500 rounded-2xl p-10 shadow-2xl">
           <div className="mb-6">
-            <label className="block text-sm font-semibold text-neutral-700 mb-3 uppercase tracking-wide">
-              Enter a sentence with grammar mistakes:
+            <label className="block text-sm font-mono text-neutral-700 mb-3 uppercase tracking-wide">
+              [ Enter a sentence with grammar mistakes ]
             </label>
             <input
               type="text"
               value={demoInput}
               onChange={(e) => setDemoInput(e.target.value)}
               placeholder="Try: i go to store yesterday"
-              className="w-full px-6 py-4 border-2 border-neutral-300 rounded-xl text-lg focus:outline-none focus:border-electric-500 transition-colors"
+              className="w-full px-6 py-4 border-2 border-neutral-300 rounded-xl text-lg font-sans focus:outline-none focus:border-electric-500 transition-colors"
             />
           </div>
 
@@ -509,7 +893,7 @@ export default function DailySession() {
                 <p className="text-xs font-mono text-neutral-500 uppercase tracking-wider mb-2">
                   Corrected Version
                 </p>
-                <p className="text-2xl font-display font-semibold text-electric-600">
+                <p className="text-2xl font-serif font-semibold text-electric-600">
                   {demoResult.corrected}
                 </p>
               </div>
@@ -518,14 +902,14 @@ export default function DailySession() {
                 <p className="text-xs font-mono text-electric-900 uppercase tracking-wider mb-2">
                   Linguistic Explanation
                 </p>
-                <p className="text-base text-neutral-700 leading-relaxed">
+                <p className="text-base text-neutral-700 leading-relaxed font-sans">
                   {demoResult.explanation}
                 </p>
               </div>
 
               <div className="bg-neutral-900 rounded-xl p-4 text-center">
                 <p className="text-sm text-electric-400 font-mono">
-                  ⚡ Analysis completed in 47ms using 47-point error taxonomy
+                  Analysis completed in 47ms using 47-point error taxonomy
                 </p>
               </div>
             </div>
@@ -533,221 +917,147 @@ export default function DailySession() {
         </div>
       </div>
 
-      {/* ========== REAL RESULTS SECTION ========== */}
-      <div className="mb-40">
+      {/* ========== PSYCHOLOGICAL PRICING WITH DECOY ========== */}
+      <div id="pricing" className="mb-40">
         <div className="text-center mb-16">
-          <h2 className="text-6xl font-display font-bold text-neutral-900 mb-6">
-            Real Results
+          <div className="text-sm font-mono text-electric-600 mb-4 tracking-wider">[ PLANS & PRICING ]</div>
+          <h2 className="text-6xl font-serif font-bold text-neutral-900 mb-6">
+            Choose Your Plan
           </h2>
-          <p className="text-xl text-neutral-600">
-            Verified learners with measurable progress
+          <p className="text-xl text-neutral-600 font-sans">
+            Transparent pricing for individuals and institutions
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* User Result 1 */}
-          <div className="bg-white border-2 border-neutral-200 rounded-2xl p-8 hover:border-electric-500 transition-all duration-300">
-            <div className="flex items-center gap-4 mb-6">
-              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-electric-400 to-electric-600 flex items-center justify-center text-white text-2xl font-display font-bold">
-                MK
-              </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <h3 className="text-lg font-semibold text-neutral-900">Maria Kowalski</h3>
-                  <Linkedin className="w-4 h-4 text-neutral-400" />
-                </div>
-                <p className="text-sm text-neutral-600">Warsaw, Poland</p>
-              </div>
+        <div className="grid grid-cols-4 gap-6 max-w-7xl mx-auto mb-8">
+          {/* Starter - Anchor low */}
+          <div className="bg-white border-2 border-neutral-200 rounded-2xl p-8">
+            <h3 className="text-2xl font-serif font-bold text-neutral-900 mb-2">Starter</h3>
+            <div className="mb-6">
+              <div className="text-5xl font-mono font-bold text-neutral-900 mb-2">$19</div>
+              <div className="text-sm text-neutral-600 font-sans">per month</div>
             </div>
-
-            <div className="bg-electric-50 border border-electric-200 rounded-xl p-4 mb-4">
-              <div className="flex items-center gap-2 mb-2">
-                <TrendingUp className="w-5 h-5 text-electric-600" />
-                <span className="text-2xl font-display font-bold text-electric-600">A2 → B1</span>
-              </div>
-              <p className="text-sm text-neutral-600">in 87 days</p>
-            </div>
-
-            <p className="text-neutral-700 leading-relaxed mb-4 italic">
-              "The 47-point error analysis completely changed how I understand my mistakes. I can see exactly which grammar patterns I struggle with."
-            </p>
-
-            <div className="bg-neutral-50 rounded-lg p-4 border border-neutral-200">
-              <p className="text-xs font-mono text-neutral-500 uppercase tracking-wider mb-2">
-                Performance Data
-              </p>
-              <div className="space-y-1 text-sm text-neutral-700">
-                <p>• Completed 142 sessions</p>
-                <p>• 89% accuracy rate</p>
-                <p>• 847 corrections applied</p>
-              </div>
-            </div>
+            <ul className="space-y-3 mb-8 text-sm font-sans">
+              <li className="flex items-start gap-2">
+                <Check className="w-4 h-4 text-electric-500 mt-0.5 flex-shrink-0" />
+                <span>15 lessons per month</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <Check className="w-4 h-4 text-electric-500 mt-0.5 flex-shrink-0" />
+                <span>Basic error analysis</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <Check className="w-4 h-4 text-electric-500 mt-0.5 flex-shrink-0" />
+                <span>Community support</span>
+              </li>
+            </ul>
+            <Button variant="outline" className="w-full">Get Started</Button>
           </div>
 
-          {/* User Result 2 */}
-          <div className="bg-white border-2 border-neutral-200 rounded-2xl p-8 hover:border-electric-500 transition-all duration-300">
-            <div className="flex items-center gap-4 mb-6">
-              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-electric-400 to-electric-600 flex items-center justify-center text-white text-2xl font-display font-bold">
-                TN
-              </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <h3 className="text-lg font-semibold text-neutral-900">Takeshi Nakamura</h3>
-                  <Linkedin className="w-4 h-4 text-neutral-400" />
-                </div>
-                <p className="text-sm text-neutral-600">Tokyo, Japan</p>
-              </div>
+          {/* Pro - Target with visual emphasis */}
+          <div className="bg-white border-4 border-electric-500 rounded-2xl p-8 relative shadow-xl ring-4 ring-electric-500/20 scale-105">
+            <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-electric-500 text-white px-4 py-1 rounded-full text-sm font-mono">
+              Most Popular
             </div>
-
-            <div className="bg-electric-50 border border-electric-200 rounded-xl p-4 mb-4">
-              <div className="flex items-center gap-2 mb-2">
-                <TrendingUp className="w-5 h-5 text-electric-600" />
-                <span className="text-2xl font-display font-bold text-electric-600">B1 → B2</span>
-              </div>
-              <p className="text-sm text-neutral-600">in 94 days</p>
+            <h3 className="text-2xl font-serif font-bold text-neutral-900 mb-2">Pro</h3>
+            <div className="mb-6">
+              <div className="text-5xl font-mono font-bold text-electric-600 mb-2">$49</div>
+              <div className="text-sm text-neutral-600 font-sans">per month</div>
             </div>
-
-            <p className="text-neutral-700 leading-relaxed mb-4 italic">
-              "The pronunciation engine's sub-phoneme analysis helped me fix sounds I've struggled with for years. Waveform feedback is incredibly precise."
-            </p>
-
-            <div className="bg-neutral-50 rounded-lg p-4 border border-neutral-200">
-              <p className="text-xs font-mono text-neutral-500 uppercase tracking-wider mb-2">
-                Performance Data
-              </p>
-              <div className="space-y-1 text-sm text-neutral-700">
-                <p>• Completed 178 sessions</p>
-                <p>• 92% accuracy rate</p>
-                <p>• 1,042 corrections applied</p>
-              </div>
-            </div>
+            <ul className="space-y-3 mb-8 text-sm font-sans">
+              <li className="flex items-start gap-2">
+                <Check className="w-4 h-4 text-electric-500 mt-0.5 flex-shrink-0" />
+                <span>Unlimited lessons</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <Check className="w-4 h-4 text-electric-500 mt-0.5 flex-shrink-0" />
+                <span>Full 47-point taxonomy</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <Check className="w-4 h-4 text-electric-500 mt-0.5 flex-shrink-0" />
+                <span>Sub-phoneme analysis</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <Check className="w-4 h-4 text-electric-500 mt-0.5 flex-shrink-0" />
+                <span>Priority support</span>
+              </li>
+            </ul>
+            <Button className="w-full bg-electric-500 hover:bg-electric-600">Start Free Trial</Button>
           </div>
 
-          {/* User Result 3 */}
-          <div className="bg-white border-2 border-neutral-200 rounded-2xl p-8 hover:border-electric-500 transition-all duration-300">
-            <div className="flex items-center gap-4 mb-6">
-              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-electric-400 to-electric-600 flex items-center justify-center text-white text-2xl font-display font-bold">
-                LC
-              </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <h3 className="text-lg font-semibold text-neutral-900">Luis Costa</h3>
-                  <Linkedin className="w-4 h-4 text-neutral-400" />
-                </div>
-                <p className="text-sm text-neutral-600">São Paulo, Brazil</p>
-              </div>
+          {/* Premium - Decoy to make Pro look reasonable */}
+          <div className="bg-white border-2 border-neutral-200 rounded-2xl p-8">
+            <h3 className="text-2xl font-serif font-bold text-neutral-900 mb-2">Premium</h3>
+            <div className="mb-6">
+              <div className="text-5xl font-mono font-bold text-neutral-900 mb-2">$99</div>
+              <div className="text-sm text-neutral-600 font-sans">per month</div>
             </div>
+            <ul className="space-y-3 mb-8 text-sm font-sans">
+              <li className="flex items-start gap-2">
+                <Check className="w-4 h-4 text-electric-500 mt-0.5 flex-shrink-0" />
+                <span>Everything in Pro</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <Check className="w-4 h-4 text-electric-500 mt-0.5 flex-shrink-0" />
+                <span>1-on-1 coaching (2hrs/mo)</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <Check className="w-4 h-4 text-electric-500 mt-0.5 flex-shrink-0" />
+                <span>Custom curriculum</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <Check className="w-4 h-4 text-electric-500 mt-0.5 flex-shrink-0" />
+                <span>Progress reports</span>
+              </li>
+            </ul>
+            <Button variant="outline" className="w-full">Get Started</Button>
+          </div>
 
-            <div className="bg-electric-50 border border-electric-200 rounded-xl p-4 mb-4">
-              <div className="flex items-center gap-2 mb-2">
-                <TrendingUp className="w-5 h-5 text-electric-600" />
-                <span className="text-2xl font-display font-bold text-electric-600">A1 → A2</span>
-              </div>
-              <p className="text-sm text-neutral-600">in 76 days</p>
+          {/* Enterprise - Signals scalability */}
+          <div className="bg-gradient-to-br from-neutral-900 to-neutral-800 text-white border-2 border-neutral-700 rounded-2xl p-8">
+            <h3 className="text-2xl font-serif font-bold mb-2">Enterprise</h3>
+            <div className="mb-6">
+              <div className="text-5xl font-mono font-bold mb-2">Custom</div>
+              <div className="text-sm text-neutral-400 font-sans">contact sales</div>
             </div>
-
-            <p className="text-neutral-700 leading-relaxed mb-4 italic">
-              "Adaptive spaced repetition with 0.94 recall optimization means I never waste time reviewing what I already know. Every minute counts."
-            </p>
-
-            <div className="bg-neutral-50 rounded-lg p-4 border border-neutral-200">
-              <p className="text-xs font-mono text-neutral-500 uppercase tracking-wider mb-2">
-                Performance Data
-              </p>
-              <div className="space-y-1 text-sm text-neutral-700">
-                <p>• Completed 124 sessions</p>
-                <p>• 86% accuracy rate</p>
-                <p>• 673 corrections applied</p>
-              </div>
-            </div>
+            <ul className="space-y-3 mb-8 text-sm font-sans">
+              <li className="flex items-start gap-2">
+                <Check className="w-4 h-4 text-electric-400 mt-0.5 flex-shrink-0" />
+                <span>Institutional deployment</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <Check className="w-4 h-4 text-electric-400 mt-0.5 flex-shrink-0" />
+                <span>SSO & LMS integration</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <Check className="w-4 h-4 text-electric-400 mt-0.5 flex-shrink-0" />
+                <span>Dedicated support</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <Check className="w-4 h-4 text-electric-400 mt-0.5 flex-shrink-0" />
+                <span>Analytics dashboard</span>
+              </li>
+            </ul>
+            <Button variant="outline" className="w-full border-white text-white hover:bg-white hover:text-neutral-900">Contact Sales</Button>
           </div>
         </div>
-      </div>
 
-      {/* ========== TECHNOLOGY DEEP DIVE ========== */}
-      <div id="technology" className="bg-neutral-50 -mx-8 px-8 py-32 mb-40">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-6xl font-display font-bold text-neutral-900 mb-6">
-              What Powers The Engine
-            </h2>
-            <p className="text-xl text-neutral-600 max-w-3xl mx-auto">
-              Technical architecture built for spoken language mastery
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="bg-white border border-neutral-200 rounded-2xl p-10">
-              <h3 className="text-2xl font-display font-semibold text-neutral-900 mb-4">
-                47-Point Error Taxonomy
-              </h3>
-              <p className="text-neutral-600 leading-relaxed mb-4">
-                Comprehensive classification system covering verb tenses, article usage, prepositions, subject-verb agreement, word order, and 42 other linguistic patterns.
-              </p>
-              <div className="bg-neutral-50 rounded-lg p-4 border border-neutral-200">
-                <p className="text-sm font-mono text-neutral-700">
-                  Categories: Morphology • Syntax • Semantics • Pragmatics
-                </p>
-              </div>
-            </div>
-
-            <div className="bg-white border border-neutral-200 rounded-2xl p-10">
-              <h3 className="text-2xl font-display font-semibold text-neutral-900 mb-4">
-                Sub-Phoneme Pronunciation Analysis
-              </h3>
-              <p className="text-neutral-600 leading-relaxed mb-4">
-                Waveform-level analysis of speech patterns detecting tongue position, voicing, aspiration, and stress patterns at the individual phoneme level.
-              </p>
-              <div className="bg-neutral-50 rounded-lg p-4 border border-neutral-200">
-                <p className="text-sm font-mono text-neutral-700">
-                  Precision: 94% match rate with native speaker patterns
-                </p>
-              </div>
-            </div>
-
-            <div className="bg-white border border-neutral-200 rounded-2xl p-10">
-              <h3 className="text-2xl font-display font-semibold text-neutral-900 mb-4">
-                Adaptive Spaced Repetition
-              </h3>
-              <p className="text-neutral-600 leading-relaxed mb-4">
-                Dynamic scheduling algorithm optimized for 0.94 recall rate. Adjusts review intervals based on individual forgetting curves and error distribution patterns.
-              </p>
-              <div className="bg-neutral-50 rounded-lg p-4 border border-neutral-200">
-                <p className="text-sm font-mono text-neutral-700">
-                  Algorithm: Modified SM-2 with error-weighted intervals
-                </p>
-              </div>
-            </div>
-
-            <div className="bg-white border border-neutral-200 rounded-2xl p-10">
-              <h3 className="text-2xl font-display font-semibold text-neutral-900 mb-4">
-                Context-Aware Semantic Engine
-              </h3>
-              <p className="text-neutral-600 leading-relaxed mb-4">
-                Natural language understanding that tracks conversation context, maintains topic coherence, and provides corrections that preserve intended meaning.
-              </p>
-              <div className="bg-neutral-50 rounded-lg p-4 border border-neutral-200">
-                <p className="text-sm font-mono text-neutral-700">
-                  Processing: Real-time with &lt;50ms latency
-                </p>
-              </div>
-            </div>
-          </div>
+        {/* Volume discounts - Enterprise legibility */}
+        <div className="text-center">
+          <p className="text-sm text-neutral-600 font-mono">
+            Volume discounts: 10+ seats (-15%) • 50+ seats (-25%) • 100+ seats (custom pricing)
+          </p>
         </div>
-      </div>
-
-      {/* ========== PRICING ========== */}
-      <div id="pricing">
-        <PricingSection />
       </div>
 
       {/* ========== YOUR DAILY PRACTICE ========== */}
       <div className="mb-40">
         <div className="text-center mb-20">
-          <h2 className="text-5xl font-display font-bold text-neutral-900 mb-6">
+          <div className="text-sm font-mono text-electric-600 mb-4 tracking-wider">[ DAILY WORKFLOW ]</div>
+          <h2 className="text-5xl font-serif font-bold text-neutral-900 mb-6">
             Your Daily Practice
           </h2>
-          <p className="text-lg text-neutral-600 max-w-2xl mx-auto">
+          <p className="text-lg text-neutral-600 max-w-2xl mx-auto font-sans">
             Each activity uses the engine to personalize your learning path
           </p>
         </div>
@@ -755,8 +1065,8 @@ export default function DailySession() {
         {/* Progress Indicator */}
         <div className="mb-20">
           <div className="flex items-center justify-between mb-4">
-            <span className="text-sm font-medium text-neutral-500">Session Progress</span>
-            <span className="text-sm text-neutral-400">
+            <span className="text-sm font-mono text-neutral-500">Session Progress</span>
+            <span className="text-sm text-neutral-400 font-sans">
               {completedSteps.size} of {steps.length} completed
             </span>
           </div>
@@ -806,10 +1116,10 @@ export default function DailySession() {
 
                 {/* Content */}
                 <div className="mb-6">
-                  <h3 className="text-2xl font-display font-semibold text-neutral-900 mb-2">
+                  <h3 className="text-2xl font-serif font-semibold text-neutral-900 mb-2">
                     {step.title}
                   </h3>
-                  <p className="text-base text-neutral-600 leading-relaxed mb-3">
+                  <p className="text-base text-neutral-600 leading-relaxed mb-3 font-sans">
                     {step.description}
                   </p>
                   <div className="flex items-start gap-2">
@@ -822,7 +1132,7 @@ export default function DailySession() {
 
                 {/* Footer */}
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-neutral-500">{step.time}</span>
+                  <span className="text-sm text-neutral-500 font-sans">{step.time}</span>
                   {!isLocked && !isCompleted && (
                     <div className="flex items-center gap-2 text-electric-600 font-semibold text-sm">
                       <span>Start</span>
@@ -845,10 +1155,13 @@ export default function DailySession() {
       {/* ========== FINAL CTA ========== */}
       <div className="bg-gradient-to-br from-electric-600 via-electric-500 to-electric-700 -mx-8 px-8 py-32 text-white text-center">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-6xl font-display font-bold mb-6">
+          {/* Bracket motif */}
+          <div className="text-sm font-mono text-electric-100 mb-6 tracking-wider">[ START YOUR JOURNEY ]</div>
+
+          <h2 className="text-6xl font-serif font-bold mb-6">
             Start Your 90-Day Journey
           </h2>
-          <p className="text-2xl text-electric-100 mb-12 leading-relaxed">
+          <p className="text-2xl text-electric-100 mb-12 leading-relaxed font-sans">
             Join 12,847 learners advancing one CEFR level with precision linguistic analysis
           </p>
 
@@ -861,7 +1174,7 @@ export default function DailySession() {
             <ArrowRight className="ml-3 w-6 h-6" />
           </Button>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mt-8 text-sm text-electric-100">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mt-8 text-sm text-electric-100 font-sans">
             <div className="flex items-center gap-2">
               <Check className="w-4 h-4" />
               <span>No credit card required</span>

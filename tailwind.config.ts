@@ -10,9 +10,10 @@ const config: Config = {
     extend: {
       // Bespoke type pairing - Display + System
       fontFamily: {
+        serif: ["EB Garamond", "Georgia", "serif"], // Authority, mastery
         display: ["var(--font-inter)", "-apple-system", "BlinkMacSystemFont", "sans-serif"], // Headlines, numbers
         sans: ["var(--font-inter)", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "sans-serif"], // Body
-        mono: ["SF Mono", "Consolas", "Monaco", "monospace"], // Code, technical
+        mono: ["SF Mono", "Consolas", "Monaco", "monospace"], // Code, technical - Precision
       },
 
       // Strict spacing scale - Apple standard
