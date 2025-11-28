@@ -148,159 +148,71 @@ export default function DailySession() {
 
   return (
     <div>
-      {/* ========== HERO SECTION - 60/40 ASYMMETRIC SPLIT ========== */}
-      <div className="-mx-8 bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900 text-white py-40 mb-40">
+      {/* ========== HERO SECTION ========== */}
+      <section className="-mx-8 bg-neutral-50 py-24">
         <div className="max-w-7xl mx-auto px-8">
-          {/* Bracket motif - top */}
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-electric-500/0 via-electric-500/50 to-electric-500/0" />
-
-          <div className="grid grid-cols-5 gap-16">
-            {/* LEFT: 60% - Headline & CTA */}
-            <div className="col-span-3">
-              <div className="text-sm font-mono text-electric-400 mb-6 tracking-wider">[ LINGUISTIC PRECISION ENGINE ]</div>
-              <h1 className="text-7xl font-serif font-bold mb-8 tracking-tight leading-tight">
-                Advance One CEFR Level in 90 Days
+          <div className="grid grid-cols-12 gap-16 items-center">
+            {/* LEFT: Headline, Subheadline, CTA */}
+            <div className="col-span-6">
+              <h1 className="text-6xl font-semibold text-neutral-900 mb-6 leading-tight tracking-tight">
+                Instant fluency corrections while you speak.
               </h1>
-              <p className="text-2xl text-neutral-300 mb-4 leading-relaxed font-sans">
-                Precision linguistic engine analyzes 47 error patterns per conversation
+              <p className="text-2xl text-neutral-600 mb-12 leading-relaxed">
+                Real-time analysis based on 47 linguistic error types.
               </p>
-              <p className="text-lg text-neutral-400 mb-12 font-sans">
-                Join 12,847 learners who've achieved measurable fluency gains
-              </p>
-
-              {/* Primary CTA */}
-              <div className="mb-8">
-                <Button
-                  size="lg"
-                  onClick={() => router.push("/assessment")}
-                  className="text-lg font-semibold px-12 py-7 bg-electric-500 text-white hover:bg-electric-600 shadow-2xl shadow-electric-500/30 transition-all duration-200 hover:scale-105"
-                >
-                  Start Free Assessment
-                  <ArrowRight className="ml-3 w-6 h-6" />
-                </Button>
-              </div>
-
-              {/* Progressive disclosure - Level 2 */}
               <button
-                onClick={() => setShowDetailedBreakdown(!showDetailedBreakdown)}
-                className="text-sm text-electric-400 hover:text-electric-300 flex items-center gap-2 mb-8"
+                onClick={() => router.push("/assessment")}
+                className="px-8 py-4 bg-neutral-900 text-white text-lg font-medium hover:bg-neutral-800 transition-colors"
               >
-                See detailed breakdown
-                <ChevronDown className={`w-4 h-4 transition-transform ${showDetailedBreakdown ? 'rotate-180' : ''}`} />
+                Start free assessment
               </button>
-
-              {/* Progressive disclosure - Level 3 */}
-              {showDetailedBreakdown && (
-                <div className="bg-white/5 border border-white/10 rounded-xl p-6 mb-8 backdrop-blur-sm">
-                  <h3 className="text-xl font-serif text-white mb-4">Your personalized assessment includes:</h3>
-                  <ul className="font-mono text-sm text-neutral-300 space-y-2">
-                    <li className="flex items-center gap-2">
-                      <span className="text-electric-400">→</span>
-                      47-point linguistic profile
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="text-electric-400">→</span>
-                      Phonetic heat map
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="text-electric-400">→</span>
-                      90-day mastery roadmap
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="text-electric-400">→</span>
-                      Predicted CEFR trajectory
-                    </li>
-                  </ul>
-                </div>
-              )}
-
-              {/* Micro-benefits */}
-              <div className="flex flex-col gap-4 text-sm text-neutral-300 font-sans">
-                <div className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-electric-400" />
-                  <span>No credit card required</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-electric-400" />
-                  <span>Get your fluency score in 15 minutes</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-electric-400" />
-                  <span>Personalized 90-day roadmap included</span>
-                </div>
-              </div>
             </div>
 
-            {/* RIGHT: 40% - Dependency Tree Visualization */}
-            <div className="col-span-2 flex items-center">
-              <div className="relative w-full">
-                <div className="bg-white/5 border border-white/10 rounded-xl p-8 backdrop-blur-sm">
-                  <div className="text-xs font-mono text-electric-400 mb-6 tracking-wider">[ SYNTAX ANALYSIS ]</div>
-
-                  {/* Dependency tree visualization */}
-                  <div className="space-y-6">
-                    <div className="flex items-center gap-3">
-                      <div className="w-3 h-3 rounded-full bg-electric-500" />
-                      <span className="font-mono text-sm text-white">SUBJ: I</span>
+            {/* RIGHT: Live Demo Visualization */}
+            <div className="col-span-6">
+              <figure className="bg-white border border-neutral-200 p-8">
+                {/* Demo: Grammar Correction Engine */}
+                <div className="space-y-6">
+                  <div className="border-b border-neutral-200 pb-4">
+                    <div className="text-xs font-mono text-neutral-500 mb-3">INPUT</div>
+                    <div className="text-lg text-neutral-900 font-mono">
+                      I <span className="bg-red-100 text-red-700 px-1">go</span> to store yesterday
                     </div>
+                  </div>
 
-                    <div className="ml-6 relative">
-                      <div className="absolute -left-3 top-0 w-px h-12 bg-electric-300" />
-                      <div className="flex items-center gap-3">
-                        <div className="w-3 h-3 rounded-full bg-electric-400" />
-                        <span className="font-mono text-sm text-white">VERB: went</span>
+                  <div className="border-b border-neutral-200 pb-4">
+                    <div className="text-xs font-mono text-neutral-500 mb-3">OUTPUT</div>
+                    <div className="text-lg text-neutral-900 font-mono">
+                      I <span className="bg-green-100 text-green-700 px-1">went</span> to <span className="bg-green-100 text-green-700 px-1">the</span> store yesterday
+                    </div>
+                  </div>
+
+                  <div className="space-y-3">
+                    <div className="text-xs font-mono text-neutral-500 mb-2">ANALYSIS</div>
+                    <div className="flex items-start gap-3">
+                      <div className="w-1 h-1 rounded-full bg-neutral-400 mt-2" />
+                      <div className="text-sm text-neutral-700">
+                        <span className="font-mono text-neutral-900">Verb tense:</span> Past simple required with "yesterday"
                       </div>
                     </div>
-
-                    <div className="ml-12 relative">
-                      <div className="absolute -left-6 top-0 w-px h-12 bg-electric-200" />
-                      <div className="flex items-center gap-3">
-                        <div className="w-3 h-3 rounded-full bg-electric-300" />
-                        <span className="font-mono text-sm text-white">PREP: to</span>
-                      </div>
-                    </div>
-
-                    <div className="ml-20 relative">
-                      <div className="absolute -left-9 top-0 w-px h-12 bg-electric-100" />
-                      <div className="flex items-center gap-3">
-                        <div className="w-3 h-3 rounded-full bg-electric-200" />
-                        <span className="font-mono text-sm text-white">DET: the</span>
-                      </div>
-                    </div>
-
-                    <div className="ml-20 relative">
-                      <div className="absolute -left-9 top-0 w-px h-12 bg-electric-100" />
-                      <div className="flex items-center gap-3">
-                        <div className="w-3 h-3 rounded-full bg-electric-200" />
-                        <span className="font-mono text-sm text-white">OBJ: store</span>
+                    <div className="flex items-start gap-3">
+                      <div className="w-1 h-1 rounded-full bg-neutral-400 mt-2" />
+                      <div className="text-sm text-neutral-700">
+                        <span className="font-mono text-neutral-900">Article:</span> Definite article "the" before specific noun
                       </div>
                     </div>
                   </div>
 
-                  <div className="mt-8 pt-6 border-t border-white/10">
-                    <div className="text-xs font-mono text-neutral-400 mb-2">Real-time parsing</div>
-                    <div className="text-2xl font-serif text-electric-400">94% accuracy</div>
+                  <div className="pt-4 border-t border-neutral-200 flex items-center justify-between">
+                    <span className="text-xs font-mono text-neutral-500">2 errors detected</span>
+                    <span className="text-xs font-mono text-neutral-500">Processing: 48ms</span>
                   </div>
                 </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Social proof */}
-          <div className="mt-20 text-center">
-            <p className="text-sm text-neutral-400 uppercase tracking-wider mb-3 font-mono">
-              Used by students at
-            </p>
-            <div className="flex items-center justify-center gap-8 text-neutral-500 font-semibold text-sm">
-              <span>Stanford</span>
-              <span className="text-neutral-700">•</span>
-              <span>Cambridge</span>
-              <span className="text-neutral-700">•</span>
-              <span>Tokyo University</span>
+              </figure>
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
       {/* ========== THE LINGUISTIC ENGINE - NUMBERED NARRATIVE ========== */}
       <div className="bg-neutral-900 text-white py-32 -mx-8 px-8 mb-40">
