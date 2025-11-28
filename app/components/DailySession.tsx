@@ -81,6 +81,10 @@ export default function DailySession() {
         corrected: "I went to the store yesterday",
         explanation: "Past tense verb 'went' required for 'yesterday'. Added article 'the' before specific noun 'store'. Capitalized sentence-initial 'I'.",
       },
+      "i go to the store yesterday": {
+        corrected: "I went to the store yesterday",
+        explanation: "Past tense verb 'went' required for 'yesterday'. Present tense 'go' conflicts with past time marker. Capitalized sentence-initial 'I'.",
+      },
       "she dont like pizza": {
         corrected: "She doesn't like pizza",
         explanation: "Third-person singular requires 'doesn't' not 'dont'. Missing apostrophe in contraction.",
