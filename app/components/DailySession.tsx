@@ -138,20 +138,20 @@ export default function DailySession() {
   return (
     <div>
       {/* ========== HERO SECTION ========== */}
-      <section className="-mx-8 bg-neutral-50 py-24">
-        <div className="max-w-7xl mx-auto px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+      <section className="-mx-8 bg-neutral-50 py-8 lg:py-24">
+        <div className="max-w-7xl mx-auto px-4 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-16 items-center">
             {/* LEFT: Headline, Subheadline, CTA */}
             <div className="lg:col-span-6">
-              <h1 className="text-6xl font-semibold text-neutral-900 mb-6 leading-tight tracking-tight">
+              <h1 className="text-3xl lg:text-6xl font-semibold text-neutral-900 mb-4 lg:mb-6 leading-tight tracking-tight">
                 Instant fluency corrections while you speak.
               </h1>
-              <p className="text-2xl text-neutral-600 mb-12 leading-relaxed">
+              <p className="text-base lg:text-2xl text-neutral-600 mb-6 lg:mb-12 leading-relaxed">
                 Real-time analysis based on 47 linguistic error types.
               </p>
               <button
                 onClick={() => router.push("/assessment")}
-                className="px-8 py-4 bg-neutral-900 text-white text-lg font-medium hover:bg-neutral-800 transition-colors"
+                className="w-full lg:w-auto px-6 lg:px-8 py-3 lg:py-4 bg-neutral-900 text-white text-base lg:text-lg font-medium hover:bg-neutral-800 transition-colors"
               >
                 Start free assessment
               </button>
@@ -159,42 +159,42 @@ export default function DailySession() {
 
             {/* RIGHT: Live Demo Visualization */}
             <div className="lg:col-span-6">
-              <figure className="bg-white border border-neutral-200 p-8">
+              <figure className="bg-white border border-neutral-200 p-4 lg:p-8">
                 {/* Demo: Grammar Correction Engine */}
-                <div className="space-y-6">
-                  <div className="border-b border-neutral-200 pb-4">
+                <div className="space-y-4 lg:space-y-6">
+                  <div className="border-b border-neutral-200 pb-3 lg:pb-4">
                     <div className="text-xs font-mono text-neutral-500 mb-2">INPUT</div>
-                    <div className="text-lg text-neutral-900 font-mono">
+                    <div className="text-sm lg:text-lg text-neutral-900 font-mono break-words">
                       I <span className="bg-red-100 text-red-700 px-1">go</span> to store yesterday
                     </div>
                   </div>
 
-                  <div className="border-b border-neutral-200 pb-4">
+                  <div className="border-b border-neutral-200 pb-3 lg:pb-4">
                     <div className="text-xs font-mono text-neutral-500 mb-2">OUTPUT</div>
-                    <div className="text-lg text-neutral-900 font-mono">
+                    <div className="text-sm lg:text-lg text-neutral-900 font-mono break-words">
                       I <span className="bg-green-100 text-green-700 px-1">went</span> to <span className="bg-green-100 text-green-700 px-1">the</span> store yesterday
                     </div>
                   </div>
 
-                  <div className="space-y-3">
+                  <div className="space-y-2 lg:space-y-3">
                     <div className="text-xs font-mono text-neutral-500 mb-2">ANALYSIS</div>
                     <div className="flex items-start gap-3">
                       <div className="w-1 h-1 rounded-full bg-neutral-400 mt-2" />
-                      <div className="text-sm text-neutral-700">
+                      <div className="text-xs lg:text-sm text-neutral-700">
                         <span className="font-mono text-neutral-900">Verb tense:</span> Past simple required with "yesterday"
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
                       <div className="w-1 h-1 rounded-full bg-neutral-400 mt-2" />
-                      <div className="text-sm text-neutral-700">
+                      <div className="text-xs lg:text-sm text-neutral-700">
                         <span className="font-mono text-neutral-900">Article:</span> Definite article "the" before specific noun
                       </div>
                     </div>
                   </div>
 
-                  <div className="pt-4 border-t border-neutral-200 flex items-center justify-between">
-                    <span className="text-xs font-mono text-neutral-500">2 errors detected</span>
-                    <span className="text-xs font-mono text-neutral-500">Processing: 48ms</span>
+                  <div className="pt-3 lg:pt-4 border-t border-neutral-200 flex items-center justify-between text-xs font-mono text-neutral-500">
+                    <span>2 errors detected</span>
+                    <span>Processing: 48ms</span>
                   </div>
                 </div>
               </figure>
@@ -204,20 +204,20 @@ export default function DailySession() {
       </section>
 
       {/* ========== THE LINGUISTIC ENGINE - NUMBERED NARRATIVE ========== */}
-      <div className="bg-neutral-900 text-white py-32 -mx-8 px-8 mb-40">
+      <div className="bg-neutral-900 text-white py-12 lg:py-32 -mx-8 px-4 lg:px-8 mb-16 lg:mb-40">
         <div className="max-w-5xl mx-auto">
-          <div className="mb-16">
-            <div className="text-sm font-mono text-electric-400 mb-4 tracking-wider">[ PLATFORM ARCHITECTURE ]</div>
-            <h2 className="text-6xl font-serif mb-12">The Linguistic Engine</h2>
+          <div className="mb-8 lg:mb-16">
+            <div className="text-xs lg:text-sm font-mono text-electric-400 mb-3 lg:mb-4 tracking-wider">[ PLATFORM ARCHITECTURE ]</div>
+            <h2 className="text-3xl lg:text-6xl font-serif mb-6 lg:mb-12">The Linguistic Engine</h2>
           </div>
 
-          <div className="space-y-16">
+          <div className="space-y-8 lg:space-y-16">
             {/* 01 - Morpho-Syntactic Analysis */}
-            <div className="flex gap-12">
-              <span className="font-mono text-4xl text-electric-400 tracking-wider flex-shrink-0">01</span>
-              <div>
-                <h3 className="text-3xl font-serif mb-4">Morpho-Syntactic Analysis</h3>
-                <p className="text-xl text-neutral-300 mb-8 leading-relaxed font-sans">
+            <div className="flex gap-4 lg:gap-12">
+              <span className="font-mono text-xl lg:text-4xl text-electric-400 tracking-wider flex-shrink-0">01</span>
+              <div className="min-w-0">
+                <h3 className="text-xl lg:text-3xl font-serif mb-3 lg:mb-4">Morpho-Syntactic Analysis</h3>
+                <p className="text-sm lg:text-xl text-neutral-300 mb-4 lg:mb-8 leading-relaxed font-sans">
                   47-point taxonomy classifies errors across morphology, syntax, semantics, pragmatics
                 </p>
 
@@ -246,11 +246,11 @@ export default function DailySession() {
             </div>
 
             {/* 02 - Phonetic Decomposition */}
-            <div className="flex gap-12">
-              <span className="font-mono text-4xl text-electric-400 tracking-wider flex-shrink-0">02</span>
-              <div>
-                <h3 className="text-3xl font-serif mb-4">Phonetic Decomposition</h3>
-                <p className="text-xl text-neutral-300 mb-8 leading-relaxed font-sans">
+            <div className="flex gap-4 lg:gap-12">
+              <span className="font-mono text-xl lg:text-4xl text-electric-400 tracking-wider flex-shrink-0">02</span>
+              <div className="min-w-0">
+                <h3 className="text-xl lg:text-3xl font-serif mb-3 lg:mb-4">Phonetic Decomposition</h3>
+                <p className="text-sm lg:text-xl text-neutral-300 mb-4 lg:mb-8 leading-relaxed font-sans">
                   Sub-phoneme waveform analysis detects articulation at 94% native precision
                 </p>
 
@@ -281,11 +281,11 @@ export default function DailySession() {
             </div>
 
             {/* 03 - Adaptive Retention Engine */}
-            <div className="flex gap-12">
-              <span className="font-mono text-4xl text-electric-400 tracking-wider flex-shrink-0">03</span>
-              <div>
-                <h3 className="text-3xl font-serif mb-4">Adaptive Retention Engine</h3>
-                <p className="text-xl text-neutral-300 mb-8 leading-relaxed font-sans">
+            <div className="flex gap-4 lg:gap-12">
+              <span className="font-mono text-xl lg:text-4xl text-electric-400 tracking-wider flex-shrink-0">03</span>
+              <div className="min-w-0">
+                <h3 className="text-xl lg:text-3xl font-serif mb-3 lg:mb-4">Adaptive Retention Engine</h3>
+                <p className="text-sm lg:text-xl text-neutral-300 mb-4 lg:mb-8 leading-relaxed font-sans">
                   Modified SM-2 algorithm optimizes review intervals for 0.94 recall rate
                 </p>
 
