@@ -45,8 +45,11 @@ export interface UserProfileResponse {
   user_id: string;
   level: string;
   native_language: string | null;
-  goals: Record<string, any>;
+  goals: string[];
   interests: string[];
+  daily_time_goal: number | null;
+  onboarding_completed: boolean;
+  full_name: string | null;
   created_at: string;
   updated_at: string;
 }
