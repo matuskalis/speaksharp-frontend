@@ -41,10 +41,8 @@ export function AppShell({ children }: AppShellProps) {
         onSignIn={() => setShowAuthModal(true)}
       />
 
-      <main className="flex-1 py-24">
-        <div className="mx-auto max-w-container px-8">
-          {children}
-        </div>
+      <main className="flex-1">
+        {children}
       </main>
 
       <Footer />
