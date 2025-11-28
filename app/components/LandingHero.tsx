@@ -7,9 +7,9 @@ export default function LandingHero() {
   const router = useRouter();
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="bg-white">
       {/* Hero Section */}
-      <section className="max-w-7xl mx-auto px-6 py-20">
+      <section className="max-w-7xl mx-auto px-6 py-20 min-h-[60vh]">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left Column - Hero Text */}
           <div className="space-y-8">
