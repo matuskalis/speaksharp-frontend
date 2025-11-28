@@ -140,9 +140,9 @@ export default function DailySession() {
       {/* ========== HERO SECTION ========== */}
       <section className="-mx-8 bg-neutral-50 py-24">
         <div className="max-w-7xl mx-auto px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+          <div className="grid grid-cols-12 gap-16 items-center">
             {/* LEFT: Headline, Subheadline, CTA */}
-            <div className="lg:col-span-6">
+            <div className="col-span-6">
               <h1 className="text-6xl font-semibold text-neutral-900 mb-6 leading-tight tracking-tight">
                 Instant fluency corrections while you speak.
               </h1>
@@ -158,7 +158,7 @@ export default function DailySession() {
             </div>
 
             {/* RIGHT: Live Demo Visualization */}
-            <div className="lg:col-span-6">
+            <div className="col-span-6">
               <figure className="bg-white border border-neutral-200 p-8">
                 {/* Demo: Grammar Correction Engine */}
                 <div className="space-y-6">
