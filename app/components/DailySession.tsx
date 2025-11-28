@@ -155,13 +155,13 @@ export default function DailySession() {
       {/* ========== HERO SECTION ========== */}
       <section className="-mx-8 bg-neutral-50 py-24">
         <div className="max-w-7xl mx-auto px-8">
-          <div className="grid grid-cols-12 gap-16 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center">
             {/* LEFT: Headline, Subheadline, CTA */}
-            <div className="col-span-6">
-              <h1 className="text-6xl font-semibold text-neutral-900 mb-6 leading-tight tracking-tight">
+            <div className="lg:col-span-6">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-neutral-900 mb-6 leading-tight tracking-tight">
                 Instant fluency corrections while you speak.
               </h1>
-              <p className="text-2xl text-neutral-600 mb-12 leading-relaxed">
+              <p className="text-lg md:text-xl lg:text-2xl text-neutral-600 mb-8 lg:mb-12 leading-relaxed">
                 Real-time analysis based on 47 linguistic error types.
               </p>
               <button
@@ -173,7 +173,7 @@ export default function DailySession() {
             </div>
 
             {/* RIGHT: Live Demo Visualization */}
-            <div className="col-span-6">
+            <div className="lg:col-span-6">
               <figure className="bg-white border border-neutral-200 p-8">
                 {/* Demo: Grammar Correction Engine */}
                 <div className="space-y-6">
@@ -223,7 +223,7 @@ export default function DailySession() {
         <div className="max-w-5xl mx-auto">
           <div className="mb-16">
             <div className="text-sm font-mono text-electric-400 mb-4 tracking-wider">[ PLATFORM ARCHITECTURE ]</div>
-            <h2 className="text-6xl font-serif mb-12">The Linguistic Engine</h2>
+            <h2 className="text-3xl md:text-5xl lg:text-6xl font-serif mb-12">The Linguistic Engine</h2>
           </div>
 
           <div className="space-y-16">
@@ -238,7 +238,7 @@ export default function DailySession() {
 
                 {/* Dependency tree visual */}
                 <div className="bg-white/5 border border-white/10 rounded-xl p-8 backdrop-blur-sm">
-                  <div className="grid grid-cols-4 gap-4 text-sm">
+                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
                     <div>
                       <div className="font-mono text-electric-400 mb-2">Morphology</div>
                       <div className="text-neutral-400 text-xs">Verb tenses, plurals, derivation</div>
@@ -345,7 +345,7 @@ export default function DailySession() {
       <div className="mb-40">
         <div className="text-center mb-20">
           <div className="text-sm font-mono text-electric-600 mb-4 tracking-wider">[ LIVE DEMONSTRATIONS ]</div>
-          <h2 className="text-6xl font-serif font-bold text-neutral-900 mb-6">
+          <h2 className="text-3xl md:text-5xl lg:text-6xl font-serif font-bold text-neutral-900 mb-6">
             See The Engine In Action
           </h2>
           <p className="text-xl text-neutral-600 max-w-3xl mx-auto font-sans">
@@ -355,9 +355,9 @@ export default function DailySession() {
 
         {/* Diagonal offset grid */}
         <div className="space-y-8">
-          <div className="grid grid-cols-5 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
             {/* Grammar Correction - spans 3 cols, starts at col 1 */}
-            <div className="col-span-3 bg-white border-2 border-neutral-200 rounded-2xl p-8 hover:border-electric-500 transition-all duration-300 hover:shadow-xl">
+            <div className="lg:col-span-3 bg-white border-2 border-neutral-200 rounded-2xl p-8 hover:border-electric-500 transition-all duration-300 hover:shadow-xl">
               <div className="mb-6">
                 <h3 className="text-3xl font-serif font-semibold text-neutral-900 mb-3">
                   Grammar Correction
@@ -404,7 +404,7 @@ export default function DailySession() {
             </div>
 
             {/* Pronunciation - spans 2 cols, offset */}
-            <div className="col-span-2 bg-white border-2 border-neutral-200 rounded-2xl p-8 hover:border-electric-500 transition-all duration-300 hover:shadow-xl mt-16">
+            <div className="lg:col-span-2 bg-white border-2 border-neutral-200 rounded-2xl p-8 hover:border-electric-500 transition-all duration-300 hover:shadow-xl lg:mt-16">
               <div className="mb-6">
                 <h3 className="text-3xl font-serif font-semibold text-neutral-900 mb-3">
                   Pronunciation Analysis
@@ -454,8 +454,8 @@ export default function DailySession() {
           </div>
 
           {/* Adaptive Difficulty - spans 2 cols, offset left */}
-          <div className="grid grid-cols-5 gap-8">
-            <div className="col-start-2 col-span-2 bg-white border-2 border-neutral-200 rounded-2xl p-8 hover:border-electric-500 transition-all duration-300 hover:shadow-xl">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+            <div className="lg:col-start-2 lg:col-span-2 bg-white border-2 border-neutral-200 rounded-2xl p-8 hover:border-electric-500 transition-all duration-300 hover:shadow-xl">
               <div className="mb-6">
                 <h3 className="text-3xl font-serif font-semibold text-neutral-900 mb-3">
                   Adaptive Difficulty
@@ -528,7 +528,7 @@ export default function DailySession() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <div className="text-sm font-mono text-electric-400 mb-4 tracking-wider">[ MEASURABLE OUTCOMES ]</div>
-            <h2 className="text-6xl font-serif font-bold text-white mb-6">
+            <h2 className="text-3xl md:text-5xl lg:text-6xl font-serif font-bold text-white mb-6">
               Progression Timeline
             </h2>
             <p className="text-xl text-neutral-400 font-sans">
@@ -542,7 +542,7 @@ export default function DailySession() {
             <div className="absolute top-1/2 left-0 right-0 h-1 bg-white/10 -translate-y-1/2" />
             <div className="absolute top-1/2 left-0 h-1 bg-electric-500 -translate-y-1/2" style={{ width: "75%" }} />
 
-            <div className="relative grid grid-cols-4 gap-8">
+            <div className="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
               {/* Day 0 */}
               <div className="text-center">
                 <div className="relative mb-8">
@@ -606,7 +606,7 @@ export default function DailySession() {
           </div>
 
           {/* Summary metrics */}
-          <div className="grid grid-cols-3 gap-8 mt-20">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-20">
             <div className="text-center">
               <div className="text-5xl font-mono font-bold text-electric-400 mb-2">847</div>
               <div className="text-lg text-white font-sans">Total Practice Hours</div>
@@ -630,7 +630,7 @@ export default function DailySession() {
       <div className="mb-40">
         <div className="text-center mb-20">
           <div className="text-sm font-mono text-electric-600 mb-4 tracking-wider">[ UNIFIED ARCHITECTURE ]</div>
-          <h2 className="text-6xl font-serif font-bold text-neutral-900 mb-6">
+          <h2 className="text-3xl md:text-5xl lg:text-6xl font-serif font-bold text-neutral-900 mb-6">
             The Platform
           </h2>
           <p className="text-xl text-neutral-600 max-w-3xl mx-auto font-sans">
@@ -653,7 +653,7 @@ export default function DailySession() {
           </svg>
 
           {/* Connected nodes */}
-          <div className="grid grid-cols-2 gap-x-32 gap-y-24 relative">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 md:gap-x-32 gap-y-12 md:gap-y-24 relative">
             <div className="text-right">
               <div className="bg-white border-2 border-electric-200 rounded-xl p-6 hover:border-electric-500 transition-all duration-300 inline-block">
                 <h4 className="font-mono text-electric-600 mb-2">Error Taxonomy</h4>
@@ -686,7 +686,7 @@ export default function DailySession() {
       <div className="mb-40">
         <div className="text-center mb-16">
           <div className="text-sm font-mono text-electric-600 mb-4 tracking-wider">[ VERIFIED RESULTS ]</div>
-          <h2 className="text-6xl font-serif font-bold text-neutral-900 mb-6">
+          <h2 className="text-3xl md:text-5xl lg:text-6xl font-serif font-bold text-neutral-900 mb-6">
             Real Results
           </h2>
           <p className="text-xl text-neutral-600 font-sans">
@@ -773,7 +773,7 @@ export default function DailySession() {
       <div className="mb-40">
         <div className="text-center mb-16">
           <div className="text-sm font-mono text-electric-600 mb-4 tracking-wider">[ TRY IT NOW ]</div>
-          <h2 className="text-6xl font-serif font-bold text-neutral-900 mb-6">
+          <h2 className="text-3xl md:text-5xl lg:text-6xl font-serif font-bold text-neutral-900 mb-6">
             Try The Grammar Engine
           </h2>
           <p className="text-xl text-neutral-600 max-w-2xl mx-auto font-sans">
@@ -837,7 +837,7 @@ export default function DailySession() {
       <div id="pricing" className="mb-40">
         <div className="text-center mb-16">
           <div className="text-sm font-mono text-electric-600 mb-4 tracking-wider">[ PLANS & PRICING ]</div>
-          <h2 className="text-6xl font-serif font-bold text-neutral-900 mb-6">
+          <h2 className="text-3xl md:text-5xl lg:text-6xl font-serif font-bold text-neutral-900 mb-6">
             Choose Your Plan
           </h2>
           <p className="text-xl text-neutral-600 font-sans">
@@ -845,7 +845,7 @@ export default function DailySession() {
           </p>
         </div>
 
-        <div className="grid grid-cols-4 gap-6 max-w-7xl mx-auto mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto mb-8">
           {/* Starter - Anchor low */}
           <div className="bg-white border-2 border-neutral-200 rounded-2xl p-8">
             <h3 className="text-2xl font-serif font-bold text-neutral-900 mb-2">Starter</h3>
@@ -871,7 +871,7 @@ export default function DailySession() {
           </div>
 
           {/* Pro - Target with visual emphasis */}
-          <div className="bg-white border-4 border-electric-500 rounded-2xl p-8 relative shadow-xl ring-4 ring-electric-500/20 scale-105">
+          <div className="bg-white border-4 border-electric-500 rounded-2xl p-8 relative shadow-xl ring-4 ring-electric-500/20 lg:scale-105">
             <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-electric-500 text-white px-4 py-1 rounded-full text-sm font-mono">
               Most Popular
             </div>
@@ -970,7 +970,7 @@ export default function DailySession() {
       <div className="mb-40">
         <div className="text-center mb-20">
           <div className="text-sm font-mono text-electric-600 mb-4 tracking-wider">[ DAILY WORKFLOW ]</div>
-          <h2 className="text-5xl font-serif font-bold text-neutral-900 mb-6">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-neutral-900 mb-6">
             Your Daily Practice
           </h2>
           <p className="text-lg text-neutral-600 max-w-2xl mx-auto font-sans">
@@ -1074,7 +1074,7 @@ export default function DailySession() {
           {/* Bracket motif */}
           <div className="text-sm font-mono text-electric-100 mb-6 tracking-wider">[ START YOUR JOURNEY ]</div>
 
-          <h2 className="text-6xl font-serif font-bold mb-6">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold mb-6">
             Start Your 90-Day Journey
           </h2>
           <p className="text-2xl text-electric-100 mb-12 leading-relaxed font-sans">
