@@ -69,7 +69,7 @@ export default function GetStartedPage() {
       // Save user preferences to backend
       await apiClient.updateProfile({
         goals: formData.goals,
-        daily_time_goal: formData.dailyTimeGoal,
+        daily_time_goal: formData.dailyTimeGoal ?? undefined,
         interests: formData.interests,
         onboarding_completed: true,
       });
