@@ -161,7 +161,7 @@ export default function DailySession() {
                 Real-time analysis based on 47 linguistic error types.
               </p>
               <button
-                onClick={() => router.push("/assessment")}
+                onClick={() => router.push("/get-started")}
                 className="px-8 py-4 bg-neutral-900 text-white text-lg font-medium hover:bg-neutral-800 transition-colors"
               >
                 Start free assessment
@@ -1079,7 +1079,7 @@ export default function DailySession() {
 
           <Button
             size="lg"
-            onClick={() => router.push("/assessment")}
+            onClick={() => router.push("/get-started")}
             className="text-lg font-semibold px-12 py-7 bg-white text-electric-600 hover:bg-neutral-100 shadow-2xl transition-all duration-200 hover:scale-105"
           >
             Start Your Free Assessment

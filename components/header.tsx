@@ -54,10 +54,10 @@ export function Header({ onSignOut, onSignIn, isAuthenticated }: HeaderProps) {
             })}
             {isAuthenticated && (
               <Link
-                href="/dashboard"
+                href="/learn"
                 className="text-sm font-medium text-neutral-600 hover:text-neutral-900 transition-colors"
               >
-                Dashboard
+                Learn
               </Link>
             )}
           </nav>

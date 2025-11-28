@@ -35,6 +35,13 @@ export default function PlacementTest() {
     const newAnswers = [...answers];
     newAnswers[currentQuestionIndex] = optionIndex;
     setAnswers(newAnswers);
+
+    // Auto-advance to next question if not the last one
+    if (currentQuestionIndex < questions.length - 1) {
+      setTimeout(() => {
+        setCurrentQuestionIndex(currentQuestionIndex + 1);
+      }, 300); // Small delay for visual feedback
+    }
   };
 
   const nextQuestion = () => {
@@ -75,50 +82,48 @@ export default function PlacementTest() {
   // Not Started State
   if (state === "not_started") {
     return (
-      <div className="max-w-[1200px] mx-auto px-8">
-        <div className="bg-white border border-gray-200 hover:border-gray-300 rounded-xl p-10">
-          <div className="text-center">
-            <h2 className="text-6xl font-bold text-gray-900 mb-8">
-              Placement Test
-            </h2>
-            <p className="text-lg text-gray-600 mb-8">
-              Find your English level (A1-C2) in 10 minutes
-            </p>
+      <div className="space-y-8">
+        <div className="text-center">
+          <h2 className="text-4xl font-semibold text-neutral-900 mb-4">
+            Placement Test
+          </h2>
+          <p className="text-lg text-neutral-600 mb-8">
+            Find your English level (A1-C2) in 10 minutes
+          </p>
 
-            <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-6 mb-8 text-left">
-              <h3 className="font-semibold text-blue-300 mb-3">What to expect:</h3>
-              <ul className="space-y-2 text-white/70">
-                <li className="flex items-start">
-                  <span className="text-blue-300 mr-2">✓</span>
-                  <span>12 questions covering grammar and vocabulary</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-blue-300 mr-2">✓</span>
-                  <span>Questions range from beginner (A1) to advanced (C2)</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-blue-300 mr-2">✓</span>
-                  <span>Takes about 5-10 minutes to complete</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-blue-300 mr-2">✓</span>
-                  <span>Instant results with personalized recommendations</span>
-                </li>
-              </ul>
-            </div>
-
-            <button
-              onClick={startTest}
-              disabled={loading}
-              className="px-8 py-4 bg-gradient-to-r from-indigo-500 to-rose-500 text-white rounded-lg font-semibold hover:from-indigo-600 hover:to-rose-600 transition-all duration-300 disabled:opacity-50 text-lg"
-            >
-              {loading ? "Loading..." : "Start Placement Test"}
-            </button>
+          <div className="bg-neutral-50 border-2 border-neutral-200 rounded-lg p-6 mb-8 text-left">
+            <h3 className="font-semibold text-neutral-900 mb-3">What to expect:</h3>
+            <ul className="space-y-2 text-neutral-600">
+              <li className="flex items-start">
+                <span className="text-neutral-900 mr-2">✓</span>
+                <span>12 questions covering grammar and vocabulary</span>
+              </li>
+              <li className="flex items-start">
+                <span className="text-neutral-900 mr-2">✓</span>
+                <span>Questions range from beginner (A1) to advanced (C2)</span>
+              </li>
+              <li className="flex items-start">
+                <span className="text-neutral-900 mr-2">✓</span>
+                <span>Takes about 5-10 minutes to complete</span>
+              </li>
+              <li className="flex items-start">
+                <span className="text-neutral-900 mr-2">✓</span>
+                <span>Instant results with personalized recommendations</span>
+              </li>
+            </ul>
           </div>
+
+          <button
+            onClick={startTest}
+            disabled={loading}
+            className="px-8 py-4 bg-neutral-900 text-white rounded-lg font-semibold hover:bg-neutral-800 transition-all disabled:opacity-50 text-lg"
+          >
+            {loading ? "Loading..." : "Start Placement Test"}
+          </button>
         </div>
 
         {error && (
-          <div className="mt-4 p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-center">
+          <div className="mt-4 p-4 bg-red-50 border-2 border-red-200 rounded-lg text-red-600 text-center">
             {error}
           </div>
         )}
@@ -134,17 +139,17 @@ export default function PlacementTest() {
     const allAnswered = answers.every(a => a !== -1);
 
     return (
-      <div className="max-w-3xl mx-auto p-6">
-        <div className="bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/[0.08] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] p-8">
+      <div className="space-y-8">
+        <div className="bg-white border-2 border-neutral-200 rounded-lg p-8">
           {/* Progress Bar */}
           <div className="mb-6">
-            <div className="flex justify-between text-sm text-white/60 mb-2">
+            <div className="flex justify-between text-sm text-neutral-600 mb-2">
               <span>Question {currentQuestionIndex + 1} of {questions.length}</span>
               <span>{Math.round(progress)}% complete</span>
             </div>
-            <div className="w-full bg-white/[0.08] rounded-full h-2">
+            <div className="w-full bg-neutral-200 rounded-full h-2">
               <div
-                className="bg-gradient-to-r from-indigo-500 to-rose-500 h-2 rounded-full transition-all duration-300"
+                className="bg-neutral-900 h-2 rounded-full transition-all duration-300"
                 style={{ width: `${progress}%` }}
               />
             </div>
@@ -153,14 +158,14 @@ export default function PlacementTest() {
           {/* Question */}
           <div className="mb-8">
             <div className="flex items-center justify-between mb-4">
-              <span className="text-sm text-white/50">
+              <span className="text-sm text-neutral-600">
                 {currentQuestion.skill_type === "grammar" ? "📝 Grammar" : "📚 Vocabulary"}
               </span>
-              <span className="text-xs bg-white/[0.08] text-white/60 px-2 py-1 rounded">
+              <span className="text-xs bg-neutral-100 text-neutral-600 px-2 py-1 rounded">
                 Level: {currentQuestion.level}
               </span>
             </div>
-            <h3 className="text-xl text-white mb-6">
+            <h3 className="text-xl text-neutral-900 font-medium mb-6">
               {currentQuestion.question_text}
             </h3>
 
@@ -172,11 +177,11 @@ export default function PlacementTest() {
                   onClick={() => selectAnswer(index)}
                   className={`w-full p-4 rounded-lg text-left transition-all duration-200 ${
                     selectedAnswer === index
-                      ? "bg-gradient-to-r from-indigo-500/20 to-rose-500/20 border-2 border-indigo-500"
-                      : "bg-white/[0.03] border-2 border-white/[0.08] hover:bg-white/[0.05]"
+                      ? "bg-neutral-50 border-2 border-neutral-900"
+                      : "bg-white border-2 border-neutral-200 hover:border-neutral-400"
                   }`}
                 >
-                  <span className="text-white">{option}</span>
+                  <span className="text-neutral-900">{option}</span>
                 </button>
               ))}
             </div>
@@ -187,39 +192,31 @@ export default function PlacementTest() {
             <button
               onClick={previousQuestion}
               disabled={currentQuestionIndex === 0}
-              className="px-4 py-2 bg-white/[0.05] text-white rounded-lg hover:bg-white/[0.08] disabled:opacity-30 disabled:cursor-not-allowed"
+              className="px-4 py-2 bg-neutral-100 text-neutral-900 rounded-lg hover:bg-neutral-200 disabled:opacity-30 disabled:cursor-not-allowed"
             >
               ← Previous
             </button>
 
-            {currentQuestionIndex === questions.length - 1 ? (
+            {currentQuestionIndex === questions.length - 1 && (
               <button
                 onClick={submitTest}
                 disabled={!allAnswered || loading}
-                className="px-6 py-3 bg-gradient-to-r from-indigo-500 to-rose-500 text-white rounded-lg font-semibold hover:from-indigo-600 hover:to-rose-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-6 py-3 bg-neutral-900 text-white rounded-lg font-semibold hover:bg-neutral-800 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? "Submitting..." : "Submit Test"}
-              </button>
-            ) : (
-              <button
-                onClick={nextQuestion}
-                disabled={selectedAnswer === -1}
-                className="px-6 py-2 bg-gradient-to-r from-indigo-500 to-rose-500 text-white rounded-lg font-semibold hover:from-indigo-600 hover:to-rose-600 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Next →
               </button>
             )}
           </div>
 
           {!allAnswered && currentQuestionIndex === questions.length - 1 && (
-            <p className="text-center text-yellow-400 text-sm mt-4">
+            <p className="text-center text-amber-600 text-sm mt-4">
               ⚠️ Please answer all questions before submitting
             </p>
           )}
         </div>
 
         {error && (
-          <div className="mt-4 p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-center">
+          <div className="mt-4 p-4 bg-red-50 border-2 border-red-200 rounded-lg text-red-600 text-center">
             {error}
           </div>
         )}
@@ -230,51 +227,51 @@ export default function PlacementTest() {
   // Completed State
   if (state === "completed" && result) {
     const levelColors: Record<string, string> = {
-      A1: "from-green-400 to-emerald-500",
-      A2: "from-blue-400 to-cyan-500",
-      B1: "from-purple-400 to-violet-500",
-      B2: "from-indigo-400 to-blue-500",
-      C1: "from-orange-400 to-red-500",
-      C2: "from-rose-400 to-pink-500",
+      A1: "bg-green-500",
+      A2: "bg-blue-500",
+      B1: "bg-purple-500",
+      B2: "bg-indigo-500",
+      C1: "bg-orange-500",
+      C2: "bg-rose-500",
     };
 
     return (
-      <div className="max-w-3xl mx-auto p-6">
-        <div className="bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/[0.08] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] p-8">
+      <div className="space-y-8">
+        <div className="bg-white border-2 border-neutral-200 rounded-lg p-8">
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-white mb-2">Test Complete!</h2>
-            <p className="text-white/60">Here are your results</p>
+            <h2 className="text-3xl font-bold text-neutral-900 mb-2">Test Complete!</h2>
+            <p className="text-neutral-600">Here are your results</p>
           </div>
 
           {/* Level Badge */}
           <div className="text-center mb-8">
-            <div className={`inline-block px-12 py-6 rounded-2xl bg-gradient-to-r ${levelColors[result.level] || "from-indigo-500 to-rose-500"} shadow-lg`}>
-              <div className="text-white/70 text-sm mb-1">Your Level</div>
+            <div className={`inline-block px-12 py-6 rounded-lg ${levelColors[result.level] || "bg-neutral-900"} shadow-lg`}>
+              <div className="text-white/80 text-sm mb-1">Your Level</div>
               <div className="text-5xl font-bold text-white">{result.level}</div>
             </div>
           </div>
 
           {/* Score */}
-          <div className="bg-white/[0.05] rounded-xl p-6 mb-6 text-center">
-            <div className="text-white/70 mb-2">Score</div>
-            <div className="text-3xl font-bold text-white">
+          <div className="bg-neutral-50 border-2 border-neutral-200 rounded-lg p-6 mb-6 text-center">
+            <div className="text-neutral-600 mb-2">Score</div>
+            <div className="text-3xl font-bold text-neutral-900">
               {result.score} / {result.total_questions}
             </div>
           </div>
 
           {/* Strengths & Weaknesses */}
           <div className="grid grid-cols-2 gap-4 mb-6">
-            <div className="bg-green-500/10 border border-green-500/20 rounded-xl p-4">
-              <h4 className="text-green-300 font-semibold mb-2">✓ Strengths</h4>
-              <ul className="text-white/70 text-sm space-y-1">
+            <div className="bg-green-50 border-2 border-green-200 rounded-lg p-4">
+              <h4 className="text-green-700 font-semibold mb-2">✓ Strengths</h4>
+              <ul className="text-neutral-600 text-sm space-y-1">
                 {result.strengths.map((strength, idx) => (
                   <li key={idx}>• {strength}</li>
                 ))}
               </ul>
             </div>
-            <div className="bg-orange-500/10 border border-orange-500/20 rounded-xl p-4">
-              <h4 className="text-orange-300 font-semibold mb-2">⚠️ Areas to Improve</h4>
-              <ul className="text-white/70 text-sm space-y-1">
+            <div className="bg-orange-50 border-2 border-orange-200 rounded-lg p-4">
+              <h4 className="text-orange-700 font-semibold mb-2">⚠️ Areas to Improve</h4>
+              <ul className="text-neutral-600 text-sm space-y-1">
                 {result.weaknesses.map((weakness, idx) => (
                   <li key={idx}>• {weakness}</li>
                 ))}
@@ -283,22 +280,22 @@ export default function PlacementTest() {
           </div>
 
           {/* Recommendation */}
-          <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-6 mb-8">
-            <h4 className="text-blue-300 font-semibold mb-2">📋 Recommendation</h4>
-            <p className="text-white/70">{result.recommendation}</p>
+          <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-6 mb-8">
+            <h4 className="text-blue-700 font-semibold mb-2">📋 Recommendation</h4>
+            <p className="text-neutral-600">{result.recommendation}</p>
           </div>
 
           {/* Actions */}
           <div className="flex gap-4">
             <button
               onClick={restartTest}
-              className="flex-1 px-6 py-3 bg-white/[0.05] text-white rounded-lg hover:bg-white/[0.08] transition-all"
+              className="flex-1 px-6 py-3 bg-neutral-100 text-neutral-900 rounded-lg hover:bg-neutral-200 transition-all"
             >
               Retake Test
             </button>
             <button
               onClick={() => window.location.href = "/"}
-              className="flex-1 px-6 py-3 bg-gradient-to-r from-indigo-500 to-rose-500 text-white rounded-lg font-semibold hover:from-indigo-600 hover:to-rose-600 transition-all"
+              className="flex-1 px-6 py-3 bg-neutral-900 text-white rounded-lg font-semibold hover:bg-neutral-800 transition-all"
             >
               Start Learning
             </button>

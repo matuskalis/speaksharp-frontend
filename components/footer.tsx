@@ -11,24 +11,24 @@ export function Footer() {
   ];
 
   return (
-    <footer className="bg-charcoal-900 text-white py-12 mt-32">
+    <footer className="bg-charcoal-900 text-white py-6 mt-16">
       <div className="mx-auto max-w-container px-8">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link
             href="/"
-            className="text-lg font-semibold text-white hover:text-charcoal-300 transition-colors"
+            className="text-base font-semibold text-white hover:text-charcoal-300 transition-colors"
           >
             Vorex
           </Link>
 
           {/* Links */}
-          <nav className="flex items-center gap-8">
+          <nav className="flex items-center gap-6">
             {links.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-sm text-charcoal-300 hover:text-white transition-colors font-light"
+                className="text-xs text-charcoal-300 hover:text-white transition-colors font-light"
               >
                 {link.name}
               </Link>
