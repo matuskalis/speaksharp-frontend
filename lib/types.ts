@@ -92,6 +92,10 @@ export interface SRSReviewResponse {
 export interface UpdateProfileRequest {
   level?: string;
   native_language?: string;
+  goals?: string[];
+  interests?: string[];
+  daily_time_goal?: number;
+  onboarding_completed?: boolean;
 }
 
 // Voice tutoring types
