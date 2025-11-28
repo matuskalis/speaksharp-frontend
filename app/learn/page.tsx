@@ -1,7 +1,9 @@
 "use client";
 
 import { useAuth } from "@/contexts/AuthContext";
+import { useTrialStatus } from "@/hooks/useTrialStatus";
 import { AppShell } from "@/components/app-shell";
+import { Paywall } from "@/components/paywall";
 import StreakCounter from "../components/StreakCounter";
 import DailyGoalProgress from "../components/DailyGoalProgress";
 import QuickPracticeCard from "../components/QuickPracticeCard";
@@ -28,6 +30,7 @@ interface PracticeOption {
 export default function LearnPage() {
   const { user } = useAuth();
   const { profile, loading } = useUserProfile();
+  const { hasAccess } = useTrialStatus();
   const router = useRouter();
   const [userStats, setUserStats] = useState<UserStats>({
     currentStreak: 0,
@@ -119,6 +122,15 @@ export default function LearnPage() {
 
   if (!user || !profile) {
     return null;
+  }
+
+  // Show paywall if user doesn't have access (trial expired and no subscription)
+  if (!hasAccess) {
+    return (
+      <AppShell>
+        <Paywall />
+      </AppShell>
+    );
   }
 
   // Personalized greeting based on user's goals

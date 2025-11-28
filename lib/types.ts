@@ -50,6 +50,10 @@ export interface UserProfileResponse {
   daily_time_goal: number | null;
   onboarding_completed: boolean;
   full_name: string | null;
+  trial_start_date: string | null;
+  trial_end_date: string | null;
+  subscription_status: string | null; // "active", "cancelled", "expired", null
+  subscription_tier: string | null; // "starter", "pro", "premium", "enterprise", null
   created_at: string;
   updated_at: string;
 }
@@ -99,6 +103,8 @@ export interface UpdateProfileRequest {
   interests?: string[];
   daily_time_goal?: number;
   onboarding_completed?: boolean;
+  trial_start_date?: string;
+  trial_end_date?: string;
 }
 
 // Voice tutoring types

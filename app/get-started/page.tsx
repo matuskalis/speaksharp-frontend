@@ -66,12 +66,19 @@ export default function GetStartedPage() {
   const completeOnboarding = async () => {
     setSaving(true);
     try {
-      // Save user preferences to backend
+      // Calculate trial dates (14-day trial)
+      const trialStartDate = new Date();
+      const trialEndDate = new Date();
+      trialEndDate.setDate(trialEndDate.getDate() + 14);
+
+      // Save user preferences to backend with trial initialization
       await apiClient.updateProfile({
         goals: formData.goals,
         daily_time_goal: formData.dailyTimeGoal ?? undefined,
         interests: formData.interests,
         onboarding_completed: true,
+        trial_start_date: trialStartDate.toISOString(),
+        trial_end_date: trialEndDate.toISOString(),
       });
       setCurrentStep("complete");
     } catch (error) {

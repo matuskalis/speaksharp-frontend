@@ -5,6 +5,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useState } from "react";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
+import { TrialBanner } from "@/components/trial-banner";
 import AuthForm from "@/app/components/AuthForm";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
@@ -40,6 +41,8 @@ export function AppShell({ children }: AppShellProps) {
         onSignOut={handleSignOut}
         onSignIn={() => setShowAuthModal(true)}
       />
+
+      {user && <TrialBanner />}
 
       <main className="flex-1">
         {children}
