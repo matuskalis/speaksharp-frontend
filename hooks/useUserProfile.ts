@@ -21,7 +21,7 @@ export function useUserProfile() {
     const fetchProfile = async () => {
       try {
         setLoading(true);
-        const profileData = await apiClient.getProfile();
+        const profileData = await apiClient.getCurrentUser();
         setProfile(profileData);
       } catch (err) {
         console.error("Failed to fetch user profile:", err);
