@@ -153,20 +153,20 @@ export default function DailySession() {
   return (
     <div>
       {/* ========== HERO SECTION ========== */}
-      <section className="-mx-8 bg-neutral-50 py-24">
-        <div className="max-w-7xl mx-auto px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center">
+      <section className="-mx-8 bg-neutral-50 py-12 md:py-20 lg:py-24">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-16 items-center">
             {/* LEFT: Headline, Subheadline, CTA */}
             <div className="lg:col-span-6">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-neutral-900 mb-6 leading-tight tracking-tight">
+              <h1 className="text-3xl md:text-5xl lg:text-6xl font-semibold text-neutral-900 mb-4 md:mb-6 leading-tight tracking-tight">
                 Instant fluency corrections while you speak.
               </h1>
-              <p className="text-lg md:text-xl lg:text-2xl text-neutral-600 mb-8 lg:mb-12 leading-relaxed">
+              <p className="text-base md:text-xl lg:text-2xl text-neutral-600 mb-6 md:mb-8 lg:mb-12 leading-relaxed">
                 Real-time analysis based on 47 linguistic error types.
               </p>
               <button
                 onClick={() => router.push("/assessment")}
-                className="px-8 py-4 bg-neutral-900 text-white text-lg font-medium hover:bg-neutral-800 transition-colors"
+                className="w-full md:w-auto px-8 py-4 bg-neutral-900 text-white text-base md:text-lg font-medium hover:bg-neutral-800 transition-colors"
               >
                 Start free assessment
               </button>
@@ -174,24 +174,24 @@ export default function DailySession() {
 
             {/* RIGHT: Live Demo Visualization */}
             <div className="lg:col-span-6">
-              <figure className="bg-white border border-neutral-200 p-8">
+              <figure className="bg-white border border-neutral-200 p-4 md:p-6 lg:p-8">
                 {/* Demo: Grammar Correction Engine */}
-                <div className="space-y-6">
-                  <div className="border-b border-neutral-200 pb-4">
-                    <div className="text-xs font-mono text-neutral-500 mb-3">INPUT</div>
-                    <div className="text-lg text-neutral-900 font-mono">
+                <div className="space-y-4 md:space-y-6">
+                  <div className="border-b border-neutral-200 pb-3 md:pb-4">
+                    <div className="text-xs font-mono text-neutral-500 mb-2">INPUT</div>
+                    <div className="text-sm md:text-base lg:text-lg text-neutral-900 font-mono break-words">
                       I <span className="bg-red-100 text-red-700 px-1">go</span> to store yesterday
                     </div>
                   </div>
 
-                  <div className="border-b border-neutral-200 pb-4">
-                    <div className="text-xs font-mono text-neutral-500 mb-3">OUTPUT</div>
-                    <div className="text-lg text-neutral-900 font-mono">
+                  <div className="border-b border-neutral-200 pb-3 md:pb-4">
+                    <div className="text-xs font-mono text-neutral-500 mb-2">OUTPUT</div>
+                    <div className="text-sm md:text-base lg:text-lg text-neutral-900 font-mono break-words">
                       I <span className="bg-green-100 text-green-700 px-1">went</span> to <span className="bg-green-100 text-green-700 px-1">the</span> store yesterday
                     </div>
                   </div>
 
-                  <div className="space-y-3">
+                  <div className="space-y-2 md:space-y-3">
                     <div className="text-xs font-mono text-neutral-500 mb-2">ANALYSIS</div>
                     <div className="flex items-start gap-3">
                       <div className="w-1 h-1 rounded-full bg-neutral-400 mt-2" />
@@ -219,20 +219,20 @@ export default function DailySession() {
       </section>
 
       {/* ========== THE LINGUISTIC ENGINE - NUMBERED NARRATIVE ========== */}
-      <div className="bg-neutral-900 text-white py-32 -mx-8 px-8 mb-40">
+      <div className="bg-neutral-900 text-white py-12 md:py-20 lg:py-32 -mx-8 px-4 md:px-6 lg:px-8 mb-16 md:mb-28 lg:mb-40">
         <div className="max-w-5xl mx-auto">
-          <div className="mb-16">
+          <div className="mb-8 md:mb-12 lg:mb-16">
             <div className="text-sm font-mono text-electric-400 mb-4 tracking-wider">[ PLATFORM ARCHITECTURE ]</div>
-            <h2 className="text-3xl md:text-5xl lg:text-6xl font-serif mb-12">The Linguistic Engine</h2>
+            <h2 className="text-2xl md:text-4xl lg:text-6xl font-serif mb-6 md:mb-10 lg:mb-12">The Linguistic Engine</h2>
           </div>
 
-          <div className="space-y-16">
+          <div className="space-y-8 md:space-y-12 lg:space-y-16">
             {/* 01 - Morpho-Syntactic Analysis */}
-            <div className="flex gap-12">
-              <span className="font-mono text-4xl text-electric-400 tracking-wider">01</span>
+            <div className="flex gap-4 md:gap-8 lg:gap-12">
+              <span className="font-mono text-2xl md:text-3xl lg:text-4xl text-electric-400 tracking-wider">01</span>
               <div className="flex-1">
-                <h3 className="text-3xl font-serif mb-4">Morpho-Syntactic Analysis</h3>
-                <p className="text-xl text-neutral-300 mb-8 leading-relaxed font-sans">
+                <h3 className="text-xl md:text-2xl lg:text-3xl font-serif mb-3 md:mb-4">Morpho-Syntactic Analysis</h3>
+                <p className="text-base md:text-lg lg:text-xl text-neutral-300 mb-4 md:mb-6 lg:mb-8 leading-relaxed font-sans">
                   47-point taxonomy classifies errors across morphology, syntax, semantics, pragmatics
                 </p>
 
@@ -261,11 +261,11 @@ export default function DailySession() {
             </div>
 
             {/* 02 - Phonetic Decomposition */}
-            <div className="flex gap-12">
-              <span className="font-mono text-4xl text-electric-400 tracking-wider">02</span>
+            <div className="flex gap-4 md:gap-8 lg:gap-12">
+              <span className="font-mono text-2xl md:text-3xl lg:text-4xl text-electric-400 tracking-wider">02</span>
               <div className="flex-1">
-                <h3 className="text-3xl font-serif mb-4">Phonetic Decomposition</h3>
-                <p className="text-xl text-neutral-300 mb-8 leading-relaxed font-sans">
+                <h3 className="text-xl md:text-2xl lg:text-3xl font-serif mb-3 md:mb-4">Phonetic Decomposition</h3>
+                <p className="text-base md:text-lg lg:text-xl text-neutral-300 mb-4 md:mb-6 lg:mb-8 leading-relaxed font-sans">
                   Sub-phoneme waveform analysis detects articulation at 94% native precision
                 </p>
 
@@ -296,11 +296,11 @@ export default function DailySession() {
             </div>
 
             {/* 03 - Adaptive Retention Engine */}
-            <div className="flex gap-12">
-              <span className="font-mono text-4xl text-electric-400 tracking-wider">03</span>
+            <div className="flex gap-4 md:gap-8 lg:gap-12">
+              <span className="font-mono text-2xl md:text-3xl lg:text-4xl text-electric-400 tracking-wider">03</span>
               <div className="flex-1">
-                <h3 className="text-3xl font-serif mb-4">Adaptive Retention Engine</h3>
-                <p className="text-xl text-neutral-300 mb-8 leading-relaxed font-sans">
+                <h3 className="text-xl md:text-2xl lg:text-3xl font-serif mb-3 md:mb-4">Adaptive Retention Engine</h3>
+                <p className="text-base md:text-lg lg:text-xl text-neutral-300 mb-4 md:mb-6 lg:mb-8 leading-relaxed font-sans">
                   Modified SM-2 algorithm optimizes review intervals for 0.94 recall rate
                 </p>
 
@@ -342,22 +342,22 @@ export default function DailySession() {
       </div>
 
       {/* ========== PRODUCT PROOF - DIAGONAL GRID WITH OFFSET CARDS ========== */}
-      <div className="mb-40">
-        <div className="text-center mb-20">
+      <div className="mb-16 md:mb-28 lg:mb-40 px-4 md:px-6 lg:px-8">
+        <div className="text-center mb-10 md:mb-16 lg:mb-20">
           <div className="text-sm font-mono text-electric-600 mb-4 tracking-wider">[ LIVE DEMONSTRATIONS ]</div>
-          <h2 className="text-3xl md:text-5xl lg:text-6xl font-serif font-bold text-neutral-900 mb-6">
+          <h2 className="text-2xl md:text-4xl lg:text-6xl font-serif font-bold text-neutral-900 mb-4 md:mb-6">
             See The Engine In Action
           </h2>
-          <p className="text-xl text-neutral-600 max-w-3xl mx-auto font-sans">
+          <p className="text-base md:text-lg lg:text-xl text-neutral-600 max-w-3xl mx-auto font-sans">
             Real-time linguistic analysis that powers every conversation
           </p>
         </div>
 
         {/* Diagonal offset grid */}
-        <div className="space-y-8">
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+        <div className="space-y-6 md:space-y-8">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 md:gap-8">
             {/* Grammar Correction - spans 3 cols, starts at col 1 */}
-            <div className="lg:col-span-3 bg-white border-2 border-neutral-200 rounded-2xl p-8 hover:border-electric-500 transition-all duration-300 hover:shadow-xl">
+            <div className="lg:col-span-3 bg-white border-2 border-neutral-200 rounded-2xl p-4 md:p-6 lg:p-8 hover:border-electric-500 transition-all duration-300 hover:shadow-xl">
               <div className="mb-6">
                 <h3 className="text-3xl font-serif font-semibold text-neutral-900 mb-3">
                   Grammar Correction
@@ -404,7 +404,7 @@ export default function DailySession() {
             </div>
 
             {/* Pronunciation - spans 2 cols, offset */}
-            <div className="lg:col-span-2 bg-white border-2 border-neutral-200 rounded-2xl p-8 hover:border-electric-500 transition-all duration-300 hover:shadow-xl lg:mt-16">
+            <div className="lg:col-span-2 bg-white border-2 border-neutral-200 rounded-2xl p-4 md:p-6 lg:p-8 hover:border-electric-500 transition-all duration-300 hover:shadow-xl lg:mt-16">
               <div className="mb-6">
                 <h3 className="text-3xl font-serif font-semibold text-neutral-900 mb-3">
                   Pronunciation Analysis
@@ -454,8 +454,8 @@ export default function DailySession() {
           </div>
 
           {/* Adaptive Difficulty - spans 2 cols, offset left */}
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
-            <div className="lg:col-start-2 lg:col-span-2 bg-white border-2 border-neutral-200 rounded-2xl p-8 hover:border-electric-500 transition-all duration-300 hover:shadow-xl">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 md:gap-8">
+            <div className="lg:col-start-2 lg:col-span-2 bg-white border-2 border-neutral-200 rounded-2xl p-4 md:p-6 lg:p-8 hover:border-electric-500 transition-all duration-300 hover:shadow-xl">
               <div className="mb-6">
                 <h3 className="text-3xl font-serif font-semibold text-neutral-900 mb-3">
                   Adaptive Difficulty
@@ -1069,25 +1069,25 @@ export default function DailySession() {
       </div>
 
       {/* ========== FINAL CTA ========== */}
-      <div className="bg-gradient-to-br from-electric-600 via-electric-500 to-electric-700 -mx-8 px-8 py-32 text-white text-center">
+      <div className="bg-gradient-to-br from-electric-600 via-electric-500 to-electric-700 -mx-8 px-4 md:px-6 lg:px-8 py-12 md:py-20 lg:py-32 text-white text-center">
         <div className="max-w-4xl mx-auto">
           {/* Bracket motif */}
-          <div className="text-sm font-mono text-electric-100 mb-6 tracking-wider">[ START YOUR JOURNEY ]</div>
+          <div className="text-sm font-mono text-electric-100 mb-4 md:mb-6 tracking-wider">[ START YOUR JOURNEY ]</div>
 
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold mb-6">
+          <h2 className="text-3xl md:text-4xl lg:text-6xl font-serif font-bold mb-4 md:mb-6">
             Start Your 90-Day Journey
           </h2>
-          <p className="text-2xl text-electric-100 mb-12 leading-relaxed font-sans">
+          <p className="text-lg md:text-xl lg:text-2xl text-electric-100 mb-8 md:mb-10 lg:mb-12 leading-relaxed font-sans">
             Join 12,847 learners advancing one CEFR level with precision linguistic analysis
           </p>
 
           <Button
             size="lg"
             onClick={() => router.push("/assessment")}
-            className="text-lg font-semibold px-12 py-7 bg-white text-electric-600 hover:bg-neutral-100 shadow-2xl transition-all duration-200 hover:scale-105"
+            className="w-full md:w-auto text-base md:text-lg font-semibold px-8 md:px-12 py-4 md:py-7 bg-white text-electric-600 hover:bg-neutral-100 shadow-2xl transition-all duration-200 hover:scale-105"
           >
             Start Your Free Assessment
-            <ArrowRight className="ml-3 w-6 h-6" />
+            <ArrowRight className="ml-2 md:ml-3 w-5 h-5 md:w-6 md:h-6" />
           </Button>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mt-8 text-sm text-electric-100 font-sans">
