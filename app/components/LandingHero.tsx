@@ -73,7 +73,7 @@ export default function LandingHero() {
       </section>
 
       {/* Platform Architecture Section */}
-      <section className="bg-neutral-900 text-white py-20">
+      <section id="technology" className="bg-neutral-900 text-white py-20">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-12">
             <p className="text-sm text-cyan-400 uppercase tracking-wide mb-2">
@@ -114,6 +114,132 @@ export default function LandingHero() {
               <p className="text-neutral-400 text-lg ml-16">
                 Real-time transcription and analysis enables natural conversation practice
               </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing Section */}
+      <section id="pricing" className="bg-white py-20">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-5xl font-bold text-neutral-900 mb-4">Simple, Transparent Pricing</h2>
+            <p className="text-xl text-neutral-600">Start with a 14-day free trial. No credit card required.</p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            {/* Starter Plan */}
+            <div className="border border-neutral-200 rounded-lg p-8 bg-white">
+              <h3 className="text-2xl font-bold text-neutral-900 mb-2">Starter</h3>
+              <div className="mb-6">
+                <span className="text-4xl font-bold text-neutral-900">$19</span>
+                <span className="text-neutral-600">/month</span>
+              </div>
+              <ul className="space-y-3 mb-8">
+                <li className="flex items-start">
+                  <span className="text-green-600 mr-2">✓</span>
+                  <span className="text-neutral-700">Real-time error correction</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-green-600 mr-2">✓</span>
+                  <span className="text-neutral-700">Voice practice sessions</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-green-600 mr-2">✓</span>
+                  <span className="text-neutral-700">Basic lessons library</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-green-600 mr-2">✓</span>
+                  <span className="text-neutral-700">Progress tracking</span>
+                </li>
+              </ul>
+              <Button
+                onClick={() => router.push("/get-started")}
+                variant="outline"
+                className="w-full"
+              >
+                Start Free Trial
+              </Button>
+            </div>
+
+            {/* Pro Plan */}
+            <div className="border-2 border-electric-500 rounded-lg p-8 bg-white relative">
+              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                <span className="bg-electric-500 text-white px-4 py-1 rounded-full text-sm font-semibold">
+                  Most Popular
+                </span>
+              </div>
+              <h3 className="text-2xl font-bold text-neutral-900 mb-2">Pro</h3>
+              <div className="mb-6">
+                <span className="text-4xl font-bold text-neutral-900">$39</span>
+                <span className="text-neutral-600">/month</span>
+              </div>
+              <ul className="space-y-3 mb-8">
+                <li className="flex items-start">
+                  <span className="text-green-600 mr-2">✓</span>
+                  <span className="text-neutral-700">Everything in Starter</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-green-600 mr-2">✓</span>
+                  <span className="text-neutral-700">Advanced scenarios</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-green-600 mr-2">✓</span>
+                  <span className="text-neutral-700">Spaced repetition drills</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-green-600 mr-2">✓</span>
+                  <span className="text-neutral-700">Detailed analytics</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-green-600 mr-2">✓</span>
+                  <span className="text-neutral-700">Priority support</span>
+                </li>
+              </ul>
+              <Button
+                onClick={() => router.push("/get-started")}
+                className="w-full bg-electric-500 hover:bg-electric-600 text-white"
+              >
+                Start Free Trial
+              </Button>
+            </div>
+
+            {/* Premium Plan */}
+            <div className="border border-neutral-200 rounded-lg p-8 bg-white">
+              <h3 className="text-2xl font-bold text-neutral-900 mb-2">Premium</h3>
+              <div className="mb-6">
+                <span className="text-4xl font-bold text-neutral-900">$79</span>
+                <span className="text-neutral-600">/month</span>
+              </div>
+              <ul className="space-y-3 mb-8">
+                <li className="flex items-start">
+                  <span className="text-green-600 mr-2">✓</span>
+                  <span className="text-neutral-700">Everything in Pro</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-green-600 mr-2">✓</span>
+                  <span className="text-neutral-700">Unlimited practice</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-green-600 mr-2">✓</span>
+                  <span className="text-neutral-700">Custom lesson creation</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-green-600 mr-2">✓</span>
+                  <span className="text-neutral-700">1-on-1 coaching sessions</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-green-600 mr-2">✓</span>
+                  <span className="text-neutral-700">API access</span>
+                </li>
+              </ul>
+              <Button
+                onClick={() => router.push("/get-started")}
+                variant="outline"
+                className="w-full"
+              >
+                Start Free Trial
+              </Button>
             </div>
           </div>
         </div>
