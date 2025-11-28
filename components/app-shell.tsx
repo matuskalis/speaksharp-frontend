@@ -35,7 +35,7 @@ export function AppShell({ children }: AppShellProps) {
   }
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
+    <div className="min-h-screen bg-white">
       <Header
         isAuthenticated={!!user}
         onSignOut={handleSignOut}
@@ -44,7 +44,7 @@ export function AppShell({ children }: AppShellProps) {
 
       {user && <TrialBanner />}
 
-      <main className="flex-1">
+      <main>
         {children}
       </main>
 
