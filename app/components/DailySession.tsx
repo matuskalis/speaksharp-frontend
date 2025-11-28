@@ -138,20 +138,20 @@ export default function DailySession() {
   return (
     <div>
       {/* ========== HERO SECTION ========== */}
-      <section className="-mx-8 bg-neutral-50 py-4 lg:py-24">
-        <div className="max-w-7xl mx-auto px-2 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-2.5 lg:gap-16 items-center">
+      <section className="-mx-8 bg-neutral-50 py-3 lg:py-24">
+        <div className="max-w-7xl mx-auto px-1.5 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-2 lg:gap-16 items-center">
             {/* LEFT: Headline, Subheadline, CTA */}
             <div className="lg:col-span-6">
-              <h1 className="text-base lg:text-6xl font-semibold text-neutral-900 mb-1 lg:mb-6 leading-tight tracking-tight">
+              <h1 className="text-sm lg:text-6xl font-semibold text-neutral-900 mb-0.5 lg:mb-6 leading-[1.1] tracking-tight">
                 Instant fluency corrections while you speak.
               </h1>
-              <p className="text-[9px] lg:text-2xl text-neutral-600 mb-2 lg:mb-12 leading-relaxed">
+              <p className="text-[7px] lg:text-2xl text-neutral-600 mb-1.5 lg:mb-12 leading-[1.3]">
                 Real-time analysis based on 47 linguistic error types.
               </p>
               <button
                 onClick={() => router.push("/assessment")}
-                className="w-full lg:w-auto px-2.5 lg:px-8 py-1 lg:py-4 bg-neutral-900 text-white text-[10px] lg:text-lg font-medium hover:bg-neutral-800 transition-colors"
+                className="w-full lg:w-auto px-2 lg:px-8 py-0.5 lg:py-4 bg-neutral-900 text-white text-[8px] lg:text-lg font-medium hover:bg-neutral-800 transition-colors"
               >
                 Start free assessment
               </button>
@@ -159,40 +159,40 @@ export default function DailySession() {
 
             {/* RIGHT: Live Demo Visualization */}
             <div className="lg:col-span-6">
-              <figure className="bg-white border border-neutral-200 p-2 lg:p-8">
+              <figure className="bg-white border border-neutral-200 p-1.5 lg:p-8">
                 {/* Demo: Grammar Correction Engine */}
-                <div className="space-y-1 lg:space-y-6">
-                  <div className="border-b border-neutral-200 pb-1 lg:pb-4">
-                    <div className="text-[7px] lg:text-xs font-mono text-neutral-500 mb-0.5 lg:mb-2">INPUT</div>
-                    <div className="text-[9px] lg:text-lg text-neutral-900 font-mono break-words">
+                <div className="space-y-0.5 lg:space-y-6">
+                  <div className="border-b border-neutral-200 pb-0.5 lg:pb-4">
+                    <div className="text-[6px] lg:text-xs font-mono text-neutral-500 mb-0.5 lg:mb-2">INPUT</div>
+                    <div className="text-[7px] lg:text-lg text-neutral-900 font-mono break-words leading-tight">
                       I <span className="bg-red-100 text-red-700 px-0.5">go</span> to store yesterday
                     </div>
                   </div>
 
-                  <div className="border-b border-neutral-200 pb-1 lg:pb-4">
-                    <div className="text-[7px] lg:text-xs font-mono text-neutral-500 mb-0.5 lg:mb-2">OUTPUT</div>
-                    <div className="text-[9px] lg:text-lg text-neutral-900 font-mono break-words">
+                  <div className="border-b border-neutral-200 pb-0.5 lg:pb-4">
+                    <div className="text-[6px] lg:text-xs font-mono text-neutral-500 mb-0.5 lg:mb-2">OUTPUT</div>
+                    <div className="text-[7px] lg:text-lg text-neutral-900 font-mono break-words leading-tight">
                       I <span className="bg-green-100 text-green-700 px-0.5">went</span> to <span className="bg-green-100 text-green-700 px-0.5">the</span> store yesterday
                     </div>
                   </div>
 
                   <div className="space-y-0.5 lg:space-y-3">
-                    <div className="text-[7px] lg:text-xs font-mono text-neutral-500 mb-0.5 lg:mb-2">ANALYSIS</div>
-                    <div className="flex items-start gap-1">
+                    <div className="text-[6px] lg:text-xs font-mono text-neutral-500 mb-0.5 lg:mb-2">ANALYSIS</div>
+                    <div className="flex items-start gap-0.5">
                       <div className="w-0.5 h-0.5 rounded-full bg-neutral-400 mt-0.5" />
-                      <div className="text-[7px] lg:text-sm text-neutral-700 leading-tight">
+                      <div className="text-[6px] lg:text-sm text-neutral-700 leading-[1.2]">
                         <span className="font-mono text-neutral-900">Verb tense:</span> Past simple required with "yesterday"
                       </div>
                     </div>
-                    <div className="flex items-start gap-1">
+                    <div className="flex items-start gap-0.5">
                       <div className="w-0.5 h-0.5 rounded-full bg-neutral-400 mt-0.5" />
-                      <div className="text-[7px] lg:text-sm text-neutral-700 leading-tight">
+                      <div className="text-[6px] lg:text-sm text-neutral-700 leading-[1.2]">
                         <span className="font-mono text-neutral-900">Article:</span> Definite article "the" before specific noun
                       </div>
                     </div>
                   </div>
 
-                  <div className="pt-1 lg:pt-4 border-t border-neutral-200 flex items-center justify-between text-[7px] lg:text-xs font-mono text-neutral-500">
+                  <div className="pt-0.5 lg:pt-4 border-t border-neutral-200 flex items-center justify-between text-[6px] lg:text-xs font-mono text-neutral-500">
                     <span>2 errors detected</span>
                     <span>Processing: 48ms</span>
                   </div>
@@ -204,20 +204,20 @@ export default function DailySession() {
       </section>
 
       {/* ========== THE LINGUISTIC ENGINE - NUMBERED NARRATIVE ========== */}
-      <div className="bg-neutral-900 text-white py-5 lg:py-32 -mx-8 px-2 lg:px-8 mb-6 lg:mb-40">
+      <div className="bg-neutral-900 text-white py-4 lg:py-32 -mx-8 px-1.5 lg:px-8 mb-5 lg:mb-40">
         <div className="max-w-5xl mx-auto">
-          <div className="mb-4 lg:mb-16">
-            <div className="text-[7px] lg:text-sm font-mono text-electric-400 mb-1 lg:mb-4 tracking-wider">[ PLATFORM ARCHITECTURE ]</div>
-            <h2 className="text-lg lg:text-6xl font-serif mb-2.5 lg:mb-12">The Linguistic Engine</h2>
+          <div className="mb-3 lg:mb-16">
+            <div className="text-[6px] lg:text-sm font-mono text-electric-400 mb-0.5 lg:mb-4 tracking-wider">[ PLATFORM ARCHITECTURE ]</div>
+            <h2 className="text-base lg:text-6xl font-serif mb-2 lg:mb-12">The Linguistic Engine</h2>
           </div>
 
-          <div className="space-y-4 lg:space-y-16">
+          <div className="space-y-3 lg:space-y-16">
             {/* 01 - Morpho-Syntactic Analysis */}
-            <div className="flex gap-2 lg:gap-12">
-              <span className="font-mono text-sm lg:text-4xl text-electric-400 tracking-wider flex-shrink-0">01</span>
+            <div className="flex gap-1.5 lg:gap-12">
+              <span className="font-mono text-xs lg:text-4xl text-electric-400 tracking-wider flex-shrink-0">01</span>
               <div className="min-w-0">
-                <h3 className="text-xs lg:text-3xl font-serif mb-1 lg:mb-4">Morpho-Syntactic Analysis</h3>
-                <p className="text-[8px] lg:text-xl text-neutral-300 mb-2 lg:mb-8 leading-tight font-sans">
+                <h3 className="text-[10px] lg:text-3xl font-serif mb-0.5 lg:mb-4">Morpho-Syntactic Analysis</h3>
+                <p className="text-[6px] lg:text-xl text-neutral-300 mb-1.5 lg:mb-8 leading-[1.2] font-sans">
                   47-point taxonomy classifies errors across morphology, syntax, semantics, pragmatics
                 </p>
 
@@ -246,11 +246,11 @@ export default function DailySession() {
             </div>
 
             {/* 02 - Phonetic Decomposition */}
-            <div className="flex gap-2 lg:gap-12">
-              <span className="font-mono text-sm lg:text-4xl text-electric-400 tracking-wider flex-shrink-0">02</span>
+            <div className="flex gap-1.5 lg:gap-12">
+              <span className="font-mono text-xs lg:text-4xl text-electric-400 tracking-wider flex-shrink-0">02</span>
               <div className="min-w-0">
-                <h3 className="text-xs lg:text-3xl font-serif mb-1 lg:mb-4">Phonetic Decomposition</h3>
-                <p className="text-[8px] lg:text-xl text-neutral-300 mb-2 lg:mb-8 leading-tight font-sans">
+                <h3 className="text-[10px] lg:text-3xl font-serif mb-0.5 lg:mb-4">Phonetic Decomposition</h3>
+                <p className="text-[6px] lg:text-xl text-neutral-300 mb-1.5 lg:mb-8 leading-[1.2] font-sans">
                   Sub-phoneme waveform analysis detects articulation at 94% native precision
                 </p>
 
@@ -281,11 +281,11 @@ export default function DailySession() {
             </div>
 
             {/* 03 - Adaptive Retention Engine */}
-            <div className="flex gap-2 lg:gap-12">
-              <span className="font-mono text-sm lg:text-4xl text-electric-400 tracking-wider flex-shrink-0">03</span>
+            <div className="flex gap-1.5 lg:gap-12">
+              <span className="font-mono text-xs lg:text-4xl text-electric-400 tracking-wider flex-shrink-0">03</span>
               <div className="min-w-0">
-                <h3 className="text-xs lg:text-3xl font-serif mb-1 lg:mb-4">Adaptive Retention Engine</h3>
-                <p className="text-[8px] lg:text-xl text-neutral-300 mb-2 lg:mb-8 leading-tight font-sans">
+                <h3 className="text-[10px] lg:text-3xl font-serif mb-0.5 lg:mb-4">Adaptive Retention Engine</h3>
+                <p className="text-[6px] lg:text-xl text-neutral-300 mb-1.5 lg:mb-8 leading-[1.2] font-sans">
                   Modified SM-2 algorithm optimizes review intervals for 0.94 recall rate
                 </p>
 
