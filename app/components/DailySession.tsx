@@ -99,21 +99,6 @@ export default function DailySession() {
     setDemoResult(result);
   };
 
-  if (!user) {
-    return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="text-center max-w-md">
-          <h3 className="text-3xl font-serif font-semibold text-neutral-900 mb-4">
-            Daily Practice Session
-          </h3>
-          <p className="text-lg text-neutral-600">
-            Sign in to access your personalized daily learning session.
-          </p>
-        </div>
-      </div>
-    );
-  }
-
   if (currentStep === "complete") {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">

@@ -59,7 +59,7 @@ export function AppShell({ children }: AppShellProps) {
             >
               <X className="w-5 h-5" />
             </Button>
-            <AuthForm />
+            <AuthForm onSuccess={() => setShowAuthModal(false)} />
           </div>
         </div>
       )}
