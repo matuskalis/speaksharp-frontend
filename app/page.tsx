@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import { AppShell } from "@/components/app-shell";
-import DailySession from "./components/DailySession";
+import LandingHero from "./components/LandingHero";
 
 export default function Home() {
   const router = useRouter();
@@ -29,7 +29,7 @@ export default function Home() {
 
   return (
     <AppShell>
-      <DailySession />
+      <LandingHero />
     </AppShell>
   );
 }
