@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import PricingSection from "./PricingSection";
+import { analytics } from "@/lib/analytics";
 import {
   RotateCcw,
   BookOpen,
@@ -85,8 +86,16 @@ export default function DailySession() {
       return;
     }
 
+    // Track demo submission
+    analytics.track("demo_submitted", {
+      input_length: demoInput.length,
+      input_preview: demoInput.substring(0, 50),
+    });
+
     setIsDemoLoading(true);
     setDemoResult(null);
+
+    const startTime = Date.now();
 
     try {
       const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
@@ -109,6 +118,16 @@ export default function DailySession() {
 
           const data = await response.json();
           setDemoResult(data);
+
+          // Track success
+          const duration = Date.now() - startTime;
+          analytics.track("demo_success", {
+            duration_ms: duration,
+            attempt: attempt + 1,
+            has_errors: data.corrected !== data.explanation,
+          });
+          analytics.timing("demo", "response_time", duration);
+
           return; // Success!
         } catch (error) {
           lastError = error instanceof Error ? error : new Error(String(error));
@@ -122,6 +141,13 @@ export default function DailySession() {
       throw lastError || new Error("Unknown error");
     } catch (error) {
       console.error("Demo grammar check failed:", error);
+
+      // Track error
+      analytics.track("demo_error", {
+        error_message: error instanceof Error ? error.message : "Unknown error",
+        duration_ms: Date.now() - startTime,
+      });
+
       setDemoResult({
         corrected: demoInput,
         explanation: "Sorry, there was an error checking your sentence. Please try again.",

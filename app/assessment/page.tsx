@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { apiClient } from "@/lib/api-client";
 import { PlacementQuestion, PlacementTestResult } from "@/lib/types";
 import { AppShell } from "@/components/app-shell";
+import { analytics } from "@/lib/analytics";
 import { Check, ArrowRight, ArrowLeft, Sparkles, Trophy, Target, TrendingUp, Zap } from "lucide-react";
 
 type TestState = "not_started" | "in_progress" | "completed";
@@ -24,6 +25,10 @@ export default function AssessmentPage() {
   const startTest = async () => {
     setLoading(true);
     setError(null);
+
+    // Track assessment start
+    analytics.track("assessment_started");
+
     try {
       const response = await apiClient.getPlacementTestQuestions();
       setQuestions(response.questions);
@@ -32,6 +37,9 @@ export default function AssessmentPage() {
       setCurrentQuestionIndex(0);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to load test");
+      analytics.error("assessment_load_failed", {
+        error: err instanceof Error ? err.message : "Unknown error",
+      });
     } finally {
       setLoading(false);
     }
@@ -41,6 +49,13 @@ export default function AssessmentPage() {
     const newAnswers = [...answers];
     newAnswers[currentQuestionIndex] = optionIndex;
     setAnswers(newAnswers);
+
+    // Track question answered
+    analytics.track("assessment_question_answered", {
+      question_number: currentQuestionIndex + 1,
+      total_questions: questions.length,
+      progress_percent: ((currentQuestionIndex + 1) / questions.length) * 100,
+    });
 
     if (currentQuestionIndex < questions.length - 1) {
       setQuestionAnimation("exit");
@@ -66,6 +81,21 @@ export default function AssessmentPage() {
     }
   }, [state]);
 
+  // Track assessment abandonment
+  useEffect(() => {
+    return () => {
+      if (state === "in_progress" && questions.length > 0) {
+        const answeredCount = answers.filter(a => a !== -1).length;
+        analytics.track("assessment_abandoned", {
+          questions_answered: answeredCount,
+          total_questions: questions.length,
+          progress_percent: Math.round((answeredCount / questions.length) * 100),
+          current_question: currentQuestionIndex + 1,
+        });
+      }
+    };
+  }, [state, questions.length, answers, currentQuestionIndex]);
+
   const previousQuestion = () => {
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex(currentQuestionIndex - 1);
@@ -75,12 +105,32 @@ export default function AssessmentPage() {
   const submitTest = async () => {
     setLoading(true);
     setError(null);
+
+    const startTime = Date.now();
+
     try {
       const testResult = await apiClient.submitPlacementTest({ answers });
       setResult(testResult);
       setState("completed");
+
+      // Track successful completion
+      const duration = Date.now() - startTime;
+      analytics.track("assessment_completed", {
+        level: testResult.level,
+        score: testResult.score,
+        total_questions: testResult.total_questions,
+        accuracy: Math.round((testResult.score / testResult.total_questions) * 100),
+        duration_ms: duration,
+      });
+      analytics.timing("assessment", "completion_time", duration);
+
+      // Track as conversion
+      analytics.conversion("assessment_complete", testResult.score);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to submit test");
+      analytics.error("assessment_submit_failed", {
+        error: err instanceof Error ? err.message : "Unknown error",
+      });
     } finally {
       setLoading(false);
     }
