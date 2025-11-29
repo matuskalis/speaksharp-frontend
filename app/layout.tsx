@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
@@ -11,6 +11,11 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Vorex - Master English Fluently",
   description: "AI-powered English learning platform with personalized lessons, real-time feedback, and structured practice",
+};
+
+export const viewport: Viewport = {
+  width: 1200,
+  initialScale: 0.3,
 };
 
 export default function RootLayout({
