@@ -91,20 +91,35 @@ export default function DailySession() {
     try {
       const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
 
-      const response = await fetch(`${API_BASE_URL}/api/demo/grammar`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ text: demoInput }),
-      });
+      // Retry up to 2 times with exponential backoff
+      let lastError: Error | null = null;
+      for (let attempt = 0; attempt < 3; attempt++) {
+        try {
+          const response = await fetch(`${API_BASE_URL}/api/demo/grammar`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ text: demoInput }),
+          });
 
-      if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
+          if (!response.ok) {
+            throw new Error(`API error: ${response.status}`);
+          }
+
+          const data = await response.json();
+          setDemoResult(data);
+          return; // Success!
+        } catch (error) {
+          lastError = error instanceof Error ? error : new Error(String(error));
+          // Don't retry on last attempt
+          if (attempt < 2) {
+            await new Promise(resolve => setTimeout(resolve, 1000 * (attempt + 1)));
+          }
+        }
       }
 
-      const data = await response.json();
-      setDemoResult(data);
+      throw lastError || new Error("Unknown error");
     } catch (error) {
       console.error("Demo grammar check failed:", error);
       setDemoResult({
