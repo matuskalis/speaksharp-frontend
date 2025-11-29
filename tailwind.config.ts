@@ -184,6 +184,32 @@ const config: Config = {
         "container-lg": "1280px",
         "container-xl": "1440px",
       },
+
+      // Custom animations
+      keyframes: {
+        "slide-in": {
+          "0%": { transform: "translateX(2rem)", opacity: "0" },
+          "100%": { transform: "translateX(0)", opacity: "1" },
+        },
+        "fade-in": {
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" },
+        },
+        "scale-in": {
+          "0%": { transform: "scale(0.9)", opacity: "0" },
+          "100%": { transform: "scale(1)", opacity: "1" },
+        },
+        "bounce-slow": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-0.5rem)" },
+        },
+      },
+      animation: {
+        "slide-in": "slide-in 0.3s ease-out",
+        "fade-in": "fade-in 0.3s ease-out",
+        "scale-in": "scale-in 0.3s ease-out",
+        "bounce-slow": "bounce-slow 2s infinite",
+      },
     },
   },
   plugins: [],

@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { apiClient } from "@/lib/api-client";
 import { PlacementQuestion, PlacementTestResult } from "@/lib/types";
 import { AppShell } from "@/components/app-shell";
-import { Check, ArrowRight, ArrowLeft, Sparkles, Trophy, Target, TrendingUp } from "lucide-react";
+import { Check, ArrowRight, ArrowLeft, Sparkles, Trophy, Target, TrendingUp, Zap } from "lucide-react";
 
 type TestState = "not_started" | "in_progress" | "completed";
 
@@ -18,6 +18,8 @@ export default function AssessmentPage() {
   const [result, setResult] = useState<PlacementTestResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [questionAnimation, setQuestionAnimation] = useState<"enter" | "exit" | "">("");
+  const [showConfetti, setShowConfetti] = useState(false);
 
   const startTest = async () => {
     setLoading(true);
@@ -41,11 +43,28 @@ export default function AssessmentPage() {
     setAnswers(newAnswers);
 
     if (currentQuestionIndex < questions.length - 1) {
+      setQuestionAnimation("exit");
       setTimeout(() => {
         setCurrentQuestionIndex(currentQuestionIndex + 1);
-      }, 300);
+        setQuestionAnimation("enter");
+      }, 200);
     }
   };
+
+  useEffect(() => {
+    if (questionAnimation === "enter") {
+      const timer = setTimeout(() => setQuestionAnimation(""), 300);
+      return () => clearTimeout(timer);
+    }
+  }, [questionAnimation]);
+
+  useEffect(() => {
+    if (state === "completed") {
+      setShowConfetti(true);
+      const timer = setTimeout(() => setShowConfetti(false), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [state]);
 
   const previousQuestion = () => {
     if (currentQuestionIndex > 0) {
@@ -81,7 +100,7 @@ export default function AssessmentPage() {
     return (
       <AppShell>
         <div className="min-h-screen bg-white">
-          <div className="max-w-4xl mx-auto px-8 py-24">
+          <div className="max-w-4xl mx-auto px-8 py-24 animate-fade-in">
             {/* Header */}
             <div className="text-center mb-16">
               <div className="inline-flex items-center gap-2 bg-electric-50 text-electric-700 px-4 py-2 rounded-full text-sm font-mono mb-6">
@@ -224,22 +243,61 @@ export default function AssessmentPage() {
       <AppShell>
         <div className="min-h-screen bg-neutral-50">
           <div className="max-w-3xl mx-auto px-8 py-12">
-            {/* Progress Bar */}
-            <div className="mb-8">
-              <div className="flex justify-between text-sm font-mono text-neutral-600 mb-3">
-                <span>Question {currentQuestionIndex + 1} of {questions.length}</span>
-                <span>{Math.round(progress)}% Complete</span>
+            {/* Progress Header with Circular Progress */}
+            <div className="mb-8 flex items-center justify-between">
+              {/* Linear Progress */}
+              <div className="flex-1 mr-6">
+                <div className="flex justify-between text-sm font-mono text-neutral-600 mb-3">
+                  <span>Question {currentQuestionIndex + 1} of {questions.length}</span>
+                  <span>{Math.round(progress)}% Complete</span>
+                </div>
+                <div className="w-full bg-neutral-200 rounded-full h-3 overflow-hidden">
+                  <div
+                    className="bg-electric-500 h-3 rounded-full transition-all duration-500 relative after:absolute after:inset-0 after:bg-gradient-to-r after:from-transparent after:via-white/20 after:to-transparent after:animate-pulse"
+                    style={{ width: `${progress}%` }}
+                  />
+                </div>
               </div>
-              <div className="w-full bg-neutral-200 rounded-full h-3">
-                <div
-                  className="bg-electric-500 h-3 rounded-full transition-all duration-500"
-                  style={{ width: `${progress}%` }}
-                />
+
+              {/* Circular Progress Indicator */}
+              <div className="relative w-16 h-16 flex-shrink-0">
+                <svg className="transform -rotate-90 w-16 h-16">
+                  <circle
+                    cx="32"
+                    cy="32"
+                    r="28"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                    fill="none"
+                    className="text-neutral-200"
+                  />
+                  <circle
+                    cx="32"
+                    cy="32"
+                    r="28"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                    fill="none"
+                    strokeDasharray={`${2 * Math.PI * 28}`}
+                    strokeDashoffset={`${2 * Math.PI * 28 * (1 - progress / 100)}`}
+                    className="text-electric-500 transition-all duration-500"
+                    strokeLinecap="round"
+                  />
+                </svg>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <span className="text-xs font-mono font-bold text-neutral-900">
+                    {Math.round(progress)}%
+                  </span>
+                </div>
               </div>
             </div>
 
             {/* Question Card */}
-            <div className="bg-white border-2 border-neutral-200 rounded-2xl p-10 shadow-lg">
+            <div className={`bg-white border-2 border-neutral-200 rounded-2xl p-10 shadow-lg transition-all duration-300 ${
+              questionAnimation === "exit" ? "opacity-0 -translate-x-8" :
+              questionAnimation === "enter" ? "opacity-0 translate-x-8 animate-slide-in" :
+              "opacity-100 translate-x-0"
+            }`}>
               {/* Question Type & Level */}
               <div className="flex items-center justify-between mb-6">
                 <span className="text-sm font-mono text-electric-600 bg-electric-50 px-3 py-1.5 rounded-lg">
@@ -338,10 +396,28 @@ export default function AssessmentPage() {
 
     return (
       <AppShell>
-        <div className="min-h-screen bg-white">
-          <div className="max-w-4xl mx-auto px-8 py-24">
+        <div className="min-h-screen bg-white relative overflow-hidden">
+          {/* Confetti Effect */}
+          {showConfetti && (
+            <div className="absolute inset-0 pointer-events-none">
+              {[...Array(20)].map((_, i) => (
+                <div
+                  key={i}
+                  className="absolute w-2 h-2 bg-electric-500 rounded-full animate-bounce-slow"
+                  style={{
+                    left: `${Math.random() * 100}%`,
+                    top: `-${Math.random() * 20}%`,
+                    animationDelay: `${Math.random() * 2}s`,
+                    animationDuration: `${2 + Math.random() * 2}s`,
+                  }}
+                />
+              ))}
+            </div>
+          )}
+
+          <div className="max-w-4xl mx-auto px-8 py-24 relative z-10">
             {/* Celebration Header */}
-            <div className="text-center mb-16">
+            <div className="text-center mb-16 animate-fade-in">
               <div className="inline-flex items-center gap-2 bg-electric-50 text-electric-700 px-4 py-2 rounded-full text-sm font-mono mb-6">
                 <Trophy className="w-4 h-4" />
                 <span>ASSESSMENT COMPLETE</span>
@@ -357,8 +433,8 @@ export default function AssessmentPage() {
             </div>
 
             {/* Level Badge */}
-            <div className="text-center mb-12">
-              <div className={`inline-block px-16 py-10 rounded-2xl ${colors.bg} shadow-2xl`}>
+            <div className="text-center mb-12 animate-scale-in" style={{ animationDelay: "0.2s" }}>
+              <div className={`inline-block px-16 py-10 rounded-2xl ${colors.bg} shadow-2xl transform hover:scale-105 transition-transform duration-300`}>
                 <div className="text-white/80 text-sm font-mono mb-2 uppercase tracking-wider">
                   Your CEFR Level
                 </div>
