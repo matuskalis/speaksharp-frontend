@@ -150,7 +150,7 @@ export default function DailySession() {
                 Real-time analysis based on 47 linguistic error types.
               </p>
               <button
-                onClick={() => router.push("/assessment")}
+                onClick={() => router.push("/placement-test")}
                 className="px-8 py-4 bg-neutral-900 text-white text-lg font-medium hover:bg-neutral-800 transition-colors"
               >
                 Start free assessment
@@ -499,7 +499,7 @@ export default function DailySession() {
 
         <div className="text-center mt-16">
           <Button
-            onClick={() => router.push("/demo")}
+            onClick={() => document.getElementById('interactive-demo')?.scrollIntoView({ behavior: 'smooth', block: 'center' })}
             className="bg-electric-500 hover:bg-electric-600 text-white px-8 py-3 text-base font-semibold"
           >
             <Play className="w-5 h-5 mr-2" />
@@ -755,7 +755,7 @@ export default function DailySession() {
       </div>
 
       {/* ========== INTERACTIVE DEMO ========== */}
-      <div className="mb-40">
+      <div id="interactive-demo" className="mb-40">
         <div className="text-center mb-16">
           <div className="text-sm font-mono text-electric-600 mb-4 tracking-wider">[ TRY IT NOW ]</div>
           <h2 className="text-3xl md:text-5xl lg:text-6xl font-serif font-bold text-neutral-900 mb-6">
@@ -1068,7 +1068,7 @@ export default function DailySession() {
 
           <Button
             size="lg"
-            onClick={() => router.push("/assessment")}
+            onClick={() => router.push("/placement-test")}
             className="text-lg font-semibold px-12 py-7 bg-white text-electric-600 hover:bg-neutral-100 shadow-2xl transition-all duration-200 hover:scale-105"
           >
             Start Your Free Assessment
