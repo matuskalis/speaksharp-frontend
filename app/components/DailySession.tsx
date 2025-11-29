@@ -30,6 +30,7 @@ export default function DailySession() {
   const [demoInput, setDemoInput] = useState("");
   const [demoResult, setDemoResult] = useState<{ corrected: string; explanation: string } | null>(null);
   const [showDetailedBreakdown, setShowDetailedBreakdown] = useState(false);
+  const [isDemoLoading, setIsDemoLoading] = useState(false);
 
   const steps = [
     {
@@ -75,32 +76,44 @@ export default function DailySession() {
     router.push(route);
   };
 
-  const handleDemoSubmit = () => {
-    const corrections: { [key: string]: { corrected: string; explanation: string } } = {
-      "i go to store yesterday": {
-        corrected: "I went to the store yesterday",
-        explanation: "Past tense verb 'went' required for 'yesterday'. Added article 'the' before specific noun 'store'. Capitalized sentence-initial 'I'.",
-      },
-      "i go to the store yesterday": {
-        corrected: "I went to the store yesterday",
-        explanation: "Past tense verb 'went' required for 'yesterday'. Present tense 'go' conflicts with past time marker. Capitalized sentence-initial 'I'.",
-      },
-      "she dont like pizza": {
-        corrected: "She doesn't like pizza",
-        explanation: "Third-person singular requires 'doesn't' not 'dont'. Missing apostrophe in contraction.",
-      },
-      "they was playing": {
-        corrected: "They were playing",
-        explanation: "Plural subject 'they' requires 'were' not 'was' for subject-verb agreement.",
-      },
-    };
+  const handleDemoSubmit = async () => {
+    if (!demoInput.trim()) {
+      setDemoResult({
+        corrected: "",
+        explanation: "Please enter a sentence to check.",
+      });
+      return;
+    }
 
-    const normalized = demoInput.toLowerCase().trim();
-    const result = corrections[normalized] || {
-      corrected: demoInput,
-      explanation: "No corrections needed, or enter one of the sample sentences: 'i go to store yesterday', 'she dont like pizza', 'they was playing'",
-    };
-    setDemoResult(result);
+    setIsDemoLoading(true);
+    setDemoResult(null);
+
+    try {
+      const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
+
+      const response = await fetch(`${API_BASE_URL}/api/demo/grammar`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ text: demoInput }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setDemoResult(data);
+    } catch (error) {
+      console.error("Demo grammar check failed:", error);
+      setDemoResult({
+        corrected: demoInput,
+        explanation: "Sorry, there was an error checking your sentence. Please try again.",
+      });
+    } finally {
+      setIsDemoLoading(false);
+    }
   };
 
   if (currentStep === "complete") {
@@ -782,13 +795,21 @@ export default function DailySession() {
 
           <Button
             onClick={handleDemoSubmit}
-            disabled={!demoInput.trim()}
-            className="w-full bg-electric-500 hover:bg-electric-600 text-white py-4 text-lg font-semibold mb-6"
+            disabled={!demoInput.trim() || isDemoLoading}
+            className="w-full bg-electric-500 hover:bg-electric-600 text-white py-4 text-lg font-semibold mb-6 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Analyze Sentence
+            {isDemoLoading ? "Analyzing..." : "Analyze Sentence"}
           </Button>
 
-          {demoResult && (
+          {isDemoLoading && (
+            <div className="flex items-center justify-center gap-3 mb-6">
+              <div className="w-2 h-2 bg-electric-500 rounded-full animate-bounce" style={{ animationDelay: "0ms" }}></div>
+              <div className="w-2 h-2 bg-electric-500 rounded-full animate-bounce" style={{ animationDelay: "150ms" }}></div>
+              <div className="w-2 h-2 bg-electric-500 rounded-full animate-bounce" style={{ animationDelay: "300ms" }}></div>
+            </div>
+          )}
+
+          {demoResult && !isDemoLoading && (
             <div className="space-y-4">
               <div className="bg-neutral-50 rounded-xl p-6">
                 <p className="text-xs font-mono text-neutral-500 uppercase tracking-wider mb-2">
