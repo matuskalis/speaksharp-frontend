@@ -5,6 +5,7 @@ export interface TrialStatus {
   hasAccess: boolean;
   isTrialActive: boolean;
   isSubscriptionActive: boolean;
+  isTester: boolean;
   trialDaysRemaining: number | null;
   trialEndDate: Date | null;
   subscriptionTier: string | null;
@@ -19,6 +20,22 @@ export function useTrialStatus(): TrialStatus {
         hasAccess: false,
         isTrialActive: false,
         isSubscriptionActive: false,
+        isTester: false,
+        trialDaysRemaining: null,
+        trialEndDate: null,
+        subscriptionTier: null,
+      };
+    }
+
+    const isTester = profile.is_tester === true;
+
+    // Testers always have full access
+    if (isTester) {
+      return {
+        hasAccess: true,
+        isTrialActive: false,
+        isSubscriptionActive: false,
+        isTester: true,
         trialDaysRemaining: null,
         trialEndDate: null,
         subscriptionTier: null,
@@ -40,6 +57,7 @@ export function useTrialStatus(): TrialStatus {
       hasAccess: isTrialActive || isSubscriptionActive,
       isTrialActive,
       isSubscriptionActive,
+      isTester: false,
       trialDaysRemaining,
       trialEndDate,
       subscriptionTier: profile.subscription_tier,

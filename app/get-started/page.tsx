@@ -12,7 +12,7 @@ import AuthForm from "../components/AuthForm";
 import { Button } from "@/components/ui/button";
 import { apiClient } from "@/lib/api-client";
 
-type OnboardingStep = "goals" | "time" | "placement" | "interests" | "auth" | "complete";
+type OnboardingStep = "goals" | "time" | "interests" | "auth" | "placement";
 
 export default function GetStartedPage() {
   const router = useRouter();
@@ -29,10 +29,9 @@ export default function GetStartedPage() {
   const stepIndex = {
     goals: 0,
     time: 1,
-    placement: 2,
-    interests: 3,
-    auth: 4,
-    complete: 4,
+    interests: 2,
+    auth: 3,
+    placement: 4,
   };
 
   const canProceed = () => {
@@ -52,15 +51,16 @@ export default function GetStartedPage() {
 
   const handleNext = () => {
     if (currentStep === "goals") setCurrentStep("time");
-    else if (currentStep === "time") setCurrentStep("placement");
-    else if (currentStep === "placement") setCurrentStep("interests");
+    else if (currentStep === "time") setCurrentStep("interests");
     else if (currentStep === "interests") {
       if (user) {
-        completeOnboarding();
+        setCurrentStep("placement");
       } else {
         setCurrentStep("auth");
       }
     }
+    else if (currentStep === "auth") setCurrentStep("placement");
+    else if (currentStep === "placement") completeOnboarding();
   };
 
   const completeOnboarding = async () => {
@@ -80,7 +80,9 @@ export default function GetStartedPage() {
         trial_start_date: trialStartDate.toISOString(),
         trial_end_date: trialEndDate.toISOString(),
       });
-      setCurrentStep("complete");
+
+      // Redirect to subscription page
+      router.push("/subscribe");
     } catch (error) {
       console.error("Failed to save onboarding data:", error);
     } finally {
@@ -128,21 +130,6 @@ export default function GetStartedPage() {
           </div>
         );
 
-      case "placement":
-        return (
-          <div>
-            <PlacementTest />
-            <div className="flex justify-center mt-8">
-              <Button
-                onClick={handleNext}
-                className="px-8 py-6 text-lg bg-neutral-900 hover:bg-neutral-800 text-white"
-              >
-                Skip for now
-              </Button>
-            </div>
-          </div>
-        );
-
       case "interests":
         return (
           <div>
@@ -153,10 +140,10 @@ export default function GetStartedPage() {
             <div className="flex justify-center mt-8">
               <Button
                 onClick={handleNext}
-                disabled={!canProceed() || saving}
+                disabled={!canProceed()}
                 className="px-8 py-6 text-lg bg-neutral-900 hover:bg-neutral-800 text-white disabled:opacity-50"
               >
-                {saving ? "Saving..." : user ? "Complete Setup" : "Continue"}
+                Continue
               </Button>
             </div>
           </div>
@@ -176,32 +163,29 @@ export default function GetStartedPage() {
             <AuthForm />
             <div className="flex justify-center mt-6">
               <Button
-                onClick={completeOnboarding}
-                disabled={!user || saving}
+                onClick={handleNext}
+                disabled={!user}
                 className="px-8 py-6 text-lg bg-neutral-900 hover:bg-neutral-800 text-white disabled:opacity-50"
               >
-                {saving ? "Saving..." : "Complete Setup"}
+                Continue
               </Button>
             </div>
           </div>
         );
 
-      case "complete":
+      case "placement":
         return (
-          <div className="text-center space-y-8">
-            <div className="text-6xl mb-4">🎉</div>
-            <h1 className="text-4xl font-semibold text-neutral-900">
-              You're all set!
-            </h1>
-            <p className="text-lg text-neutral-600">
-              Let's start your English learning journey
-            </p>
-            <Button
-              onClick={() => router.push("/learn")}
-              className="px-8 py-6 text-lg bg-neutral-900 hover:bg-neutral-800 text-white"
-            >
-              Start Learning
-            </Button>
+          <div>
+            <PlacementTest onComplete={completeOnboarding} />
+            <div className="flex justify-center mt-8">
+              <Button
+                onClick={completeOnboarding}
+                disabled={saving}
+                className="px-8 py-6 text-lg bg-neutral-900 hover:bg-neutral-800 text-white disabled:opacity-50"
+              >
+                {saving ? "Saving..." : "Skip for now"}
+              </Button>
+            </div>
           </div>
         );
 

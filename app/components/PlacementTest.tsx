@@ -1,12 +1,18 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { apiClient } from "@/lib/api-client";
 import { PlacementQuestion, PlacementTestResult } from "@/lib/types";
 
 type TestState = "not_started" | "in_progress" | "completed";
 
-export default function PlacementTest() {
+interface PlacementTestProps {
+  onComplete?: () => void;
+}
+
+export default function PlacementTest({ onComplete }: PlacementTestProps = {}) {
+  const router = useRouter();
   const [state, setState] = useState<TestState>("not_started");
   const [questions, setQuestions] = useState<PlacementQuestion[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -294,10 +300,16 @@ export default function PlacementTest() {
               Retake Test
             </button>
             <button
-              onClick={() => window.location.href = "/"}
+              onClick={() => {
+                if (onComplete) {
+                  onComplete();
+                } else {
+                  router.push("/learn");
+                }
+              }}
               className="flex-1 px-6 py-3 bg-neutral-900 text-white rounded-lg font-semibold hover:bg-neutral-800 transition-all"
             >
-              Start Learning
+              Continue
             </button>
           </div>
         </div>
