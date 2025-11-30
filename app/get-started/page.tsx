@@ -64,6 +64,7 @@ export default function GetStartedPage() {
   };
 
   const completeOnboarding = async () => {
+    console.log("[GetStarted] completeOnboarding called");
     setSaving(true);
     try {
       // Calculate trial dates (14-day trial)
@@ -71,6 +72,7 @@ export default function GetStartedPage() {
       const trialEndDate = new Date();
       trialEndDate.setDate(trialEndDate.getDate() + 14);
 
+      console.log("[GetStarted] Saving profile with trial dates");
       // Save user preferences to backend with trial initialization
       await apiClient.updateProfile({
         goals: formData.goals,
@@ -81,6 +83,7 @@ export default function GetStartedPage() {
         trial_end_date: trialEndDate.toISOString(),
       });
 
+      console.log("[GetStarted] Profile saved, redirecting to /subscribe");
       // Redirect to subscription page
       router.push("/subscribe");
     } catch (error) {

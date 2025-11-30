@@ -301,9 +301,13 @@ export default function PlacementTest({ onComplete }: PlacementTestProps = {}) {
             </button>
             <button
               onClick={() => {
+                console.log("[PlacementTest] Continue button clicked");
+                console.log("[PlacementTest] onComplete exists:", !!onComplete);
                 if (onComplete) {
+                  console.log("[PlacementTest] Calling onComplete callback");
                   onComplete();
                 } else {
+                  console.log("[PlacementTest] Navigating to /learn");
                   router.push("/learn");
                 }
               }}
