@@ -54,6 +54,7 @@ export interface UserProfileResponse {
   trial_end_date: string | null;
   subscription_status: string | null; // "active", "cancelled", "expired", null
   subscription_tier: string | null; // "starter", "pro", "premium", "enterprise", null
+  is_tester: boolean;
   created_at: string;
   updated_at: string;
 }
