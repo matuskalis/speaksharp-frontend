@@ -153,9 +153,9 @@ export default function PlacementTest({ onComplete }: PlacementTestProps = {}) {
               <span>Question {currentQuestionIndex + 1} of {questions.length}</span>
               <span>{Math.round(progress)}% complete</span>
             </div>
-            <div className="w-full bg-neutral-200 rounded-full h-2">
+            <div className="w-full bg-neutral-200 rounded-full h-3">
               <div
-                className="bg-neutral-900 h-2 rounded-full transition-all duration-300"
+                className="bg-electric-500 h-3 rounded-full transition-all duration-500"
                 style={{ width: `${progress}%` }}
               />
             </div>
@@ -181,13 +181,22 @@ export default function PlacementTest({ onComplete }: PlacementTestProps = {}) {
                 <button
                   key={index}
                   onClick={() => selectAnswer(index)}
-                  className={`w-full p-4 rounded-lg text-left transition-all duration-200 ${
+                  className={`w-full p-5 rounded-xl text-left transition-all duration-200 font-medium ${
                     selectedAnswer === index
-                      ? "bg-neutral-50 border-2 border-neutral-900"
-                      : "bg-white border-2 border-neutral-200 hover:border-neutral-400"
+                      ? "bg-electric-500 border-2 border-electric-600 text-white shadow-lg scale-[1.02]"
+                      : "bg-neutral-50 border-2 border-neutral-200 hover:border-electric-400 text-neutral-900 hover:shadow-md"
                   }`}
                 >
-                  <span className="text-neutral-900">{option}</span>
+                  <div className="flex items-center gap-4">
+                    <span className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-mono text-sm ${
+                      selectedAnswer === index
+                        ? "bg-white text-electric-600"
+                        : "bg-neutral-200 text-neutral-600"
+                    }`}>
+                      {String.fromCharCode(65 + index)}
+                    </span>
+                    <span>{option}</span>
+                  </div>
                 </button>
               ))}
             </div>
