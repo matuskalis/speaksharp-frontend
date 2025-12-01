@@ -43,6 +43,7 @@ import {
   ReferralCode,
   ReferralStats,
   ClaimReferralRequest,
+  LearningDashboardResponse,
 } from "./types";
 import { supabase } from "./supabase-client";
 
@@ -312,6 +313,10 @@ class ApiClient {
       method: "POST",
       body: JSON.stringify(data),
     });
+  }
+
+  async getLearningDashboard(): Promise<LearningDashboardResponse> {
+    return this.request<LearningDashboardResponse>("/api/learning/dashboard");
   }
 }
 

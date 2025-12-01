@@ -393,3 +393,42 @@ export interface PlacementTestResult {
   weaknesses: string[];
   recommendation: string;
 }
+
+// Learning Dashboard types
+export interface DashboardTask {
+  id: string;
+  type: "lesson" | "drill" | "scenario";
+  title: string;
+  duration: number;
+  skill: string;
+  href: string;
+}
+
+export interface SkillScore {
+  grammar: number;
+  vocabulary: number;
+  fluency: number;
+  pronunciation: number;
+}
+
+export interface ProgressLevel {
+  current: string;
+  next: string;
+  progress: number;
+  daysToNext: number;
+}
+
+export interface SessionData {
+  date: string;
+  minutes: number;
+}
+
+export interface LearningDashboardResponse {
+  todayFocus: DashboardTask[];
+  skillScores: SkillScore;
+  progressPath: ProgressLevel;
+  recentGrowth: SessionData[];
+  minutesStudiedToday: number;
+  currentStreak: number;
+  dailyGoal: number;
+}
