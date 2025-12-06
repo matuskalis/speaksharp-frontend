@@ -55,6 +55,7 @@ export interface UserProfileResponse {
   subscription_status: string | null; // "active", "cancelled", "expired", null
   subscription_tier: string | null; // "starter", "pro", "premium", "enterprise", null
   is_tester: boolean;
+  total_xp: number;
   created_at: string;
   updated_at: string;
 }
@@ -106,6 +107,24 @@ export interface UpdateProfileRequest {
   onboarding_completed?: boolean;
   trial_start_date?: string;
   trial_end_date?: string;
+  voice_preferences?: VoicePreferences;
+}
+
+// Voice Preferences types
+export interface VoicePreferences {
+  voice: string;
+  speech_speed: number;
+  auto_play_responses: boolean;
+  show_transcription: boolean;
+  microphone_sensitivity: number;
+}
+
+export interface UpdateVoicePreferencesRequest {
+  voice?: string;
+  speech_speed?: number;
+  auto_play_responses?: boolean;
+  show_transcription?: boolean;
+  microphone_sensitivity?: number;
 }
 
 // Voice tutoring types
@@ -226,6 +245,23 @@ export interface Achievement {
 export interface AchievementsResponse {
   achievements: Achievement[];
   count: number;
+}
+
+// Leaderboard types
+export interface LeaderboardEntry {
+  user_id: string;
+  display_name: string;
+  level: string;
+  rank: number;
+  xp_this_week?: number;
+  xp_this_month?: number;
+  total_xp?: number;
+  current_streak?: number;
+}
+
+export interface LeaderboardResponse {
+  leaderboard: LeaderboardEntry[];
+  current_user: LeaderboardEntry | null;
 }
 
 // Daily Goals types
@@ -431,4 +467,452 @@ export interface LearningDashboardResponse {
   minutesStudiedToday: number;
   currentStreak: number;
   dailyGoal: number;
+}
+
+// Gamification types
+
+export interface HeartsState {
+  current: number;
+  max: number;
+  lastLostTime: string | null;
+  refillsAt: string | null;
+}
+
+export interface XPState {
+  total: number;
+  today: number;
+  level: number;
+  toNextLevel: number;
+}
+
+export interface ExerciseResult {
+  correct: boolean;
+  xpEarned: number;
+  streakBonus: number;
+  explanation?: string;
+  correctAnswer?: string;
+}
+
+// Exercise types
+
+export type ExerciseType = "multiple_choice" | "fill_blank" | "sentence_correction";
+
+export interface Exercise {
+  id: string;
+  type: ExerciseType;
+  level: string; // A1, A2, B1, B2
+  skill: string; // grammar, vocabulary, etc.
+  question: string;
+  options?: string[]; // For multiple choice
+  correctAnswer: string;
+  explanation: string;
+  hint?: string;
+}
+
+export interface ExerciseSession {
+  exercises: Exercise[];
+  currentIndex: number;
+  correctCount: number;
+  totalXP: number;
+  startTime: string;
+  heartsLost: number;
+}
+
+// Exercise API types
+export interface ExerciseFromAPI {
+  id: string;
+  type: ExerciseType;
+  level: string;
+  skill: string;
+  question: string;
+  options?: string[];
+  hint?: string;
+  // Note: correctAnswer and explanation are NOT returned from API until submission
+}
+
+export interface ExerciseSessionResponse {
+  exercises: ExerciseFromAPI[];
+  count: number;
+}
+
+export interface ExerciseSubmitRequest {
+  exercise_id: string;
+  user_answer: string;
+}
+
+export interface ExerciseSubmitResponse {
+  is_correct: boolean;
+  correct_answer: string;
+  explanation: string;
+  xp_earned: number;
+}
+
+// Payment types
+
+export interface CreateCheckoutSessionRequest {
+  price_id: string;
+  success_url: string;
+  cancel_url: string;
+}
+
+export interface CheckoutSessionResponse {
+  session_id: string;
+  checkout_url: string;
+}
+
+export interface PortalSessionRequest {
+  return_url: string;
+}
+
+export interface PortalSessionResponse {
+  portal_url: string;
+}
+
+export interface SubscriptionStatusResponse {
+  status: string; // "none", "active", "trialing", "past_due", "cancelled"
+  tier: string; // "free", "premium"
+  message?: string;
+  subscription_id?: string;
+  billing_cycle?: string; // "monthly", "yearly"
+  price_cents?: number;
+  currency?: string;
+  current_period_start?: string;
+  current_period_end?: string;
+  cancelled_at?: string;
+  trial_start?: string;
+  trial_end?: string;
+  will_renew?: boolean;
+}
+
+export interface CancelSubscriptionRequest {
+  reason?: string;
+}
+
+// Notification types
+
+export type NotificationType =
+  | "streak_risk"
+  | "achievement"
+  | "goal_complete"
+  | "weekly_summary"
+  | "reminder"
+  | "level_up"
+  | "streak_milestone";
+
+export interface Notification {
+  notification_id: string;
+  user_id: string;
+  type: NotificationType;
+  title: string;
+  message: string;
+  read: boolean;
+  action_url?: string | null;
+  metadata?: Record<string, any> | null;
+  created_at: string;
+  read_at?: string | null;
+}
+
+export interface NotificationsResponse {
+  notifications: Notification[];
+  count: number;
+  has_more: boolean;
+}
+
+export interface UnreadCountResponse {
+  unread_count: number;
+}
+
+export interface MarkNotificationReadResponse {
+  status: string;
+  message: string;
+  notification_id: string;
+}
+
+export interface MarkAllReadResponse {
+  status: string;
+  message: string;
+  count: number;
+}
+
+// Daily Challenges
+export interface DailyChallenge {
+  type: string;
+  title: string;
+  description: string;
+  goal: number;
+  reward_xp: number;
+  icon: string;
+  date: string;
+  expires_at: string;
+}
+
+export interface ChallengeHistoryRecord {
+  user_id: string;
+  challenge_date: string;
+  challenge_type: string;
+  progress: number;
+  goal: number;
+  completed: boolean;
+  completed_at?: string;
+  created_at: string;
+  updated_at: string;
+  challenge_title?: string;
+  challenge_description?: string;
+  reward_xp?: number;
+}
+
+// Learning Path types
+export interface LearningUnit {
+  unit_id: string;
+  unit_number: number;
+  level: string;
+  title: string;
+  description: string | null;
+  icon: string | null;
+  color: string | null;
+  order_index: number;
+  is_locked: boolean;
+  prerequisite_unit_id: string | null;
+  estimated_time_minutes: number | null;
+  lesson_count: number;
+  completed_lessons: number;
+  progress_percentage: number;
+  is_completed: boolean;
+}
+
+export interface LearningLesson {
+  lesson_id: string;
+  unit_id: string;
+  lesson_number: number;
+  title: string;
+  description: string | null;
+  lesson_type: string;
+  order_index: number;
+  is_locked: boolean;
+  xp_reward: number;
+  estimated_time_minutes: number | null;
+  is_completed: boolean;
+  best_score: number | null;
+  attempts: number;
+}
+
+export interface LearningPathUnitsResponse {
+  units: LearningUnit[];
+  count: number;
+  user_level: string;
+}
+
+export interface LearningPathUnitDetailResponse {
+  unit: LearningUnit;
+  lessons: LearningLesson[];
+}
+
+export interface LearningPathLessonResponse {
+  lesson: LearningLesson;
+  exercises: ExerciseFromAPI[];
+}
+
+export interface CompleteLessonRequest {
+  score: number;
+  mistakes_count?: number;
+  time_spent_seconds?: number;
+}
+
+export interface CompleteLessonResponse {
+  status: string;
+  xp_earned: number;
+  is_first_completion: boolean;
+  lesson_progress: {
+    is_completed: boolean;
+    best_score: number;
+    attempts: number;
+  };
+  unit_progress: {
+    completed_lessons: number;
+    total_lessons: number;
+    is_completed: boolean;
+  };
+}
+
+export interface NextLessonResponse {
+  next_lesson: LearningLesson | null;
+  unit: LearningUnit | null;
+  message: string;
+}
+
+// Diagnostic Test types
+
+export interface DiagnosticQuestion {
+  exercise_id: string;
+  level: string;
+  question: string;
+  options: string[];
+  type: string;
+}
+
+export interface DiagnosticProgress {
+  answered: number;
+  max: number;
+}
+
+export interface DiagnosticStats {
+  A1: { correct: number; total: number };
+  A2: { correct: number; total: number };
+  B1: { correct: number; total: number };
+}
+
+export interface DiagnosticStartResponse {
+  session_id?: string;
+  resuming?: boolean;
+  question?: DiagnosticQuestion;
+  progress?: DiagnosticProgress;
+  done?: boolean;
+  user_level?: string;
+  summary?: {
+    stats: DiagnosticStats;
+    questions_answered: number;
+  };
+}
+
+export interface DiagnosticAnswerRequest {
+  session_id: string;
+  exercise_id: string;
+  user_answer: string;
+}
+
+export interface DiagnosticAnswerResponse {
+  done: boolean;
+  is_correct: boolean;
+  correct_answer: string;
+  question?: DiagnosticQuestion;
+  progress?: DiagnosticProgress;
+  user_level?: string;
+  summary?: {
+    stats: DiagnosticStats;
+    questions_answered: number;
+  };
+}
+
+// Guided Mode types
+
+export interface GuidedSkillExercise {
+  id: string;
+  type: string;
+  question: string;
+  options?: string[];
+  level: string;
+  skill: string;
+}
+
+export interface GuidedSkill {
+  skill_key: string;
+  name: string;
+  domain: string;
+  level: string;
+  p_learned: number;
+  practice_count: number;
+  sample_exercise: GuidedSkillExercise | null;
+}
+
+export interface GuidedLearningResponse {
+  has_diagnostic: boolean;
+  user_level: string;
+  skills: GuidedSkill[];
+}
+
+export interface LevelMastery {
+  total_skills: number;
+  mastered_skills: number;
+  average_mastery: number;
+  mastery_percentage: number;
+}
+
+export interface ProgressSummaryResponse {
+  user_level: string;
+  has_diagnostic: boolean;
+  total_skills: number;
+  mastered_skills: number;
+  mastery_percentage: number;
+  by_level: {
+    A1: LevelMastery;
+    A2: LevelMastery;
+    B1: LevelMastery;
+  };
+  recent_activity: {
+    skills_practiced_last_10_days: number;
+  };
+}
+
+export interface DiagnosticStatusResponse {
+  status: "completed" | "in_progress" | "not_started";
+  user_level?: string;
+  completed_at?: string;
+  session_id?: string;
+  questions_answered?: number;
+}
+
+// Think (Thinking in English) types
+
+export interface ThinkingCorrection {
+  original: string | null;
+  corrected: string | null;
+  note: string | null;
+}
+
+export interface ThinkingTurn {
+  turn_number: number;
+  user_message: string;
+  ai_response: string;
+  question_asked: string;
+  correction: ThinkingCorrection | null;
+  timestamp: string;
+}
+
+export interface ThinkingSession {
+  session_id: string;
+  user_id: string;
+  level: string;
+  turns: ThinkingTurn[];
+  started_at: string;
+  ended_at: string | null;
+  max_turns: number;
+  current_turn: number;
+  is_complete: boolean;
+}
+
+export interface ThinkStartResponse {
+  session_id: string;
+  ai_message: string;
+  question_asked: string;
+  current_turn: number;
+  max_turns: number;
+}
+
+export interface ThinkRespondRequest {
+  session_id: string;
+  user_message: string;
+}
+
+export interface ThinkRespondResponse {
+  ai_message: string;
+  question_asked: string;
+  correction: ThinkingCorrection | null;
+  current_turn: number;
+  max_turns: number;
+  is_complete: boolean;
+  summary?: ThinkingSummary;
+}
+
+export interface ThinkingSummary {
+  total_turns: number;
+  total_words: number;
+  corrections_count: number;
+  corrections: ThinkingCorrection[];
+  strengths: string[];
+  xp_earned: number;
+}
+
+export interface ThinkEndResponse {
+  status: string;
+  summary: ThinkingSummary;
 }

@@ -42,7 +42,8 @@ export function AppShell({ children }: AppShellProps) {
         onSignIn={() => setShowAuthModal(true)}
       />
 
-      {user && <TrialBanner />}
+      {/* FREE MODE: Trial banner hidden while app is free for all users */}
+      {/* {user && <TrialBanner />} */}
 
       <main>
         {children}

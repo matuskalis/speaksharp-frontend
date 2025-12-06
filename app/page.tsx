@@ -1,12 +1,29 @@
 "use client";
 
-import { AppShell } from "@/components/app-shell";
-import DailySession from "./components/DailySession";
+import {
+  Navigation,
+  Hero,
+  Features,
+  HowItWorks,
+  GrammarDemo,
+  Testimonials,
+  Pricing,
+  CTA,
+  Footer,
+} from "./components/landing";
 
-export default function Home() {
+export default function LandingPage() {
   return (
-    <AppShell>
-      <DailySession />
-    </AppShell>
+    <main className="min-h-screen bg-dark">
+      <Navigation />
+      <Hero />
+      <Features />
+      <HowItWorks />
+      <GrammarDemo />
+      <Testimonials />
+      <Pricing />
+      <CTA />
+      <Footer />
+    </main>
   );
 }

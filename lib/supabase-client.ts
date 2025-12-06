@@ -17,10 +17,12 @@ if (!supabaseUrl || !supabaseAnonKey) {
   );
 }
 
+const isBrowser = typeof window !== "undefined";
+
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
-    persistSession: true,
-    autoRefreshToken: true,
-    detectSessionInUrl: true,
+    persistSession: isBrowser,
+    autoRefreshToken: isBrowser,
+    detectSessionInUrl: isBrowser,
   },
 });

@@ -1,0 +1,26 @@
+<svg width="400" height="400" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradient -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8B5CF6"/>
+      <stop offset="50%" style="stop-color:#A855F7"/>
+      <stop offset="100%" style="stop-color:#EC4899"/>
+    </linearGradient>
+    <linearGradient id="innerGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.2"/>
+      <stop offset="100%" style="stop-color:#ffffff;stop-opacity:0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Main circle background -->
+  <circle cx="200" cy="200" r="200" fill="url(#bgGradient)"/>
+
+  <!-- Inner glow -->
+  <circle cx="200" cy="200" r="180" fill="url(#innerGlow)"/>
+
+  <!-- Letter V -->
+  <text x="200" y="260" font-family="Arial, sans-serif" font-size="200" font-weight="bold" fill="white" text-anchor="middle">V</text>
+
+  <!-- Subtle shine effect -->
+  <ellipse cx="140" cy="120" rx="60" ry="40" fill="white" opacity="0.1"/>
+</svg>

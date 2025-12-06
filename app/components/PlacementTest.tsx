@@ -2,8 +2,10 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 import { apiClient } from "@/lib/api-client";
 import { PlacementQuestion, PlacementTestResult } from "@/lib/types";
+import { CheckCircle, ArrowRight, ArrowLeft, Sparkles, Target } from "lucide-react";
 
 type TestState = "not_started" | "in_progress" | "completed";
 
@@ -46,7 +48,7 @@ export default function PlacementTest({ onComplete }: PlacementTestProps = {}) {
     if (currentQuestionIndex < questions.length - 1) {
       setTimeout(() => {
         setCurrentQuestionIndex(currentQuestionIndex + 1);
-      }, 300); // Small delay for visual feedback
+      }, 300);
     }
   };
 
@@ -89,47 +91,72 @@ export default function PlacementTest({ onComplete }: PlacementTestProps = {}) {
   if (state === "not_started") {
     return (
       <div className="space-y-8">
-        <div className="text-center">
-          <h2 className="text-4xl font-semibold text-neutral-900 mb-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center"
+        >
+          <div className="w-20 h-20 bg-gradient-brand rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-btn-glow">
+            <Target className="w-10 h-10 text-white" />
+          </div>
+          <h2 className="text-3xl font-bold text-text-primary mb-4">
             Placement Test
           </h2>
-          <p className="text-lg text-neutral-600 mb-8">
+          <p className="text-lg text-text-secondary mb-8">
             Find your English level (A1-C2) in 10 minutes
           </p>
 
-          <div className="bg-neutral-50 border-2 border-neutral-200 rounded-lg p-6 mb-8 text-left">
-            <h3 className="font-semibold text-neutral-900 mb-3">What to expect:</h3>
-            <ul className="space-y-2 text-neutral-600">
-              <li className="flex items-start">
-                <span className="text-neutral-900 mr-2">✓</span>
+          <div className="glass gradient-border rounded-2xl p-6 mb-8 text-left">
+            <h3 className="font-semibold text-text-primary mb-3">What to expect:</h3>
+            <ul className="space-y-3 text-text-secondary">
+              <li className="flex items-start gap-3">
+                <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5" />
                 <span>12 questions covering grammar and vocabulary</span>
               </li>
-              <li className="flex items-start">
-                <span className="text-neutral-900 mr-2">✓</span>
+              <li className="flex items-start gap-3">
+                <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5" />
                 <span>Questions range from beginner (A1) to advanced (C2)</span>
               </li>
-              <li className="flex items-start">
-                <span className="text-neutral-900 mr-2">✓</span>
+              <li className="flex items-start gap-3">
+                <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5" />
                 <span>Takes about 5-10 minutes to complete</span>
               </li>
-              <li className="flex items-start">
-                <span className="text-neutral-900 mr-2">✓</span>
+              <li className="flex items-start gap-3">
+                <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5" />
                 <span>Instant results with personalized recommendations</span>
               </li>
             </ul>
           </div>
 
-          <button
-            onClick={startTest}
-            disabled={loading}
-            className="px-8 py-4 bg-neutral-900 text-white rounded-lg font-semibold hover:bg-neutral-800 transition-all disabled:opacity-50 text-lg"
-          >
-            {loading ? "Loading..." : "Start Placement Test"}
-          </button>
-        </div>
+          <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
+            <button
+              onClick={startTest}
+              disabled={loading}
+              className="px-8 py-4 bg-gradient-brand text-white rounded-xl font-semibold shadow-btn-glow hover:shadow-btn-glow-hover transition-all disabled:opacity-50 text-lg inline-flex items-center gap-2"
+            >
+              {loading ? (
+                <>
+                  <Sparkles className="w-5 h-5 animate-pulse" />
+                  Loading...
+                </>
+              ) : (
+                <>
+                  Start Placement Test
+                  <ArrowRight className="w-5 h-5" />
+                </>
+              )}
+            </button>
+            <button
+              onClick={() => router.push("/learn")}
+              className="text-text-muted hover:text-text-primary underline text-sm transition-colors"
+            >
+              Skip test and start learning
+            </button>
+          </div>
+        </motion.div>
 
         {error && (
-          <div className="mt-4 p-4 bg-red-50 border-2 border-red-200 rounded-lg text-red-600 text-center">
+          <div className="mt-4 p-4 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-center">
             {error}
           </div>
         )}
@@ -145,18 +172,24 @@ export default function PlacementTest({ onComplete }: PlacementTestProps = {}) {
     const allAnswered = answers.every(a => a !== -1);
 
     return (
-      <div className="space-y-8">
-        <div className="bg-white border-2 border-neutral-200 rounded-lg p-8">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="space-y-6"
+      >
+        <div className="glass gradient-border rounded-2xl p-6">
           {/* Progress Bar */}
           <div className="mb-6">
-            <div className="flex justify-between text-sm text-neutral-600 mb-2">
+            <div className="flex justify-between text-sm text-text-secondary mb-2">
               <span>Question {currentQuestionIndex + 1} of {questions.length}</span>
               <span>{Math.round(progress)}% complete</span>
             </div>
-            <div className="w-full bg-neutral-200 rounded-full h-3">
-              <div
-                className="bg-electric-500 h-3 rounded-full transition-all duration-500"
-                style={{ width: `${progress}%` }}
+            <div className="w-full bg-dark-300 rounded-full h-3">
+              <motion.div
+                className="bg-gradient-brand h-3 rounded-full shadow-[0_0_10px_rgba(168,85,247,0.5)]"
+                initial={{ width: 0 }}
+                animate={{ width: `${progress}%` }}
+                transition={{ duration: 0.3 }}
               />
             </div>
           </div>
@@ -164,40 +197,41 @@ export default function PlacementTest({ onComplete }: PlacementTestProps = {}) {
           {/* Question */}
           <div className="mb-8">
             <div className="flex items-center justify-between mb-4">
-              <span className="text-sm text-neutral-600">
+              <span className="text-sm text-text-muted">
                 {currentQuestion.skill_type === "grammar" ? "📝 Grammar" : "📚 Vocabulary"}
               </span>
-              <span className="text-xs bg-neutral-100 text-neutral-600 px-2 py-1 rounded">
+              <span className="text-xs bg-accent-purple/20 text-accent-purple px-2 py-1 rounded-full">
                 Level: {currentQuestion.level}
               </span>
             </div>
-            <h3 className="text-xl text-neutral-900 font-medium mb-6">
+            <h3 className="text-xl text-text-primary font-medium mb-6">
               {currentQuestion.question_text}
             </h3>
 
             {/* Options */}
             <div className="space-y-3">
               {currentQuestion.options.map((option, index) => (
-                <button
+                <motion.button
                   key={index}
                   onClick={() => selectAnswer(index)}
-                  className={`w-full p-5 rounded-xl text-left transition-all duration-200 font-medium ${
+                  whileTap={{ scale: 0.98 }}
+                  className={`w-full p-4 rounded-xl text-left transition-all duration-200 font-medium ${
                     selectedAnswer === index
-                      ? "bg-electric-500 border-2 border-electric-600 text-white shadow-lg scale-[1.02]"
-                      : "bg-neutral-50 border-2 border-neutral-200 hover:border-electric-400 text-neutral-900 hover:shadow-md"
+                      ? "bg-gradient-brand border-2 border-accent-purple text-white shadow-btn-glow"
+                      : "bg-dark-200 border-2 border-white/[0.08] hover:border-accent-purple/50 text-text-primary hover:bg-dark-300"
                   }`}
                 >
                   <div className="flex items-center gap-4">
                     <span className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-mono text-sm ${
                       selectedAnswer === index
-                        ? "bg-white text-electric-600"
-                        : "bg-neutral-200 text-neutral-600"
+                        ? "bg-white/20 text-white"
+                        : "bg-dark-300 text-text-muted"
                     }`}>
                       {String.fromCharCode(65 + index)}
                     </span>
                     <span>{option}</span>
                   </div>
-                </button>
+                </motion.button>
               ))}
             </div>
           </div>
@@ -207,86 +241,106 @@ export default function PlacementTest({ onComplete }: PlacementTestProps = {}) {
             <button
               onClick={previousQuestion}
               disabled={currentQuestionIndex === 0}
-              className="px-4 py-2 bg-neutral-100 text-neutral-900 rounded-lg hover:bg-neutral-200 disabled:opacity-30 disabled:cursor-not-allowed"
+              className="px-4 py-2 flex items-center gap-2 bg-dark-200 text-text-secondary rounded-lg hover:bg-dark-300 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
             >
-              ← Previous
+              <ArrowLeft className="w-4 h-4" />
+              Previous
             </button>
 
             {currentQuestionIndex === questions.length - 1 && (
               <button
                 onClick={submitTest}
                 disabled={!allAnswered || loading}
-                className="px-6 py-3 bg-neutral-900 text-white rounded-lg font-semibold hover:bg-neutral-800 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-6 py-3 bg-gradient-brand text-white rounded-xl font-semibold shadow-btn-glow hover:shadow-btn-glow-hover disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center gap-2"
               >
-                {loading ? "Submitting..." : "Submit Test"}
+                {loading ? (
+                  <>
+                    <Sparkles className="w-5 h-5 animate-pulse" />
+                    Submitting...
+                  </>
+                ) : (
+                  <>
+                    Submit Test
+                    <ArrowRight className="w-5 h-5" />
+                  </>
+                )}
               </button>
             )}
           </div>
 
           {!allAnswered && currentQuestionIndex === questions.length - 1 && (
-            <p className="text-center text-amber-600 text-sm mt-4">
-              ⚠️ Please answer all questions before submitting
+            <p className="text-center text-amber-400 text-sm mt-4">
+              Please answer all questions before submitting
             </p>
           )}
         </div>
 
         {error && (
-          <div className="mt-4 p-4 bg-red-50 border-2 border-red-200 rounded-lg text-red-600 text-center">
+          <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-center">
             {error}
           </div>
         )}
-      </div>
+      </motion.div>
     );
   }
 
   // Completed State
   if (state === "completed" && result) {
     const levelColors: Record<string, string> = {
-      A1: "bg-green-500",
-      A2: "bg-blue-500",
-      B1: "bg-purple-500",
-      B2: "bg-indigo-500",
-      C1: "bg-orange-500",
-      C2: "bg-rose-500",
+      A1: "from-green-500 to-emerald-400",
+      A2: "from-blue-500 to-cyan-400",
+      B1: "from-purple-500 to-violet-400",
+      B2: "from-indigo-500 to-blue-400",
+      C1: "from-orange-500 to-amber-400",
+      C2: "from-rose-500 to-pink-400",
     };
 
     return (
-      <div className="space-y-8">
-        <div className="bg-white border-2 border-neutral-200 rounded-lg p-8">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="space-y-6"
+      >
+        <div className="glass gradient-border rounded-2xl p-6">
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-neutral-900 mb-2">Test Complete!</h2>
-            <p className="text-neutral-600">Here are your results</p>
+            <h2 className="text-3xl font-bold text-text-primary mb-2">Test Complete!</h2>
+            <p className="text-text-secondary">Here are your results</p>
           </div>
 
           {/* Level Badge */}
           <div className="text-center mb-8">
-            <div className={`inline-block px-12 py-6 rounded-lg ${levelColors[result.level] || "bg-neutral-900"} shadow-lg`}>
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ type: "spring", damping: 10 }}
+              className={`inline-block px-12 py-6 rounded-2xl bg-gradient-to-r ${levelColors[result.level] || "from-purple-500 to-pink-500"} shadow-lg`}
+            >
               <div className="text-white/80 text-sm mb-1">Your Level</div>
               <div className="text-5xl font-bold text-white">{result.level}</div>
-            </div>
+            </motion.div>
           </div>
 
           {/* Score */}
-          <div className="bg-neutral-50 border-2 border-neutral-200 rounded-lg p-6 mb-6 text-center">
-            <div className="text-neutral-600 mb-2">Score</div>
-            <div className="text-3xl font-bold text-neutral-900">
+          <div className="bg-dark-200 border border-white/[0.08] rounded-xl p-6 mb-6 text-center">
+            <div className="text-text-muted mb-2">Score</div>
+            <div className="text-3xl font-bold text-text-primary">
               {result.score} / {result.total_questions}
             </div>
           </div>
 
           {/* Strengths & Weaknesses */}
           <div className="grid grid-cols-2 gap-4 mb-6">
-            <div className="bg-green-50 border-2 border-green-200 rounded-lg p-4">
-              <h4 className="text-green-700 font-semibold mb-2">✓ Strengths</h4>
-              <ul className="text-neutral-600 text-sm space-y-1">
+            <div className="bg-green-500/10 border border-green-500/30 rounded-xl p-4">
+              <h4 className="text-green-400 font-semibold mb-2">Strengths</h4>
+              <ul className="text-text-secondary text-sm space-y-1">
                 {result.strengths.map((strength, idx) => (
                   <li key={idx}>• {strength}</li>
                 ))}
               </ul>
             </div>
-            <div className="bg-orange-50 border-2 border-orange-200 rounded-lg p-4">
-              <h4 className="text-orange-700 font-semibold mb-2">⚠️ Areas to Improve</h4>
-              <ul className="text-neutral-600 text-sm space-y-1">
+            <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4">
+              <h4 className="text-amber-400 font-semibold mb-2">Areas to Improve</h4>
+              <ul className="text-text-secondary text-sm space-y-1">
                 {result.weaknesses.map((weakness, idx) => (
                   <li key={idx}>• {weakness}</li>
                 ))}
@@ -295,38 +349,35 @@ export default function PlacementTest({ onComplete }: PlacementTestProps = {}) {
           </div>
 
           {/* Recommendation */}
-          <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-6 mb-8">
-            <h4 className="text-blue-700 font-semibold mb-2">📋 Recommendation</h4>
-            <p className="text-neutral-600">{result.recommendation}</p>
+          <div className="bg-accent-purple/10 border border-accent-purple/30 rounded-xl p-6 mb-8">
+            <h4 className="text-accent-purple font-semibold mb-2">Recommendation</h4>
+            <p className="text-text-secondary">{result.recommendation}</p>
           </div>
 
           {/* Actions */}
           <div className="flex gap-4">
             <button
               onClick={restartTest}
-              className="flex-1 px-6 py-3 bg-neutral-100 text-neutral-900 rounded-lg hover:bg-neutral-200 transition-all"
+              className="flex-1 px-6 py-3 bg-dark-200 text-text-secondary rounded-xl hover:bg-dark-300 transition-colors"
             >
               Retake Test
             </button>
             <button
               onClick={() => {
-                console.log("[PlacementTest] Continue button clicked");
-                console.log("[PlacementTest] onComplete exists:", !!onComplete);
                 if (onComplete) {
-                  console.log("[PlacementTest] Calling onComplete callback");
                   onComplete();
                 } else {
-                  console.log("[PlacementTest] Navigating to /learn");
                   router.push("/learn");
                 }
               }}
-              className="flex-1 px-6 py-3 bg-neutral-900 text-white rounded-lg font-semibold hover:bg-neutral-800 transition-all"
+              className="flex-1 px-6 py-3 bg-gradient-brand text-white rounded-xl font-semibold shadow-btn-glow hover:shadow-btn-glow-hover transition-all flex items-center justify-center gap-2"
             >
-              Continue
+              Start Learning
+              <ArrowRight className="w-5 h-5" />
             </button>
           </div>
         </div>
-      </div>
+      </motion.div>
     );
   }
 

@@ -3,10 +3,20 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { apiClient } from "@/lib/api-client";
-import { ErrorStatsResponse, SrsStatsResponse, WeakSkillsResponse, StreakResponse, UserProfileResponse } from "@/lib/types";
-import SessionSummary from "./SessionSummary";
-import DailyGoalCard from "@/components/daily-goal-card";
-import { CheckCircle2, Circle, X, BookOpen, Target, FolderOpen, Flame } from "lucide-react";
+import { ErrorStatsResponse, SrsStatsResponse, WeakSkillsResponse } from "@/lib/types";
+import { useGamification } from "@/contexts/GamificationContext";
+import { useUserProfile } from "@/hooks/useUserProfile";
+import {
+  Flame,
+  Trophy,
+  Heart,
+  TrendingUp,
+  Target,
+  BookOpen,
+  BarChart3,
+  Award,
+  Zap
+} from "lucide-react";
 
 export default function Dashboard() {
   const [loading, setLoading] = useState(true);
@@ -15,9 +25,12 @@ export default function Dashboard() {
   const [errorStats, setErrorStats] = useState<ErrorStatsResponse | null>(null);
   const [srsStats, setSrsStats] = useState<SrsStatsResponse | null>(null);
   const [weakSkills, setWeakSkills] = useState<WeakSkillsResponse | null>(null);
-  const [streak, setStreak] = useState<StreakResponse | null>(null);
-  const [userProfile, setUserProfile] = useState<UserProfileResponse | null>(null);
-  const [showOnboarding, setShowOnboarding] = useState(true);
+
+  // Use gamification context for XP, streak, and hearts
+  const { xp, streak, longestStreak, hearts } = useGamification();
+
+  // Use user profile hook
+  const { profile } = useUserProfile();
 
   useEffect(() => {
     loadDashboardData();
@@ -28,19 +41,15 @@ export default function Dashboard() {
     setError(null);
 
     try {
-      const [errors, srs, skills, streakData, profile] = await Promise.all([
-        apiClient.getErrorStats(),
-        apiClient.getSrsStats(),
-        apiClient.getWeakSkills(3),
-        apiClient.getStreak().catch(() => ({ current_streak: 0, longest_streak: 0, last_active_date: null })),
-        apiClient.getCurrentUser().catch(() => null),
+      const [errors, srs, skills] = await Promise.all([
+        apiClient.getErrorStats().catch(() => null),
+        apiClient.getSrsStats().catch(() => null),
+        apiClient.getWeakSkills(5).catch(() => null),
       ]);
 
       setErrorStats(errors);
       setSrsStats(srs);
       setWeakSkills(skills);
-      setStreak(streakData);
-      setUserProfile(profile);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to load dashboard data");
     } finally {
@@ -50,32 +59,47 @@ export default function Dashboard() {
 
   if (loading) {
     return (
-      <div className="max-w-container mx-auto px-8 text-center">
-        <div className="text-gray-600">Loading dashboard...</div>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center">
+        <div className="text-white/60">Loading your progress...</div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="max-w-container mx-auto px-8">
-        <div className="p-8 bg-white border border-gray-200 rounded-xl text-red-600">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="p-6 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400">
           {error}
         </div>
       </div>
     );
   }
 
-  // Calculate total sentences from error count (rough approximation)
-  const totalSentences = errorStats?.total_errors || 0;
+  // Calculate XP progress percentage
+  const xpProgress = ((xp.toNextLevel > 0 ? (100 - (xp.toNextLevel / 100) * 100) : 0));
 
-  // Error type colors
+  // Generate mock weekly activity data (last 7 days)
+  const generateWeeklyActivity = () => {
+    const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    const today = new Date().getDay();
+    const reorderedDays = [...days.slice(today), ...days.slice(0, today)];
+
+    return reorderedDays.map((day, index) => ({
+      day,
+      minutes: index === 6 ? (srsStats?.reviewed_today || 0) * 2 : Math.floor(Math.random() * 30),
+    }));
+  };
+
+  const weeklyActivity = generateWeeklyActivity();
+  const maxMinutes = Math.max(...weeklyActivity.map(d => d.minutes), 1);
+
+  // Error type colors and labels
   const errorTypeColors: Record<string, string> = {
-    grammar: "bg-red-500",
-    vocab: "bg-purple-500",
-    fluency: "bg-blue-500",
-    structure: "bg-orange-500",
-    pronunciation_placeholder: "bg-pink-500",
+    grammar: "bg-gradient-to-r from-red-500 to-red-600",
+    vocab: "bg-gradient-to-r from-purple-500 to-purple-600",
+    fluency: "bg-gradient-to-r from-blue-500 to-blue-600",
+    structure: "bg-gradient-to-r from-orange-500 to-orange-600",
+    pronunciation_placeholder: "bg-gradient-to-r from-pink-500 to-pink-600",
   };
 
   const errorTypeLabels: Record<string, string> = {
@@ -86,313 +110,291 @@ export default function Dashboard() {
     pronunciation_placeholder: "Pronunciation",
   };
 
-  // Check if onboarding is complete
-  const isOnboardingComplete = (userProfile as any)?.onboarding_completed === true;
-  const hasCompletedPlacementTest = userProfile?.level && userProfile.level !== "A1";
-  const hasCompletedProfile = !!(userProfile as any)?.full_name && !!(userProfile as any)?.country;
-  const hasCompletedFirstLesson = (srsStats?.total_cards || 0) > 0;
-
-  const handleCompleteOnboarding = async () => {
-    try {
-      await apiClient.updateProfile({ onboarding_completed: true } as any);
-      setShowOnboarding(false);
-    } catch (error) {
-      console.error("Failed to mark onboarding as complete:", error);
-    }
-  };
-
   return (
-    <div className="max-w-container mx-auto px-8">
-      {/* Onboarding Checklist */}
-      {!isOnboardingComplete && showOnboarding && (
-        <div className="bg-white border border-gray-200 rounded-xl p-8 mb-20">
-          <div className="flex items-start justify-between mb-6">
-            <div>
-              <h3 className="text-3xl font-semibold text-gray-900 mb-2">Welcome to SpeakSharp!</h3>
-              <p className="text-base text-gray-600">Complete these steps to get started:</p>
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      {/* Header */}
+      <div className="text-center mb-8">
+        <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 via-white/90 to-rose-300 mb-3">
+          Progress Dashboard
+        </h1>
+        <p className="text-white/60 text-lg">Track your English learning journey</p>
+      </div>
+
+      {/* Top Stats Row - Streak, XP, Hearts */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Streak Card */}
+        <div className="bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/[0.08] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] p-6 hover:border-white/[0.15] transition-all duration-300">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-white/60 text-sm font-medium uppercase tracking-wide">Streak</h3>
+            <Flame className="w-6 h-6 text-orange-400" />
+          </div>
+          <div className="space-y-2">
+            <div className="flex items-baseline gap-2">
+              <span className="text-4xl font-bold text-white">{streak}</span>
+              <span className="text-white/40 text-lg">days</span>
             </div>
-            <button
-              onClick={() => setShowOnboarding(false)}
-              className="text-gray-500 hover:text-gray-900 transition-colors"
-            >
-              <X className="w-5 h-5" />
-            </button>
+            <p className="text-white/40 text-sm">
+              Longest: <span className="text-white/60 font-medium">{longestStreak} days</span>
+            </p>
+          </div>
+        </div>
+
+        {/* XP Card */}
+        <div className="bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/[0.08] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] p-6 hover:border-white/[0.15] transition-all duration-300">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-white/60 text-sm font-medium uppercase tracking-wide">Level {xp.level}</h3>
+            <Trophy className="w-6 h-6 text-yellow-400" />
+          </div>
+          <div className="space-y-3">
+            <div className="flex items-baseline gap-2">
+              <span className="text-4xl font-bold text-white">{xp.total}</span>
+              <span className="text-white/40 text-lg">XP</span>
+            </div>
+            <div className="space-y-1">
+              <div className="flex justify-between text-xs text-white/40">
+                <span>Level Progress</span>
+                <span>{xpProgress.toFixed(0)}%</span>
+              </div>
+              <div className="w-full bg-white/[0.08] rounded-full h-2">
+                <div
+                  className="bg-gradient-to-r from-yellow-400 to-orange-400 h-2 rounded-full transition-all duration-500"
+                  style={{ width: `${xpProgress}%` }}
+                />
+              </div>
+              <p className="text-white/40 text-xs">{xp.toNextLevel} XP to Level {xp.level + 1}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Hearts Card */}
+        <div className="bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/[0.08] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] p-6 hover:border-white/[0.15] transition-all duration-300">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-white/60 text-sm font-medium uppercase tracking-wide">Hearts</h3>
+            <Heart className="w-6 h-6 text-red-400 fill-red-400" />
+          </div>
+          <div className="space-y-2">
+            <div className="flex items-baseline gap-2">
+              <span className="text-4xl font-bold text-white">{hearts.current}</span>
+              <span className="text-white/40 text-lg">/ {hearts.max}</span>
+            </div>
+            <div className="flex gap-1">
+              {Array.from({ length: hearts.max }).map((_, i) => (
+                <Heart
+                  key={i}
+                  className={`w-5 h-5 ${
+                    i < hearts.current
+                      ? 'text-red-400 fill-red-400'
+                      : 'text-white/[0.08] fill-white/[0.08]'
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Weekly Activity Chart */}
+      <div className="bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/[0.08] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] p-7">
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="text-xl font-semibold text-white">Weekly Activity</h3>
+          <BarChart3 className="w-5 h-5 text-white/40" />
+        </div>
+        <div className="flex items-end justify-between gap-3 h-48">
+          {weeklyActivity.map((data, index) => {
+            const heightPercent = (data.minutes / maxMinutes) * 100;
+            return (
+              <div key={index} className="flex-1 flex flex-col items-center gap-2">
+                <div className="w-full flex items-end justify-center h-40">
+                  <div
+                    className="w-full bg-gradient-to-t from-indigo-500 to-indigo-400 rounded-t-lg transition-all duration-500 hover:from-indigo-400 hover:to-indigo-300"
+                    style={{ height: `${Math.max(heightPercent, 5)}%` }}
+                    title={`${data.minutes} minutes`}
+                  />
+                </div>
+                <span className="text-white/40 text-xs font-medium">{data.day}</span>
+              </div>
+            );
+          })}
+        </div>
+        <div className="mt-4 text-center">
+          <p className="text-white/40 text-sm">
+            Total this week: <span className="text-white/60 font-medium">{weeklyActivity.reduce((sum, d) => sum + d.minutes, 0)} minutes</span>
+          </p>
+        </div>
+      </div>
+
+      {/* Skills & Stats Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Skills Mastery */}
+        <div className="bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/[0.08] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] p-7">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-xl font-semibold text-white">Skills Mastery</h3>
+            <Target className="w-5 h-5 text-white/40" />
           </div>
 
-          <div className="space-y-6">
-            {/* Placement Test */}
-            <Link
-              href="/placement-test"
-              className={`flex items-center gap-3 p-8 rounded-xl border transition-all duration-200 ${
-                hasCompletedPlacementTest
-                  ? "bg-white border-gray-200 cursor-default"
-                  : "bg-white border-gray-200 hover:border-gray-300 hover:shadow-md"
-              }`}
-            >
-              {hasCompletedPlacementTest ? (
-                <CheckCircle2 className="w-5 h-5 text-gray-900 flex-shrink-0" />
-              ) : (
-                <Circle className="w-5 h-5 text-gray-400 flex-shrink-0" />
-              )}
-              <div className="flex-1">
-                <div className="text-base text-gray-900 font-medium">Take Placement Test</div>
-                <div className="text-sm text-gray-600">Find your English level (5 min)</div>
-              </div>
-            </Link>
-
-            {/* Complete Profile */}
-            <Link
-              href="/profile"
-              className={`flex items-center gap-3 p-8 rounded-xl border transition-all duration-200 ${
-                hasCompletedProfile
-                  ? "bg-white border-gray-200 cursor-default"
-                  : "bg-white border-gray-200 hover:border-gray-300 hover:shadow-md"
-              }`}
-            >
-              {hasCompletedProfile ? (
-                <CheckCircle2 className="w-5 h-5 text-gray-900 flex-shrink-0" />
-              ) : (
-                <Circle className="w-5 h-5 text-gray-400 flex-shrink-0" />
-              )}
-              <div className="flex-1">
-                <div className="text-base text-gray-900 font-medium">Complete Your Profile</div>
-                <div className="text-sm text-gray-600">Add your name and country</div>
-              </div>
-            </Link>
-
-            {/* First Lesson */}
-            <Link
-              href="/lessons"
-              className={`flex items-center gap-3 p-8 rounded-xl border transition-all duration-200 ${
-                hasCompletedFirstLesson
-                  ? "bg-white border-gray-200 cursor-default"
-                  : "bg-white border-gray-200 hover:border-gray-300 hover:shadow-md"
-              }`}
-            >
-              {hasCompletedFirstLesson ? (
-                <CheckCircle2 className="w-5 h-5 text-gray-900 flex-shrink-0" />
-              ) : (
-                <Circle className="w-5 h-5 text-gray-400 flex-shrink-0" />
-              )}
-              <div className="flex-1">
-                <div className="text-base text-gray-900 font-medium">Complete Your First Lesson</div>
-                <div className="text-sm text-gray-600">Start learning with AI-powered lessons</div>
-              </div>
-            </Link>
-          </div>
-
-          {/* Complete Button */}
-          {hasCompletedPlacementTest && hasCompletedProfile && hasCompletedFirstLesson && (
-            <button
-              onClick={handleCompleteOnboarding}
-              className="mt-6 w-full px-6 py-3 bg-gray-900 text-white font-medium rounded-lg hover:bg-gray-800 transition-all duration-200"
-            >
-              Complete Onboarding
-            </button>
+          {weakSkills && weakSkills.skills && weakSkills.skills.length > 0 ? (
+            <div className="space-y-4">
+              {weakSkills.skills.slice(0, 5).map((skill) => (
+                <div key={skill.skill_key} className="space-y-2">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-white/80 font-medium">{skill.skill_key}</span>
+                    <span className="text-white/60">{skill.mastery_score.toFixed(0)}%</span>
+                  </div>
+                  <div className="w-full bg-white/[0.08] rounded-full h-2">
+                    <div
+                      className={`h-2 rounded-full transition-all duration-500 ${
+                        skill.mastery_score >= 80
+                          ? 'bg-gradient-to-r from-green-400 to-emerald-400'
+                          : skill.mastery_score >= 50
+                          ? 'bg-gradient-to-r from-yellow-400 to-orange-400'
+                          : 'bg-gradient-to-r from-red-400 to-rose-400'
+                      }`}
+                      style={{ width: `${skill.mastery_score}%` }}
+                    />
+                  </div>
+                  <div className="flex items-center gap-4 text-xs text-white/40">
+                    <span>Errors: {skill.error_count}</span>
+                    <span>Practice: {skill.practice_count}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <Award className="w-12 h-12 text-white/20 mx-auto mb-3" />
+              <p className="text-white/40">No skill data yet</p>
+              <p className="text-white/30 text-sm mt-1">Start practicing to see your progress</p>
+            </div>
           )}
         </div>
-      )}
 
-      {/* Hero Header */}
-      <div className="text-center mb-24">
-        <div className="flex items-center justify-center gap-4 mb-6">
-          <h2 className="text-6xl font-bold text-gray-900">
-            Dashboard
-          </h2>
-          {streak && streak.current_streak > 0 && (
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-deep-blue-200 rounded-full">
-              <Flame className="w-5 h-5 text-deep-blue-600" />
-              <span className="text-deep-blue-900 font-bold text-lg">{streak.current_streak}</span>
-              <span className="text-charcoal-600 text-sm">day streak</span>
+        {/* SRS Review Stats */}
+        <div className="bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/[0.08] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] p-7">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-xl font-semibold text-white">Review Stats</h3>
+            <BookOpen className="w-5 h-5 text-white/40" />
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="bg-white/[0.05] rounded-xl p-4 border border-white/[0.08]">
+              <div className="text-3xl font-bold text-white mb-1">{srsStats?.total_cards || 0}</div>
+              <div className="text-white/40 text-sm">Total Cards</div>
             </div>
+            <div className="bg-white/[0.05] rounded-xl p-4 border border-white/[0.08]">
+              <div className="text-3xl font-bold text-white mb-1">{srsStats?.due_today || 0}</div>
+              <div className="text-white/40 text-sm">Due Today</div>
+            </div>
+            <div className="bg-white/[0.05] rounded-xl p-4 border border-white/[0.08]">
+              <div className="text-3xl font-bold text-white mb-1">{srsStats?.reviewed_today || 0}</div>
+              <div className="text-white/40 text-sm">Reviewed</div>
+            </div>
+            <div className="bg-white/[0.05] rounded-xl p-4 border border-white/[0.08]">
+              <div className="text-3xl font-bold text-white mb-1">
+                {srsStats?.success_rate_today.toFixed(0) || 0}%
+              </div>
+              <div className="text-white/40 text-sm">Success Rate</div>
+            </div>
+          </div>
+
+          {srsStats && srsStats.due_today > 0 && (
+            <Link
+              href="/review"
+              className="mt-4 w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-400 hover:to-purple-400 text-white font-medium rounded-lg transition-all duration-200"
+            >
+              <Zap className="w-4 h-4" />
+              Review Now
+            </Link>
           )}
         </div>
-        <p className="text-xl text-gray-600">Your learning progress at a glance</p>
-      </div>
-
-      {/* Session Summary */}
-      <div className="mb-20">
-        <SessionSummary />
-      </div>
-
-      {/* Today Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-20">
-        {/* Cards Reviewed */}
-        <div className="bg-white border border-gray-200 rounded-xl p-8 hover:border-gray-300 hover:shadow-md transition-all duration-200">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="text-sm font-medium text-charcoal-600">Cards Reviewed Today</h3>
-            <div className="w-10 h-10 rounded-lg bg-deep-blue-50 flex items-center justify-center">
-              <BookOpen className="w-5 h-5 text-deep-blue-600" strokeWidth={1.5} />
-            </div>
-          </div>
-          <p className="text-6xl font-bold text-charcoal-900 mb-2">{srsStats?.reviewed_today || 0}</p>
-          <p className="text-sm text-charcoal-500">
-            {srsStats?.due_today || 0} cards due today
-          </p>
-        </div>
-
-        {/* Accuracy */}
-        <div className="bg-white border border-gray-200 rounded-xl p-8 hover:border-gray-300 hover:shadow-md transition-all duration-200">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="text-sm font-medium text-charcoal-600">Success Rate Today</h3>
-            <div className="w-10 h-10 rounded-lg bg-deep-blue-50 flex items-center justify-center">
-              <Target className="w-5 h-5 text-deep-blue-600" strokeWidth={1.5} />
-            </div>
-          </div>
-          <p className="text-6xl font-bold text-charcoal-900 mb-2">
-            {srsStats?.success_rate_today.toFixed(1) || 0}%
-          </p>
-          <p className="text-sm text-charcoal-500">
-            Quality score ≥ 3
-          </p>
-        </div>
-
-        {/* Total Cards */}
-        <div className="bg-white border border-gray-200 rounded-xl p-8 hover:border-gray-300 hover:shadow-md transition-all duration-200">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="text-sm font-medium text-charcoal-600">Total SRS Cards</h3>
-            <div className="w-10 h-10 rounded-lg bg-deep-blue-50 flex items-center justify-center">
-              <FolderOpen className="w-5 h-5 text-deep-blue-600" strokeWidth={1.5} />
-            </div>
-          </div>
-          <p className="text-6xl font-bold text-charcoal-900 mb-2">{srsStats?.total_cards || 0}</p>
-          <p className="text-sm text-charcoal-500">
-            Errors tracked: {errorStats?.total_errors || 0}
-          </p>
-        </div>
-      </div>
-
-      {/* Daily Goals */}
-      <div className="mb-20">
-        <DailyGoalCard />
       </div>
 
       {/* Error Breakdown */}
-      <div className="bg-white border border-gray-200 rounded-xl p-8 mb-20">
-        <h3 className="text-3xl font-semibold text-gray-900 mb-6">Error Breakdown</h3>
+      <div className="bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/[0.08] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] p-7">
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="text-xl font-semibold text-white">Error Analysis</h3>
+          <TrendingUp className="w-5 h-5 text-white/40" />
+        </div>
 
         {errorStats && Object.keys(errorStats.errors_by_type).length > 0 ? (
-          <div className="space-y-6">
+          <div className="space-y-4">
             {Object.entries(errorStats.errors_by_type)
-              .sort(([, a], [, b]) => b - a)
+              .sort(([, a], [, b]) => (b as number) - (a as number))
               .map(([type, count]) => {
-                const percentage = ((count / errorStats.total_errors) * 100).toFixed(1);
+                const percentage = ((count as number / errorStats.total_errors) * 100).toFixed(1);
                 return (
                   <div key={type}>
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-lg font-medium text-gray-900">
+                      <span className="text-white/80 font-medium">
                         {errorTypeLabels[type] || type}
                       </span>
-                      <span className="text-sm text-gray-600">
+                      <span className="text-white/60 text-sm">
                         {count} ({percentage}%)
                       </span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2.5">
+                    <div className="w-full bg-white/[0.08] rounded-full h-2.5 overflow-hidden">
                       <div
-                        className={`h-2.5 rounded-full ${errorTypeColors[type] || "bg-gray-500"}`}
+                        className={`h-2.5 rounded-full transition-all duration-500 ${errorTypeColors[type] || "bg-gradient-to-r from-gray-400 to-gray-500"}`}
                         style={{ width: `${percentage}%` }}
-                      ></div>
+                      />
                     </div>
                   </div>
                 );
               })}
+            <div className="pt-4 border-t border-white/[0.08]">
+              <p className="text-white/40 text-sm text-center">
+                Total errors tracked: <span className="text-white/60 font-medium">{errorStats.total_errors}</span>
+              </p>
+            </div>
           </div>
         ) : (
-          <p className="text-gray-500 text-center py-6">No errors recorded yet</p>
+          <div className="text-center py-12">
+            <TrendingUp className="w-12 h-12 text-white/20 mx-auto mb-3" />
+            <p className="text-white/40">No errors recorded yet</p>
+            <p className="text-white/30 text-sm mt-1">Start learning to track your mistakes</p>
+          </div>
         )}
       </div>
 
-      {/* Weakest Skills */}
-      <div className="bg-white border border-gray-200 rounded-xl p-8 mb-20">
-        <h3 className="text-3xl font-semibold text-gray-900 mb-6">Areas to Improve</h3>
-
-        {weakSkills && weakSkills.skills.length > 0 ? (
-          <div className="space-y-6">
-            {weakSkills.skills.map((skill, index) => (
-              <div
-                key={skill.skill_key}
-                className="p-8 bg-white border border-gray-200 rounded-xl hover:border-gray-300 hover:shadow-md transition-all duration-200"
-              >
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <div className="flex items-center space-x-2 mb-2">
-                      <span className="text-base font-semibold text-gray-600">
-                        #{index + 1}
-                      </span>
-                      <h4 className="text-base font-medium text-gray-900">
-                        {skill.skill_key}
-                      </h4>
-                    </div>
-                    <p className="text-sm text-gray-500 mb-6">
-                      Category: {skill.skill_category}
-                    </p>
-                    <div className="flex items-center space-x-6 text-sm">
-                      <span className="text-gray-600">
-                        Mastery: <span className="font-medium text-gray-900">{skill.mastery_score.toFixed(1)}%</span>
-                      </span>
-                      <span className="text-gray-600">
-                        Errors: <span className="font-medium text-red-600">{skill.error_count}</span>
-                      </span>
-                      <span className="text-gray-600">
-                        Practice: <span className="font-medium text-blue-600">{skill.practice_count}</span>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p className="text-gray-500 text-center py-6">No skill data available yet</p>
-        )}
-      </div>
-
-      {/* Recent Errors */}
-      <div className="bg-white border border-gray-200 rounded-xl p-8">
-        <h3 className="text-3xl font-semibold text-gray-900 mb-6">Recent Errors</h3>
-
-        {errorStats && errorStats.last_errors.length > 0 ? (
-          <div className="space-y-6">
-            {errorStats.last_errors.map((error, index) => (
+      {/* Recent Errors Summary */}
+      {errorStats && errorStats.last_errors && errorStats.last_errors.length > 0 && (
+        <div className="bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/[0.08] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] p-7">
+          <h3 className="text-xl font-semibold text-white mb-6">Recent Corrections</h3>
+          <div className="space-y-4">
+            {errorStats.last_errors.slice(0, 3).map((error, index) => (
               <div
                 key={index}
-                className="p-8 bg-white border border-gray-200 rounded-xl hover:border-gray-300 hover:shadow-md transition-all duration-200"
+                className="p-5 bg-white/[0.05] rounded-xl border border-white/[0.08] hover:border-white/[0.15] transition-all duration-200"
               >
-                <div className="flex items-start justify-between mb-6">
-                  <span className="inline-block px-3 py-1 text-sm font-medium rounded-lg bg-white text-red-600 border border-gray-200">
+                <div className="flex items-start justify-between mb-3">
+                  <span className="inline-block px-2.5 py-1 text-xs font-medium rounded-lg bg-red-500/20 text-red-300 border border-red-500/30">
                     {errorTypeLabels[error.type] || error.type}
                   </span>
-                  <span className="text-sm text-gray-500">
-                    {new Date(error.timestamp).toLocaleDateString()} at{" "}
-                    {new Date(error.timestamp).toLocaleTimeString([], {
-                      hour: '2-digit',
-                      minute: '2-digit'
-                    })}
+                  <span className="text-xs text-white/40">
+                    {new Date(error.timestamp).toLocaleDateString()}
                   </span>
                 </div>
-
-                <div className="space-y-6">
-                  <div className="flex items-start space-x-2">
-                    <span className="text-red-600 font-medium text-sm mt-1">✗</span>
-                    <p className="text-base text-gray-600 line-through flex-1">{error.before_text}</p>
-                  </div>
-
-                  <div className="flex items-start space-x-2">
-                    <span className="text-green-600 font-medium text-sm mt-1">✓</span>
-                    <p className="text-base text-gray-900 font-medium flex-1">{error.after_text}</p>
-                  </div>
-
-                  <div className="pl-6 pt-6 border-t border-gray-200">
-                    <p className="text-base text-gray-600 italic">{error.explanation}</p>
-                  </div>
+                <div className="space-y-2">
+                  <p className="text-white/60 line-through text-sm">{error.before_text}</p>
+                  <p className="text-white text-sm font-medium">{error.after_text}</p>
+                  <p className="text-white/40 text-xs italic pt-2 border-t border-white/[0.08]">
+                    {error.explanation}
+                  </p>
                 </div>
               </div>
             ))}
           </div>
-        ) : (
-          <p className="text-gray-500 text-center py-6">No errors recorded yet</p>
-        )}
-      </div>
+          {errorStats.last_errors.length > 3 && (
+            <div className="mt-4 text-center">
+              <Link
+                href="/insights"
+                className="text-indigo-400 hover:text-indigo-300 text-sm font-medium transition-colors"
+              >
+                View all errors
+              </Link>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

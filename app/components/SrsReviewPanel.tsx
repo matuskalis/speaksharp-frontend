@@ -1,8 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import { apiClient } from "@/lib/api-client";
 import { SRSCard } from "@/lib/types";
+import { CheckCircle, RotateCcw, Sparkles, BookOpen } from "lucide-react";
 
 export default function SrsReviewPanel() {
   const [cards, setCards] = useState<SRSCard[]>([]);
@@ -13,12 +15,10 @@ export default function SrsReviewPanel() {
   const [error, setError] = useState<string | null>(null);
   const [startTime, setStartTime] = useState<number>(Date.now());
 
-  // New state for answer checking
   const [userAnswer, setUserAnswer] = useState("");
   const [hasChecked, setHasChecked] = useState(false);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
 
-  // Fetch due cards on mount
   useEffect(() => {
     fetchDueCards();
   }, []);
@@ -60,7 +60,6 @@ export default function SrsReviewPanel() {
         correct: Boolean(isCorrect),
       });
 
-      // Move to next card
       if (currentIndex < cards.length - 1) {
         setCurrentIndex(currentIndex + 1);
         setShowBack(false);
@@ -69,7 +68,6 @@ export default function SrsReviewPanel() {
         setIsCorrect(null);
         setStartTime(Date.now());
       } else {
-        // All cards reviewed
         setCurrentIndex(cards.length);
       }
     } catch (err) {
@@ -84,9 +82,7 @@ export default function SrsReviewPanel() {
     const trimmedAnswer = userAnswer.trim().toLowerCase();
     const trimmedCorrect = currentCard.back.trim().toLowerCase();
 
-    // Check if answer is correct (simple exact match after trimming and lowercasing)
     if (trimmedAnswer === "" || trimmedAnswer.length === 0) {
-      // No answer provided
       setIsCorrect(false);
     } else if (trimmedAnswer === trimmedCorrect) {
       setIsCorrect(true);
@@ -100,13 +96,12 @@ export default function SrsReviewPanel() {
 
   if (loading) {
     return (
-      <div className="max-w-[1200px] mx-auto px-8">
-        <div className="bg-white border border-gray-200 rounded-xl p-10 text-center">
-          <div className="animate-pulse">
-            <div className="h-8 bg-white/[0.05] rounded mb-4"></div>
-            <div className="h-32 bg-white/[0.05] rounded"></div>
+      <div className="min-h-[60vh] flex items-center justify-center p-6">
+        <div className="text-center">
+          <div className="w-16 h-16 bg-gradient-brand rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-btn-glow animate-pulse">
+            <BookOpen className="w-8 h-8 text-white" />
           </div>
-          <p className="mt-8 text-gray-600">Loading your review cards...</p>
+          <p className="text-text-secondary">Loading your review cards...</p>
         </div>
       </div>
     );
@@ -114,14 +109,18 @@ export default function SrsReviewPanel() {
 
   if (error) {
     return (
-      <div className="max-w-[1200px] mx-auto px-8">
-        <div className="bg-red-50 border border-red-200 rounded-xl p-10">
-          <h3 className="text-3xl font-semibold text-gray-900 mb-8">Error</h3>
-          <p className="text-lg text-gray-900 mb-8">{error}</p>
+      <div className="p-6">
+        <div className="glass gradient-border rounded-2xl p-8 text-center">
+          <div className="w-16 h-16 bg-red-500/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <span className="text-3xl">!</span>
+          </div>
+          <h3 className="text-xl font-semibold text-text-primary mb-2">Something went wrong</h3>
+          <p className="text-text-secondary mb-6">{error}</p>
           <button
             onClick={fetchDueCards}
-            className="px-8 py-4 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors"
+            className="px-6 py-3 bg-gradient-brand text-white rounded-xl font-medium shadow-btn-glow hover:shadow-btn-glow-hover transition-all"
           >
+            <RotateCcw className="w-4 h-4 inline mr-2" />
             Try Again
           </button>
         </div>
@@ -131,38 +130,30 @@ export default function SrsReviewPanel() {
 
   if (cards.length === 0 || currentIndex >= cards.length) {
     return (
-      <div className="max-w-[1200px] mx-auto px-8">
-        <div className="bg-green-50 border border-green-200 rounded-xl p-10 text-center">
-          <div className="mb-4">
-            <svg
-              className="w-16 h-16 text-green-400 mx-auto"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
+      <div className="p-6">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="glass gradient-border rounded-2xl p-8 text-center"
+        >
+          <div className="w-20 h-20 bg-success/20 rounded-full flex items-center justify-center mx-auto mb-6">
+            <CheckCircle className="w-10 h-10 text-success" />
           </div>
-          <h2 className="text-6xl font-bold text-gray-900 mb-8">
-            You're all done for today!
+          <h2 className="text-2xl font-bold text-text-primary mb-3">
+            You're all done!
           </h2>
-          <p className="text-lg text-gray-900 mb-8">
+          <p className="text-text-secondary mb-6">
             {cards.length > 0
               ? `You reviewed ${cards.length} card${cards.length > 1 ? "s" : ""}. Great work!`
               : "No cards are due for review right now."}
           </p>
           <button
             onClick={fetchDueCards}
-            className="px-8 py-4 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors"
+            className="px-6 py-3 bg-gradient-brand text-white rounded-xl font-medium shadow-btn-glow hover:shadow-btn-glow-hover transition-all"
           >
             Check Again
           </button>
-        </div>
+        </motion.div>
       </div>
     );
   }
@@ -171,165 +162,151 @@ export default function SrsReviewPanel() {
   const progress = ((currentIndex + 1) / cards.length) * 100;
 
   return (
-    <div className="max-w-[1200px] mx-auto px-8 space-y-8">
+    <div className="p-4 space-y-4">
       {/* Progress Bar */}
-      <div className="bg-white border border-gray-200 hover:border-gray-300 rounded-xl p-10">
+      <div className="glass rounded-xl p-4">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-sm font-medium text-white/80">
+          <span className="text-sm font-medium text-text-secondary">
             Card {currentIndex + 1} of {cards.length}
           </span>
-          <span className="text-sm text-white/60">{Math.round(progress)}%</span>
+          <span className="text-sm text-text-muted">{Math.round(progress)}%</span>
         </div>
-        <div className="w-full bg-white/[0.05] rounded-full h-2">
-          <div
-            className="bg-gradient-to-r from-indigo-500 to-rose-500 h-2 rounded-full transition-all duration-300"
-            style={{ width: `${progress}%` }}
-          ></div>
+        <div className="h-2 bg-dark-300 rounded-full overflow-hidden">
+          <motion.div
+            className="h-full bg-gradient-brand rounded-full"
+            initial={{ width: 0 }}
+            animate={{ width: `${progress}%` }}
+            transition={{ duration: 0.3 }}
+          />
         </div>
       </div>
 
       {/* Card Display */}
-      <div className="bg-white border border-gray-200 hover:border-gray-300 rounded-xl p-10">
-        <div className="w-full space-y-8">
-          <div className="text-center">
-            <span className="inline-block px-3 py-1 bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-xs font-semibold rounded-full">
-              {currentCard.card_type}
-            </span>
-          </div>
-
-          {/* Front of card */}
-          <div className="text-center">
-            <h3 className="text-sm font-medium text-white/50 mb-2">Question</h3>
-            <p className="text-2xl font-semibold text-white">
-              {currentCard.front}
-            </p>
-          </div>
-
-          {/* Answer Input */}
-          <div>
-            <label className="block text-sm font-medium text-white/70 mb-2">
-              Your Answer
-            </label>
-            <textarea
-              value={userAnswer}
-              onChange={(e) => setUserAnswer(e.target.value)}
-              placeholder="Type your answer here..."
-              disabled={hasChecked}
-              className="w-full px-4 py-3 bg-white/[0.05] border border-white/[0.12] rounded-lg text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 resize-none disabled:opacity-50 disabled:cursor-not-allowed"
-              rows={3}
-            />
-          </div>
-
-          {/* Check Answer Button */}
-          {!hasChecked && (
-            <div className="text-center">
-              <button
-                onClick={handleCheckAnswer}
-                className="px-6 py-3 bg-gradient-to-r from-indigo-500 to-rose-500 text-white font-medium rounded-lg hover:from-indigo-600 hover:to-rose-600 transition-all duration-300"
-              >
-                Check Answer
-              </button>
-            </div>
-          )}
-
-          {/* Feedback after checking */}
-          {hasChecked && showBack && (
-            <>
-              <div className="text-center pt-4 border-t border-white/[0.08]">
-                <h3 className="text-sm font-medium text-white/50 mb-2">Correct Answer</h3>
-                <p className="text-xl text-white/90 whitespace-pre-wrap">
-                  {currentCard.back}
-                </p>
-              </div>
-
-              {/* Feedback message */}
-              <div className={`p-4 rounded-xl ${
-                isCorrect
-                  ? "bg-green-500/10 border border-green-500/20"
-                  : "bg-amber-500/10 border border-amber-500/20"
-              }`}>
-                <p className={`text-sm ${
-                  isCorrect ? "text-green-300" : "text-amber-300"
-                }`}>
-                  {isCorrect
-                    ? "✓ Looks correct based on the reference answer."
-                    : "Not exactly the same as the reference. Compare your answer with the correct one."}
-                </p>
-              </div>
-            </>
-          )}
-
-          {/* Rating Buttons */}
-          {hasChecked && (
-            <div className="w-full space-y-4">
-              <p className="text-center text-sm text-white/70">
-                How well did you know this?
-              </p>
-              <div className="grid grid-cols-3 gap-2">
-                <button
-                  onClick={() => handleReview(0)}
-                  disabled={reviewing || !hasChecked}
-                  className="px-4 py-3 bg-red-500/20 border border-red-500/30 text-red-300 rounded-lg hover:bg-red-500/30 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
-                >
-                  <div className="text-xs font-semibold mb-1">0</div>
-                  <div className="text-xs">Total Blackout</div>
-                </button>
-                <button
-                  onClick={() => handleReview(1)}
-                  disabled={reviewing || !hasChecked}
-                  className="px-4 py-3 bg-orange-500/20 border border-orange-500/30 text-orange-300 rounded-lg hover:bg-orange-500/30 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
-                >
-                  <div className="text-xs font-semibold mb-1">1</div>
-                  <div className="text-xs">Incorrect</div>
-                </button>
-                <button
-                  onClick={() => handleReview(2)}
-                  disabled={reviewing || !hasChecked}
-                  className="px-4 py-3 bg-amber-500/20 border border-amber-500/30 text-amber-300 rounded-lg hover:bg-amber-500/30 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
-                >
-                  <div className="text-xs font-semibold mb-1">2</div>
-                  <div className="text-xs">Hard</div>
-                </button>
-              </div>
-              <div className="grid grid-cols-3 gap-2">
-                <button
-                  onClick={() => handleReview(3)}
-                  disabled={reviewing || !hasChecked}
-                  className="px-4 py-3 bg-lime-500/20 border border-lime-500/30 text-lime-300 rounded-lg hover:bg-lime-500/30 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
-                >
-                  <div className="text-xs font-semibold mb-1">3</div>
-                  <div className="text-xs">Good</div>
-                </button>
-                <button
-                  onClick={() => handleReview(4)}
-                  disabled={reviewing || !hasChecked}
-                  className="px-4 py-3 bg-green-500/20 border border-green-500/30 text-green-300 rounded-lg hover:bg-green-500/30 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
-                >
-                  <div className="text-xs font-semibold mb-1">4</div>
-                  <div className="text-xs">Easy</div>
-                </button>
-                <button
-                  onClick={() => handleReview(5)}
-                  disabled={reviewing || !hasChecked}
-                  className="px-4 py-3 bg-blue-500/20 border border-blue-500/30 text-blue-300 rounded-lg hover:bg-blue-500/30 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
-                >
-                  <div className="text-xs font-semibold mb-1">5</div>
-                  <div className="text-xs">Perfect</div>
-                </button>
-              </div>
-            </div>
-          )}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="glass gradient-border rounded-2xl p-6 space-y-6"
+      >
+        {/* Card Type Badge */}
+        <div className="text-center">
+          <span className="inline-block px-3 py-1.5 bg-accent-purple/20 text-accent-purple border border-accent-purple/30 text-xs font-semibold rounded-full">
+            {currentCard.card_type}
+          </span>
         </div>
-      </div>
+
+        {/* Question */}
+        <div className="text-center">
+          <p className="text-xs font-medium text-text-muted mb-2">Question</p>
+          <p className="text-xl font-semibold text-text-primary">
+            {currentCard.front}
+          </p>
+        </div>
+
+        {/* Answer Input */}
+        <div>
+          <label className="block text-sm font-medium text-text-secondary mb-2">
+            Your Answer
+          </label>
+          <textarea
+            value={userAnswer}
+            onChange={(e) => setUserAnswer(e.target.value)}
+            placeholder="Type your answer here..."
+            disabled={hasChecked}
+            className="w-full px-4 py-3 bg-dark-200 border border-white/[0.08] rounded-xl text-text-primary placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-accent-purple/50 focus:border-accent-purple/50 resize-none disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+            rows={3}
+          />
+        </div>
+
+        {/* Check Answer Button */}
+        {!hasChecked && (
+          <div className="text-center">
+            <button
+              onClick={handleCheckAnswer}
+              className="px-8 py-3 bg-gradient-brand text-white font-semibold rounded-xl shadow-btn-glow hover:shadow-btn-glow-hover transition-all"
+            >
+              Check Answer
+            </button>
+          </div>
+        )}
+
+        {/* Feedback after checking */}
+        {hasChecked && showBack && (
+          <>
+            <div className="text-center pt-4 border-t border-white/[0.06]">
+              <p className="text-xs font-medium text-text-muted mb-2">Correct Answer</p>
+              <p className="text-lg text-text-primary whitespace-pre-wrap">
+                {currentCard.back}
+              </p>
+            </div>
+
+            {/* Feedback message */}
+            <div className={`p-4 rounded-xl ${
+              isCorrect
+                ? "bg-success/10 border border-success/30"
+                : "bg-amber-500/10 border border-amber-500/30"
+            }`}>
+              <p className={`text-sm ${isCorrect ? "text-success" : "text-amber-300"}`}>
+                {isCorrect
+                  ? "✓ Correct! Great job!"
+                  : "Not quite right. Compare your answer with the correct one."}
+              </p>
+            </div>
+          </>
+        )}
+
+        {/* Rating Buttons */}
+        {hasChecked && (
+          <div className="space-y-4">
+            <p className="text-center text-sm text-text-muted">
+              How well did you know this?
+            </p>
+            <div className="grid grid-cols-3 gap-2">
+              {[
+                { quality: 0, label: "Forgot", color: "red" },
+                { quality: 1, label: "Hard", color: "orange" },
+                { quality: 2, label: "Okay", color: "amber" },
+              ].map(({ quality, label, color }) => (
+                <button
+                  key={quality}
+                  onClick={() => handleReview(quality)}
+                  disabled={reviewing}
+                  className={`px-3 py-3 bg-${color}-500/20 border border-${color}-500/30 text-${color}-300 rounded-xl hover:bg-${color}-500/30 disabled:opacity-50 disabled:cursor-not-allowed transition-all text-sm font-medium`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+            <div className="grid grid-cols-3 gap-2">
+              {[
+                { quality: 3, label: "Good", color: "lime" },
+                { quality: 4, label: "Easy", color: "green" },
+                { quality: 5, label: "Perfect", color: "blue" },
+              ].map(({ quality, label, color }) => (
+                <button
+                  key={quality}
+                  onClick={() => handleReview(quality)}
+                  disabled={reviewing}
+                  className={`px-3 py-3 bg-${color}-500/20 border border-${color}-500/30 text-${color}-300 rounded-xl hover:bg-${color}-500/30 disabled:opacity-50 disabled:cursor-not-allowed transition-all text-sm font-medium`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+      </motion.div>
 
       {/* Help Text */}
       {hasChecked && (
-        <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-5 backdrop-blur-sm">
-          <p className="text-sm text-blue-300">
-            <strong className="text-blue-200">Tip:</strong> Rate yourself honestly based on how well you knew the answer.
-            The system uses your rating to schedule the next review at the optimal time for long-term retention.
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-accent-purple/10 border border-accent-purple/20 rounded-xl p-4"
+        >
+          <p className="text-sm text-accent-purple/80">
+            <strong className="text-accent-purple">Tip:</strong> Rate yourself honestly. The system uses your rating to schedule the next review at the optimal time.
           </p>
-        </div>
+        </motion.div>
       )}
     </div>
   );

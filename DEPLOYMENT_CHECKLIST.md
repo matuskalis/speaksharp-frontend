@@ -1,4 +1,4 @@
-# SpeakSharp Deployment Checklist
+# Vorex Deployment Checklist
 
 ## Required Environment Variables
 
@@ -10,7 +10,7 @@ NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 
 # Backend API
-NEXT_PUBLIC_API_BASE_URL=http://localhost:8000  # Production: https://api.speaksharp.com
+NEXT_PUBLIC_API_BASE_URL=http://localhost:8000  # Production: https://api.vorex.app
 
 # Voice Tutor Debug (optional, dev only)
 NEXT_PUBLIC_DEBUG_VOICE=false  # Set to "true" to enable tech debug panel
@@ -54,8 +54,8 @@ SPEAKSHARP_ENABLE_TTS=true  # Enable Text-to-Speech
 
 1. **Build Docker image**:
    ```bash
-   cd speaksharp-core
-   docker build -t speaksharp-backend .
+   cd vorex-backend
+   docker build -t vorex-backend .
    ```
 
 2. **Run with Docker Compose** (includes PostgreSQL):
@@ -69,14 +69,14 @@ SPEAKSHARP_ENABLE_TTS=true  # Enable Text-to-Speech
      -e DATABASE_URL="postgresql://..." \
      -e OPENAI_API_KEY="sk-..." \
      -e SUPABASE_JWT_SECRET="..." \
-     speaksharp-backend
+     vorex-backend
    ```
 
 #### Option 2: Uvicorn (Local/Production)
 
 1. **Activate virtual environment**:
    ```bash
-   cd speaksharp-core
+   cd vorex-backend
    source venv/bin/activate  # On Windows: venv\Scripts\activate
    ```
 
@@ -139,7 +139,7 @@ flyctl deploy
    ```bash
    # Or via CLI
    npm install -g vercel
-   cd speaksharp-frontend
+   cd vorex-frontend
    vercel
    ```
 
@@ -147,7 +147,7 @@ flyctl deploy
 
 1. **Install dependencies**:
    ```bash
-   cd speaksharp-frontend
+   cd vorex-frontend
    npm install
    ```
 
@@ -164,7 +164,7 @@ flyctl deploy
 4. **Or use PM2 for process management**:
    ```bash
    npm install -g pm2
-   pm2 start npm --name "speaksharp-frontend" -- start
+   pm2 start npm --name "vorex-frontend" -- start
    pm2 save
    pm2 startup
    ```
@@ -175,7 +175,7 @@ flyctl deploy
 
 If frontend and backend are on different domains, configure CORS in backend:
 
-**`speaksharp-core/app/api.py`** (already configured):
+**`vorex-backend/app/api.py`** (already configured):
 ```python
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -190,7 +190,7 @@ app.add_middleware(
 
 **Production**: Replace `allow_origins=["*"]` with your frontend domain:
 ```python
-allow_origins=["https://speaksharp.com", "https://www.speaksharp.com"],
+allow_origins=["https://vorex.app", "https://www.vorex.app"],
 ```
 
 ---
@@ -281,18 +281,18 @@ allow_origins=["https://speaksharp.com", "https://www.speaksharp.com"],
 
 2. **Create database**:
    ```bash
-   createdb speaksharp_db
+   createdb vorex_db
    ```
 
 3. **Apply schema**:
    ```bash
-   cd speaksharp-core
-   psql speaksharp_db < database/schema.sql
+   cd vorex-backend
+   psql vorex_db < database/schema.sql
    ```
 
 4. **Set DATABASE_URL**:
    ```bash
-   export DATABASE_URL="postgresql://username:password@localhost:5432/speaksharp_db"
+   export DATABASE_URL="postgresql://username:password@localhost:5432/vorex_db"
    ```
 
 ### Supabase (Production)
@@ -300,7 +300,7 @@ allow_origins=["https://speaksharp.com", "https://www.speaksharp.com"],
 1. **Create project** at https://supabase.com
 
 2. **Run schema** in SQL Editor:
-   - Copy contents of `speaksharp-core/database/schema.sql`
+   - Copy contents of `vorex-backend/database/schema.sql`
    - Paste and execute in Supabase SQL Editor
 
 3. **Get connection string**:
@@ -359,6 +359,19 @@ curl -X POST http://localhost:8000/api/tutor/voice \
 - [ ] Authentication flow works
 - [ ] Hard refresh on any tab doesn't error
 
+### SEO & Metadata
+- [ ] Sitemap generates correctly at `/sitemap.xml`
+- [ ] Robots.txt accessible at `/robots.txt`
+- [ ] OG image renders at `/opengraph-image`
+- [ ] Twitter Card preview works
+- [ ] Structured data (JSON-LD) validates on Google Rich Results Test
+- [ ] Meta title and description set correctly on all pages
+- [ ] Google Search Console verification code updated
+- [ ] Submit sitemap to Google Search Console
+- [ ] Submit sitemap to Bing Webmaster Tools
+- [ ] Canonical URLs configured correctly
+- [ ] No broken internal links
+
 ### Testing
 - [ ] Sign up/sign in flow
 - [ ] Complete a lesson
@@ -388,7 +401,7 @@ If issues occur after deployment:
 
 2. **Backend**: Redeploy previous Docker image
    ```bash
-   docker pull speaksharp-backend:previous-tag
+   docker pull vorex-backend:previous-tag
    docker run ...
    ```
 
@@ -419,7 +432,7 @@ If issues occur after deployment:
 **Backend**:
 ```bash
 # Docker
-docker logs speaksharp-backend
+docker logs vorex-backend
 
 # Uvicorn
 # Logs print to stdout
@@ -461,6 +474,6 @@ npm run dev  # Logs to console
 
 ---
 
-**Last Updated**: November 22, 2024
-**Project**: SpeakSharp MVP
+**Last Updated**: November 29, 2024
+**Project**: Vorex - AI-Powered English Learning Platform
 **Maintainer**: See README for contact info

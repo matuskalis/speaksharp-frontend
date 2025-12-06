@@ -53,12 +53,20 @@ export function Header({ onSignOut, onSignIn, isAuthenticated }: HeaderProps) {
               );
             })}
             {isAuthenticated && (
-              <Link
-                href="/learn"
-                className="text-base font-medium text-neutral-600 hover:text-neutral-900 transition-colors"
-              >
-                Learn
-              </Link>
+              <>
+                <Link
+                  href="/learn"
+                  className="text-base font-medium text-neutral-600 hover:text-neutral-900 transition-colors"
+                >
+                  Learn
+                </Link>
+                <Link
+                  href="/leaderboard"
+                  className="text-base font-medium text-neutral-600 hover:text-neutral-900 transition-colors"
+                >
+                  Leaderboard
+                </Link>
+              </>
             )}
           </nav>
 

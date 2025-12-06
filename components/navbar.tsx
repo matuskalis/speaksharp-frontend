@@ -20,6 +20,7 @@ import {
   Trophy
 } from "lucide-react";
 import { Button } from "./ui/button";
+import { NotificationBell } from "./NotificationBell";
 
 // Navigation structure with logical grouping
 const navSections = [
@@ -92,6 +93,11 @@ export function Navbar() {
               </Link>
             );
           })}
+
+          {/* Notification Bell */}
+          <div className="ml-2 pl-2 border-l border-white/[0.08]">
+            <NotificationBell />
+          </div>
         </div>
       </nav>
 
@@ -112,18 +118,21 @@ export function Navbar() {
               );
             })()}
           </div>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2"
-          >
-            {mobileMenuOpen ? (
-              <X className="w-6 h-6" />
-            ) : (
-              <Menu className="w-6 h-6" />
-            )}
-          </Button>
+          <div className="flex items-center gap-2">
+            <NotificationBell />
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="p-2"
+            >
+              {mobileMenuOpen ? (
+                <X className="w-6 h-6" />
+              ) : (
+                <Menu className="w-6 h-6" />
+              )}
+            </Button>
+          </div>
         </div>
 
         {/* Mobile Menu Dropdown with Grouped Structure */}

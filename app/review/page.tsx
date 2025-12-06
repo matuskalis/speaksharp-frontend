@@ -1,12 +1,12 @@
 "use client";
 
-import { AppShell } from "@/components/app-shell";
+import { MobileAppShell } from "@/components/mobile-app-shell";
 import SrsReviewPanel from "../components/SrsReviewPanel";
 
 export default function ReviewPage() {
   return (
-    <AppShell>
+    <MobileAppShell>
       <SrsReviewPanel />
-    </AppShell>
+    </MobileAppShell>
   );
 }

@@ -4,11 +4,16 @@ import { useState, useEffect } from "react";
 import { AppShell } from "@/components/app-shell";
 import { apiClient } from "@/lib/api-client";
 import { Achievement } from "@/lib/types";
-import { Trophy, Lock, Star } from "lucide-react";
+import { Trophy, Lock, Star, Target, Flame, Award, Users } from "lucide-react";
+import { ShareButton } from "@/components/social/ShareButton";
+import { generateAchievementShareText, formatAchievementForShare } from "@/lib/share-utils";
+
+type CategoryFilter = "all" | "milestone" | "streak" | "mastery" | "social";
 
 export default function AchievementsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<CategoryFilter>("all");
 
   const [allAchievements, setAllAchievements] = useState<Achievement[]>([]);
   const [myAchievements, setMyAchievements] = useState<Achievement[]>([]);
@@ -74,27 +79,44 @@ export default function AchievementsPage() {
     };
   });
 
-  // Group by category
-  const achievementsByCategory = achievementsWithStatus.reduce((acc, ach) => {
-    if (!acc[ach.category]) {
-      acc[ach.category] = [];
-    }
-    acc[ach.category].push(ach);
-    return acc;
-  }, {} as Record<string, typeof achievementsWithStatus>);
+  // Filter achievements by selected category
+  const filteredAchievements = selectedCategory === "all"
+    ? achievementsWithStatus
+    : achievementsWithStatus.filter(a => a.category === selectedCategory);
 
   // Calculate stats
   const totalPoints = myAchievements.reduce((sum, ach) => sum + ach.points, 0);
   const unlockedCount = myAchievements.length;
   const totalCount = allAchievements.length;
 
+  // Category configuration
+  const categories: {
+    key: CategoryFilter;
+    label: string;
+    icon: React.ComponentType<{ className?: string }>;
+    color: string;
+  }[] = [
+    { key: "all", label: "All", icon: Trophy, color: "text-white" },
+    { key: "milestone", label: "Milestones", icon: Target, color: "text-blue-400" },
+    { key: "streak", label: "Streaks", icon: Flame, color: "text-orange-400" },
+    { key: "mastery", label: "Mastery", icon: Award, color: "text-purple-400" },
+    { key: "social", label: "Social", icon: Users, color: "text-green-400" },
+  ];
+
   // Tier badge styling
-  const getTierBadge = (tier: string) => {
+  const getTierBadge = (tier: string, isUnlocked: boolean) => {
     const styles = {
       bronze: "bg-amber-900/30 border-amber-600/40 text-amber-300",
       silver: "bg-gray-600/30 border-gray-400/40 text-gray-200",
       gold: "bg-yellow-600/30 border-yellow-500/40 text-yellow-300",
       platinum: "bg-cyan-600/30 border-cyan-400/40 text-cyan-200",
+    };
+
+    const lockedStyles = {
+      bronze: "bg-white/5 border-white/10 text-white/30",
+      silver: "bg-white/5 border-white/10 text-white/30",
+      gold: "bg-white/5 border-white/10 text-white/30",
+      platinum: "bg-white/5 border-white/10 text-white/30",
     };
 
     const emojis = {
@@ -104,27 +126,26 @@ export default function AchievementsPage() {
       platinum: "💎",
     };
 
+    const styleMap = isUnlocked ? styles : lockedStyles;
+
     return (
-      <div className={`px-3 py-1 rounded-lg text-xs font-semibold border ${styles[tier as keyof typeof styles] || styles.bronze}`}>
-        <span className="mr-1">{emojis[tier as keyof typeof emojis] || "🏆"}</span>
+      <div className={`px-3 py-1 rounded-lg text-xs font-semibold border ${styleMap[tier as keyof typeof styleMap] || styleMap.bronze}`}>
+        <span className="mr-1 opacity-70">{emojis[tier as keyof typeof emojis] || "🏆"}</span>
         {tier.charAt(0).toUpperCase() + tier.slice(1)}
       </div>
     );
   };
 
-  // Category labels
-  const categoryLabels: Record<string, string> = {
-    milestone: "Milestones",
-    streak: "Streaks",
-    mastery: "Mastery",
-    social: "Social",
+  // Get category icon
+  const getCategoryIcon = (category: string) => {
+    const categoryConfig = categories.find(c => c.key === category);
+    return categoryConfig ? categoryConfig.icon : Trophy;
   };
 
-  const categoryEmojis: Record<string, string> = {
-    milestone: "🎯",
-    streak: "🔥",
-    mastery: "⭐",
-    social: "👥",
+  // Get category color
+  const getCategoryColor = (category: string) => {
+    const categoryConfig = categories.find(c => c.key === category);
+    return categoryConfig ? categoryConfig.color : "text-white";
   };
 
   return (
@@ -172,71 +193,122 @@ export default function AchievementsPage() {
           </div>
         </div>
 
-        {/* Achievements by Category */}
-        {Object.entries(achievementsByCategory).map(([category, achievements]) => (
-          <div
-            key={category}
-            className="bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/[0.08] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] p-7"
-          >
-            <div className="flex items-center gap-3 mb-6">
-              <span className="text-3xl">{categoryEmojis[category] || "🏆"}</span>
-              <h3 className="text-xl font-semibold text-white">
-                {categoryLabels[category] || category}
-              </h3>
-            </div>
+        {/* Category Filter Tabs */}
+        <div className="bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/[0.08] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] p-2">
+          <div className="flex flex-wrap gap-2">
+            {categories.map((category) => {
+              const Icon = category.icon;
+              const isActive = selectedCategory === category.key;
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {achievements.map((achievement) => {
+              return (
+                <button
+                  key={category.key}
+                  onClick={() => setSelectedCategory(category.key)}
+                  className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium transition-all duration-300 ${
+                    isActive
+                      ? "bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-400/30 text-white shadow-lg"
+                      : "bg-white/[0.03] border border-white/[0.08] text-white/60 hover:bg-white/[0.08] hover:text-white/80"
+                  }`}
+                >
+                  <Icon className={`w-4 h-4 ${isActive ? category.color : "text-white/40"}`} />
+                  <span>{category.label}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Achievements Grid */}
+        {filteredAchievements.length > 0 ? (
+          <div className="bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/[0.08] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] p-7">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
+              {filteredAchievements.map((achievement) => {
                 const isUnlocked = achievement.unlocked;
+                const CategoryIcon = getCategoryIcon(achievement.category);
+                const categoryColor = getCategoryColor(achievement.category);
 
                 return (
                   <div
                     key={achievement.achievement_id}
                     className={`p-5 rounded-xl border transition-all duration-300 ${
                       isUnlocked
-                        ? "bg-white/[0.08] border-white/[0.15] hover:bg-white/[0.12]"
-                        : "bg-white/[0.02] border-white/[0.05] opacity-60"
+                        ? "bg-white/[0.08] border-white/[0.15] hover:bg-white/[0.12] hover:border-white/[0.20] hover:shadow-lg"
+                        : "bg-white/[0.02] border-white/[0.05] hover:bg-white/[0.04] grayscale"
                     }`}
                   >
                     <div className="flex items-start justify-between mb-3">
-                      <div className="flex items-center gap-3">
-                        {isUnlocked ? (
-                          <Trophy className="w-6 h-6 text-yellow-400" />
-                        ) : (
-                          <Lock className="w-6 h-6 text-white/30" />
-                        )}
-                        <div>
-                          <h4 className={`font-semibold ${isUnlocked ? "text-white" : "text-white/50"}`}>
+                      <div className="flex items-center gap-3 flex-1">
+                        {/* Icon */}
+                        <div className={`flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center ${
+                          isUnlocked
+                            ? "bg-gradient-to-br from-yellow-500/20 to-orange-500/20 border border-yellow-500/30"
+                            : "bg-white/[0.03] border border-white/[0.08]"
+                        }`}>
+                          {isUnlocked ? (
+                            <CategoryIcon className={`w-5 h-5 ${categoryColor}`} />
+                          ) : (
+                            <Lock className="w-5 h-5 text-white/30" />
+                          )}
+                        </div>
+
+                        {/* Title and Date */}
+                        <div className="flex-1 min-w-0">
+                          <h4 className={`font-semibold text-base ${isUnlocked ? "text-white" : "text-white/40"}`}>
                             {achievement.title}
                           </h4>
                           {isUnlocked && achievement.unlocked_at && (
-                            <p className="text-xs text-white/40 mt-1">
-                              Unlocked {new Date(achievement.unlocked_at).toLocaleDateString()}
+                            <p className="text-xs text-white/40 mt-0.5">
+                              {new Date(achievement.unlocked_at).toLocaleDateString('en-US', {
+                                month: 'short',
+                                day: 'numeric',
+                                year: 'numeric'
+                              })}
                             </p>
                           )}
                         </div>
                       </div>
-                      {getTierBadge(achievement.tier)}
+
+                      {/* Tier Badge */}
+                      <div className="flex-shrink-0">
+                        {getTierBadge(achievement.tier, isUnlocked)}
+                      </div>
                     </div>
 
-                    <p className={`text-sm mb-3 ${isUnlocked ? "text-white/70" : "text-white/40"}`}>
+                    <p className={`text-sm mb-4 ${isUnlocked ? "text-white/70" : "text-white/30"}`}>
                       {achievement.description}
                     </p>
 
                     <div className="flex items-center justify-between">
-                      <div className={`text-sm font-semibold ${isUnlocked ? "text-yellow-400" : "text-white/40"}`}>
-                        {achievement.points} points
+                      <div className={`flex items-center gap-1.5 text-sm font-semibold ${isUnlocked ? "text-yellow-400" : "text-white/30"}`}>
+                        <Star className="w-4 h-4" />
+                        {achievement.points} pts
                       </div>
 
                       {achievement.progress !== undefined && achievement.progress < 100 && (
-                        <div className="flex items-center gap-2">
-                          <div className="w-20 h-2 bg-white/10 rounded-full overflow-hidden">
+                        <div className="flex items-center gap-2 flex-1 ml-4">
+                          <div className="flex-1 h-2 bg-white/10 rounded-full overflow-hidden">
                             <div
-                              className="h-full bg-gradient-to-r from-blue-500 to-purple-500"
+                              className="h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-500"
                               style={{ width: `${achievement.progress}%` }}
                             />
                           </div>
-                          <span className="text-xs text-white/60">{Math.round(achievement.progress)}%</span>
+                          <span className="text-xs text-white/60 font-medium min-w-[3rem] text-right">
+                            {Math.round(achievement.progress)}%
+                          </span>
+                        </div>
+                      )}
+
+                      {/* Share Button (only for unlocked achievements) */}
+                      {isUnlocked && (
+                        <div className="ml-3">
+                          <ShareButton
+                            title={achievement.title}
+                            text={generateAchievementShareText(formatAchievementForShare(achievement))}
+                            variant="icon"
+                            onShare={(platform) => {
+                              console.log(`Shared achievement ${achievement.title} on ${platform}`);
+                            }}
+                          />
                         </div>
                       )}
                     </div>
@@ -245,14 +317,21 @@ export default function AchievementsPage() {
               })}
             </div>
           </div>
-        ))}
-
-        {/* Empty State */}
-        {allAchievements.length === 0 && (
+        ) : (
           <div className="bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/[0.08] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] p-12 text-center">
-            <div className="text-6xl mb-4">🏆</div>
-            <p className="text-white/40 text-lg">No achievements available yet</p>
-            <p className="text-white/30 text-sm mt-2">Check back soon for new achievements!</p>
+            <div className="text-6xl mb-4">
+              {allAchievements.length === 0 ? "🏆" : "🔍"}
+            </div>
+            <p className="text-white/40 text-lg">
+              {allAchievements.length === 0
+                ? "No achievements available yet"
+                : `No ${selectedCategory} achievements`}
+            </p>
+            <p className="text-white/30 text-sm mt-2">
+              {allAchievements.length === 0
+                ? "Check back soon for new achievements!"
+                : "Try selecting a different category"}
+            </p>
           </div>
         )}
       </div>
