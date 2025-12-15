@@ -37,7 +37,7 @@ export default function LessonPage() {
   const params = useParams();
   const lessonId = params.lessonId as string;
 
-  const { hearts, hasHearts, timeUntilRefill, showShake } = useGamification();
+  const { hearts, hasHearts, timeUntilRefill, showShake, checkAchievements } = useGamification();
   const { handleAnswer } = useExerciseAnswer();
   const { profile, loading: profileLoading } = useUserProfile();
 
@@ -105,6 +105,7 @@ export default function LessonPage() {
         score,
       });
       setShowCompletion(true);
+      checkAchievements();
     } catch (err) {
       console.error("Failed to complete lesson:", err);
       setCompletionData({
@@ -113,8 +114,9 @@ export default function LessonPage() {
         score,
       });
       setShowCompletion(true);
+      checkAchievements();
     }
-  }, [lessonId, startTime, exercises.length, totalXP]);
+  }, [lessonId, startTime, exercises.length, totalXP, checkAchievements]);
 
   const handleSubmitAnswer = useCallback(async (answer: string) => {
     if (!currentExercise) {

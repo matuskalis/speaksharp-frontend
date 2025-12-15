@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { AppShell } from "@/components/app-shell";
+import { ActivityHeatmap } from "@/components/ActivityHeatmap";
+import { LearningInsights } from "@/components/LearningInsights";
 import { apiClient } from "@/lib/api-client";
 import { ErrorStatsResponse, SrsStatsResponse, WeakSkillsResponse } from "@/lib/types";
 
@@ -61,7 +63,6 @@ export default function InsightsPage() {
   }
 
   const totalErrors = errorStats?.total_errors || 0;
-  const totalReviews = srsStats?.reviewed_today || 0;
   const totalCards = srsStats?.total_cards || 0;
 
   return (
@@ -70,38 +71,16 @@ export default function InsightsPage() {
         {/* Header */}
         <div className="text-center">
           <h2 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 via-white/90 to-rose-300 mb-3">
-            Insights
+            Learning Insights
           </h2>
-          <p className="text-white/50 text-lg">Track your learning journey</p>
+          <p className="text-white/50 text-lg">Track your learning journey and discover patterns</p>
         </div>
 
-        {/* Activity Stats */}
-        <div className="bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/[0.08] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] p-7">
-          <h3 className="text-xl font-semibold text-white mb-6">Activity Overview</h3>
+        {/* Activity Heatmap */}
+        <ActivityHeatmap days={365} />
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Total Errors */}
-            <div className="text-center p-5 bg-white/[0.03] rounded-xl border border-white/[0.08]">
-              <div className="text-4xl mb-2">📝</div>
-              <div className="text-3xl font-bold text-white mb-1">{totalErrors}</div>
-              <div className="text-sm text-white/60">Total Errors Tracked</div>
-            </div>
-
-            {/* SRS Cards */}
-            <div className="text-center p-5 bg-white/[0.03] rounded-xl border border-white/[0.08]">
-              <div className="text-4xl mb-2">🗂️</div>
-              <div className="text-3xl font-bold text-white mb-1">{totalCards}</div>
-              <div className="text-sm text-white/60">SRS Cards Created</div>
-            </div>
-
-            {/* Reviews Today */}
-            <div className="text-center p-5 bg-white/[0.03] rounded-xl border border-white/[0.08]">
-              <div className="text-4xl mb-2">📚</div>
-              <div className="text-3xl font-bold text-white mb-1">{totalReviews}</div>
-              <div className="text-sm text-white/60">Reviews Today</div>
-            </div>
-          </div>
-        </div>
+        {/* Learning Insights */}
+        <LearningInsights />
 
         {/* Weak Skills */}
         <div className="bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/[0.08] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] p-7">
@@ -152,7 +131,7 @@ export default function InsightsPage() {
 
         {/* Recent Progress */}
         <div className="bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/[0.08] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] p-7">
-          <h3 className="text-xl font-semibold text-white mb-6">Recent Progress</h3>
+          <h3 className="text-xl font-semibold text-white mb-6">Error Categories</h3>
 
           <div className="space-y-4">
             {errorStats && errorStats.last_errors && errorStats.last_errors.length > 0 ? (
@@ -203,7 +182,7 @@ export default function InsightsPage() {
             ) : (
               <div className="text-center py-12">
                 <div className="text-6xl mb-4">🌱</div>
-                <p className="text-white/40 text-lg">No progress data yet</p>
+                <p className="text-white/40 text-lg">No error data yet</p>
                 <p className="text-white/30 text-sm mt-2">Start using the tutor to track your progress</p>
               </div>
             )}

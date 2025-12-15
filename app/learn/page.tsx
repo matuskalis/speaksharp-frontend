@@ -10,6 +10,7 @@ import { useUserProfile } from "@/hooks/useUserProfile";
 import { MobileAppShell } from "@/components/mobile-app-shell";
 import { Paywall } from "@/components/paywall";
 import { DailyChallenge } from "@/components/DailyChallenge";
+import { ActiveBonuses } from "@/components/ActiveBonuses";
 import { apiClient } from "@/lib/api-client";
 import { GuidedLearningResponse, ProgressSummaryResponse, GuidedSkill } from "@/lib/types";
 import {
@@ -151,13 +152,17 @@ export default function LearnPage() {
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
+              className="flex items-start justify-between"
             >
-              <h1 className="text-2xl font-bold text-text-primary mb-1">
-                {getGreeting()}, {profile.full_name?.split(" ")[0] || "Learner"}!
-              </h1>
-              <p className="text-text-secondary text-sm">
-                Your AI-powered learning continues
-              </p>
+              <div>
+                <h1 className="text-2xl font-bold text-text-primary mb-1">
+                  {getGreeting()}, {profile.full_name?.split(" ")[0] || "Learner"}!
+                </h1>
+                <p className="text-text-secondary text-sm">
+                  Your AI-powered learning continues
+                </p>
+              </div>
+              <ActiveBonuses />
             </motion.div>
 
             {/* Level & Progress Card */}

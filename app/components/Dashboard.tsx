@@ -15,8 +15,11 @@ import {
   BookOpen,
   BarChart3,
   Award,
-  Zap
+  Zap,
+  Clock
 } from "lucide-react";
+import { StreakRiskBanner } from "@/components/StreakRiskBanner";
+import { DailyChallengesPanel } from "@/components/DailyChallengesPanel";
 
 export default function Dashboard() {
   const [loading, setLoading] = useState(true);
@@ -25,9 +28,17 @@ export default function Dashboard() {
   const [errorStats, setErrorStats] = useState<ErrorStatsResponse | null>(null);
   const [srsStats, setSrsStats] = useState<SrsStatsResponse | null>(null);
   const [weakSkills, setWeakSkills] = useState<WeakSkillsResponse | null>(null);
+  const [analyticsData, setAnalyticsData] = useState<{
+    study_time: {
+      today_minutes: number;
+      week_minutes: number;
+      total_minutes: number;
+    };
+    activity_breakdown: Record<string, number>;
+  } | null>(null);
 
   // Use gamification context for XP, streak, and hearts
-  const { xp, streak, longestStreak, hearts } = useGamification();
+  const { xp, streak, longestStreak, hearts, studyTime, streakAtRisk } = useGamification();
 
   // Use user profile hook
   const { profile } = useUserProfile();
@@ -41,15 +52,22 @@ export default function Dashboard() {
     setError(null);
 
     try {
-      const [errors, srs, skills] = await Promise.all([
+      const [errors, srs, skills, analytics] = await Promise.all([
         apiClient.getErrorStats().catch(() => null),
         apiClient.getSrsStats().catch(() => null),
         apiClient.getWeakSkills(5).catch(() => null),
+        apiClient.getAnalyticsSummary().catch(() => null),
       ]);
 
       setErrorStats(errors);
       setSrsStats(srs);
       setWeakSkills(skills);
+      if (analytics) {
+        setAnalyticsData({
+          study_time: analytics.study_time,
+          activity_breakdown: analytics.activity_breakdown,
+        });
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to load dashboard data");
     } finally {
@@ -120,8 +138,14 @@ export default function Dashboard() {
         <p className="text-white/60 text-lg">Track your English learning journey</p>
       </div>
 
-      {/* Top Stats Row - Streak, XP, Hearts */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* Streak Risk Banner */}
+      {streakAtRisk && <StreakRiskBanner streak={streak} />}
+
+      {/* Daily Challenges */}
+      <DailyChallengesPanel />
+
+      {/* Top Stats Row - Streak, XP, Hearts, Study Time */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {/* Streak Card */}
         <div className="bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/[0.08] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] p-6 hover:border-white/[0.15] transition-all duration-300">
           <div className="flex items-center justify-between mb-4">
@@ -189,6 +213,28 @@ export default function Dashboard() {
                 />
               ))}
             </div>
+          </div>
+        </div>
+
+        {/* Study Time Card */}
+        <div className="bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/[0.08] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] p-6 hover:border-white/[0.15] transition-all duration-300">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-white/60 text-sm font-medium uppercase tracking-wide">Study Time</h3>
+            <Clock className="w-6 h-6 text-emerald-400" />
+          </div>
+          <div className="space-y-2">
+            <div className="flex items-baseline gap-2">
+              <span className="text-4xl font-bold text-white">
+                {(analyticsData?.study_time.today_minutes ?? studyTime.todayMinutes) || 0}
+              </span>
+              <span className="text-white/40 text-lg">min today</span>
+            </div>
+            <p className="text-white/40 text-sm">
+              This week:{" "}
+              <span className="text-white/60 font-medium">
+                {(analyticsData?.study_time.week_minutes ?? studyTime.weekMinutes) || 0} min
+              </span>
+            </p>
           </div>
         </div>
       </div>

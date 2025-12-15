@@ -13,13 +13,10 @@ import {
   Briefcase,
   GraduationCap,
   Plane,
-  Globe,
   Users,
-  Brain,
   Sparkles,
   Clock,
   Check,
-  Search,
   User,
   BookOpen,
   Target,
@@ -56,21 +53,6 @@ const INTERESTS = [
   { id: "art", label: "Art", emoji: "🎨" },
 ];
 
-const LANGUAGES = [
-  { id: "es", label: "Spanish", flag: "🇪🇸" },
-  { id: "zh", label: "Chinese", flag: "🇨🇳" },
-  { id: "hi", label: "Hindi", flag: "🇮🇳" },
-  { id: "ar", label: "Arabic", flag: "🇸🇦" },
-  { id: "pt", label: "Portuguese", flag: "🇵🇹" },
-  { id: "bn", label: "Bengali", flag: "🇧🇩" },
-  { id: "ru", label: "Russian", flag: "🇷🇺" },
-  { id: "ja", label: "Japanese", flag: "🇯🇵" },
-  { id: "de", label: "German", flag: "🇩🇪" },
-  { id: "fr", label: "French", flag: "🇫🇷" },
-  { id: "ko", label: "Korean", flag: "🇰🇷" },
-  { id: "it", label: "Italian", flag: "🇮🇹" },
-];
-
 const LEVELS = [
   {
     id: "beginner",
@@ -101,17 +83,15 @@ export default function GetStartedPage() {
   const [currentStep, setCurrentStep] = useState<OnboardingStep>("welcome");
   const [formData, setFormData] = useState({
     name: "",
-    nativeLanguage: "",
     level: "",
     goals: [] as string[],
     dailyTimeGoal: null as number | null,
     interests: [] as string[],
   });
-  const [languageSearch, setLanguageSearch] = useState("");
   const [saving, setSaving] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
 
-  const steps: OnboardingStep[] = ["welcome", "name", "language", "level", "goals", "time", "interests", "auth"];
+  const steps: OnboardingStep[] = ["welcome", "name", "level", "goals", "time", "interests", "auth"];
   const currentStepIndex = steps.indexOf(currentStep);
 
   const canProceed = () => {
@@ -120,8 +100,6 @@ export default function GetStartedPage() {
         return true;
       case "name":
         return formData.name.trim().length > 0;
-      case "language":
-        return formData.nativeLanguage.length > 0;
       case "level":
         return formData.level.length > 0;
       case "goals":
@@ -139,8 +117,7 @@ export default function GetStartedPage() {
 
   const handleNext = () => {
     if (currentStep === "welcome") setCurrentStep("name");
-    else if (currentStep === "name") setCurrentStep("language");
-    else if (currentStep === "language") setCurrentStep("level");
+    else if (currentStep === "name") setCurrentStep("level");
     else if (currentStep === "level") setCurrentStep("goals");
     else if (currentStep === "goals") setCurrentStep("time");
     else if (currentStep === "time") setCurrentStep("interests");
@@ -157,8 +134,7 @@ export default function GetStartedPage() {
 
   const handleBack = () => {
     if (currentStep === "name") setCurrentStep("welcome");
-    else if (currentStep === "language") setCurrentStep("name");
-    else if (currentStep === "level") setCurrentStep("language");
+    else if (currentStep === "level") setCurrentStep("name");
     else if (currentStep === "goals") setCurrentStep("level");
     else if (currentStep === "time") setCurrentStep("goals");
     else if (currentStep === "interests") setCurrentStep("time");
@@ -193,7 +169,6 @@ export default function GetStartedPage() {
       };
 
       await apiClient.updateProfile({
-        native_language: formData.nativeLanguage,
         level: levelMapping[formData.level] || formData.level,
         goals: formData.goals,
         daily_time_goal: formData.dailyTimeGoal ?? undefined,
@@ -231,10 +206,6 @@ export default function GetStartedPage() {
         : [...prev.interests, interestId],
     }));
   };
-
-  const filteredLanguages = LANGUAGES.filter((lang) =>
-    lang.label.toLowerCase().includes(languageSearch.toLowerCase())
-  );
 
   return (
     <div className="min-h-screen bg-dark flex flex-col">
@@ -357,69 +328,6 @@ export default function GetStartedPage() {
                 className="w-full px-6 py-4 bg-dark-200 border-2 border-white/[0.08] rounded-2xl text-text-primary text-lg placeholder-text-muted focus:outline-none focus:border-accent-purple transition-colors"
                 autoFocus
               />
-            </StepContainer>
-          )}
-
-          {/* Native Language */}
-          {currentStep === "language" && (
-            <StepContainer key="language">
-              <div className="text-center mb-8">
-                <Globe className="w-12 h-12 text-accent-purple mx-auto mb-4" />
-                <h1 className="text-2xl font-bold text-text-primary mb-2">
-                  What's your native language?
-                </h1>
-                <p className="text-text-secondary">
-                  We'll use this to help you learn better
-                </p>
-              </div>
-
-              <div className="mb-4">
-                <div className="relative">
-                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted" />
-                  <input
-                    type="text"
-                    value={languageSearch}
-                    onChange={(e) => setLanguageSearch(e.target.value)}
-                    placeholder="Search languages..."
-                    className="w-full pl-12 pr-4 py-3 bg-dark-200 border border-white/[0.08] rounded-xl text-text-primary placeholder-text-muted focus:outline-none focus:border-accent-purple transition-colors"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3 max-h-96 overflow-y-auto scrollbar-hide">
-                {filteredLanguages.map((language) => {
-                  const isSelected = formData.nativeLanguage === language.id;
-
-                  return (
-                    <button
-                      key={language.id}
-                      onClick={() =>
-                        setFormData((prev) => ({
-                          ...prev,
-                          nativeLanguage: language.id,
-                        }))
-                      }
-                      className={`p-4 rounded-2xl border-2 transition-all press-effect flex items-center gap-3 ${
-                        isSelected
-                          ? "border-accent-purple bg-accent-purple/20"
-                          : "border-white/[0.08] bg-dark-200"
-                      }`}
-                    >
-                      <span className="text-3xl">{language.flag}</span>
-                      <span
-                        className={`font-semibold ${
-                          isSelected ? "text-accent-purple" : "text-text-primary"
-                        }`}
-                      >
-                        {language.label}
-                      </span>
-                      {isSelected && (
-                        <Check className="w-5 h-5 text-accent-purple ml-auto" />
-                      )}
-                    </button>
-                  );
-                })}
-              </div>
             </StepContainer>
           )}
 

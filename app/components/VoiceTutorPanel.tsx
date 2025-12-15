@@ -2,9 +2,11 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
+import { useGamification } from "@/contexts/GamificationContext";
 import { apiClient } from "@/lib/api-client";
-import { VoiceTutorResponse, TutorError } from "@/lib/types";
+import { VoiceTutorResponse } from "@/lib/types";
 import { VERSION } from "@/lib/version";
+import PronunciationFeedback from "./PronunciationFeedback";
 
 type RecordingState = "idle" | "recording" | "processing" | "complete";
 
@@ -19,6 +21,7 @@ interface DebugInfo {
 
 export default function VoiceTutorPanel() {
   const { user } = useAuth();
+  const { checkAchievements } = useGamification();
   const [recordingState, setRecordingState] = useState<RecordingState>("idle");
   const [error, setError] = useState<string | null>(null);
   const [response, setResponse] = useState<VoiceTutorResponse | null>(null);
@@ -282,6 +285,7 @@ export default function VoiceTutorPanel() {
 
       setResponse(result);
       setRecordingState("complete");
+      checkAchievements();
     } catch (err) {
       console.error("[VoiceTutor] Error processing recording:", err);
 
@@ -557,6 +561,16 @@ export default function VoiceTutorPanel() {
               </h3>
               <p className="text-gray-900 text-lg">{response.transcript}</p>
             </div>
+
+            {/* Pronunciation Feedback */}
+            {response.pronunciation && (
+              <PronunciationFeedback
+                overallScore={response.pronunciation.overall_score}
+                wordScores={response.pronunciation.word_scores}
+                problemSounds={response.pronunciation.problem_sounds}
+                tips={response.pronunciation.tips}
+              />
+            )}
 
             {/* Tutor Feedback */}
             <div className="bg-green-50 border border-green-200 rounded-xl p-10">

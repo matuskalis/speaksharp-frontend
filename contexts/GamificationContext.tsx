@@ -11,6 +11,14 @@ const XP_PER_CORRECT = 10;
 const XP_STREAK_BONUS = 5;
 const XP_PER_LEVEL = 100;
 
+interface Achievement {
+  key: string;
+  title: string;
+  description: string;
+  xp_reward: number;
+  tier: string;
+}
+
 interface GamificationContextType {
   // Hearts
   hearts: HeartsState;
@@ -21,18 +29,39 @@ interface GamificationContextType {
 
   // XP
   xp: XPState;
-  addXP: (amount: number, isStreakBonus?: boolean) => void;
+  addXP: (amount: number, activityType?: string, bonusXp?: number) => void;
   syncXPFromBackend: (backendTotal: number) => void;
 
   // Daily streak (synced with backend)
   streak: number;
   longestStreak: number;
+  streakAtRisk: boolean;
+  practicedToday: boolean;
   syncStreak: () => Promise<void>;
+
+  // Streak milestone toast
+  streakMilestone: 7 | 30 | 100 | 365 | null;
+  dismissStreakMilestone: () => void;
 
   // Streak tracking within session
   correctStreak: number;
   incrementStreak: () => void;
   resetStreak: () => void;
+
+  // Study time tracking
+  studyTime: {
+    todayMinutes: number;
+    weekMinutes: number;
+    sessionStart: Date | null;
+    currentActivity: string | null;
+  };
+  startStudySession: (activityType: string) => void;
+  endStudySession: () => void;
+
+  // Achievements
+  pendingAchievement: Achievement | null;
+  checkAchievements: () => Promise<void>;
+  dismissAchievement: () => void;
 
   // Animation triggers
   showConfetti: boolean;
@@ -48,6 +77,7 @@ const GamificationContext = createContext<GamificationContextType | undefined>(u
 const STORAGE_KEY_HEARTS = "vorex_hearts";
 const STORAGE_KEY_XP = "vorex_xp";
 const STORAGE_KEY_STREAK = "vorex_streak";
+const STORAGE_KEY_STUDY_TIME = "vorex_study_time";
 
 function loadFromStorage<T>(key: string, defaultValue: T): T {
   if (typeof window === "undefined") return defaultValue;
@@ -96,10 +126,39 @@ export function GamificationProvider({ children }: { children: React.ReactNode }
   // Session streak
   const [correctStreak, setCorrectStreak] = useState(0);
 
+  // Study time tracking
+  const [studyTime, setStudyTime] = useState<{
+    todayMinutes: number;
+    weekMinutes: number;
+    sessionStart: Date | null;
+    currentActivity: string | null;
+  }>({
+    todayMinutes: 0,
+    weekMinutes: 0,
+    sessionStart: null,
+    currentActivity: null,
+  });
+
   // Animation states
   const [showConfetti, setShowConfetti] = useState(false);
   const [showXPPopup, setShowXPPopup] = useState<{ amount: number; bonus: number } | null>(null);
   const [showShake, setShowShake] = useState(false);
+
+  // Achievement states
+  const [pendingAchievement, setPendingAchievement] = useState<Achievement | null>(null);
+  const [achievementQueue, setAchievementQueue] = useState<Achievement[]>([]);
+
+  // Streak milestone toast
+  const [streakMilestone, setStreakMilestone] = useState<7 | 30 | 100 | 365 | null>(null);
+  const [shownMilestones, setShownMilestones] = useState<Set<number>>(() => {
+    if (typeof window === "undefined") return new Set();
+    try {
+      const stored = localStorage.getItem("vorex_shown_milestones");
+      return stored ? new Set(JSON.parse(stored)) : new Set();
+    } catch {
+      return new Set();
+    }
+  });
 
   // Time until refill (recalculated)
   const [timeUntilRefill, setTimeUntilRefill] = useState<number | null>(null);
@@ -271,14 +330,16 @@ export function GamificationProvider({ children }: { children: React.ReactNode }
   }, []);
 
   // Add XP and update daily streak
-  const addXP = useCallback((amount: number, isStreakBonus = false) => {
+  const addXP = useCallback((amount: number, activityType: string = "exercise", bonusXp: number = 0) => {
+    const totalAmount = amount + bonusXp;
+
     setXP(prev => {
-      const newTotal = prev.total + amount;
-      const newToday = prev.today + amount;
+      const newTotal = prev.total + totalAmount;
+      const newToday = prev.today + totalAmount;
 
       // Check for level up
       let newLevel = prev.level;
-      let newToNextLevel = prev.toNextLevel - amount;
+      let newToNextLevel = prev.toNextLevel - totalAmount;
 
       while (newToNextLevel <= 0) {
         newLevel++;
@@ -306,6 +367,17 @@ export function GamificationProvider({ children }: { children: React.ReactNode }
 
     // Sync with backend (non-blocking)
     if (user) {
+      // Record XP to backend
+      apiClient.recordXP(activityType, amount, bonusXp).then((result) => {
+        // Sync total XP from backend (authoritative source)
+        if (result.total_xp) {
+          syncXPFromBackend(result.total_xp);
+        }
+      }).catch((err) => {
+        console.error("Failed to record XP:", err);
+      });
+
+      // Also record activity for streak
       apiClient.recordActivity().then((result) => {
         // Update with backend's authoritative data
         setStreak(result.current_streak);
@@ -325,6 +397,51 @@ export function GamificationProvider({ children }: { children: React.ReactNode }
       });
     }
   }, [lastPracticeDate, streak, user]);
+
+  // Start a study session (call when entering a learning page)
+  const startStudySession = useCallback((activityType: string) => {
+    setStudyTime(prev => ({
+      ...prev,
+      sessionStart: new Date(),
+      currentActivity: activityType,
+    }));
+  }, []);
+
+  // End study session and record to backend
+  const endStudySession = useCallback(() => {
+    if (!studyTime.sessionStart || !studyTime.currentActivity) return;
+
+    const durationSeconds = Math.floor(
+      (Date.now() - studyTime.sessionStart.getTime()) / 1000
+    );
+
+    // Only record if session was at least 5 seconds
+    if (durationSeconds >= 5 && user) {
+      apiClient.trackStudySession(
+        studyTime.currentActivity,
+        durationSeconds,
+        studyTime.sessionStart.toISOString()
+      ).then(() => {
+        // Update local study time
+        const durationMinutes = Math.floor(durationSeconds / 60);
+        setStudyTime(prev => ({
+          ...prev,
+          todayMinutes: prev.todayMinutes + durationMinutes,
+          sessionStart: null,
+          currentActivity: null,
+        }));
+      }).catch((err) => {
+        console.error("Failed to track study session:", err);
+      });
+    } else {
+      // Just clear the session without recording
+      setStudyTime(prev => ({
+        ...prev,
+        sessionStart: null,
+        currentActivity: null,
+      }));
+    }
+  }, [studyTime.sessionStart, studyTime.currentActivity, user]);
 
   // Sync XP from backend (authoritative source)
   const syncXPFromBackend = useCallback((backendTotal: number) => {
@@ -370,6 +487,67 @@ export function GamificationProvider({ children }: { children: React.ReactNode }
     setTimeout(() => setShowShake(false), 500);
   }, []);
 
+  // Achievement functions
+  const checkAchievements = useCallback(async () => {
+    if (!user) return;
+
+    try {
+      const result = await apiClient.checkAchievements();
+      if (result.newly_unlocked && result.newly_unlocked.length > 0) {
+        // Queue all unlocked achievements
+        setAchievementQueue(prev => [...prev, ...result.newly_unlocked]);
+      }
+    } catch (error) {
+      console.error("Failed to check achievements:", error);
+    }
+  }, [user]);
+
+  const dismissAchievement = useCallback(() => {
+    setPendingAchievement(null);
+  }, []);
+
+  // Process achievement queue - show one at a time
+  useEffect(() => {
+    if (!pendingAchievement && achievementQueue.length > 0) {
+      const [next, ...rest] = achievementQueue;
+      setPendingAchievement(next);
+      setAchievementQueue(rest);
+      triggerConfetti();
+    }
+  }, [pendingAchievement, achievementQueue, triggerConfetti]);
+
+  // Streak milestone functions
+  const dismissStreakMilestone = useCallback(() => {
+    if (streakMilestone) {
+      const newShown = new Set(shownMilestones);
+      newShown.add(streakMilestone);
+      setShownMilestones(newShown);
+      try {
+        localStorage.setItem("vorex_shown_milestones", JSON.stringify([...newShown]));
+      } catch {
+        // Storage unavailable
+      }
+    }
+    setStreakMilestone(null);
+  }, [streakMilestone, shownMilestones]);
+
+  // Check for streak milestones when streak changes
+  useEffect(() => {
+    const milestones: (7 | 30 | 100 | 365)[] = [365, 100, 30, 7];
+    for (const milestone of milestones) {
+      if (streak >= milestone && !shownMilestones.has(milestone)) {
+        setStreakMilestone(milestone);
+        break;
+      }
+    }
+  }, [streak, shownMilestones]);
+
+  // Computed values for streak risk
+  const today = new Date().toDateString();
+  const yesterday = new Date(Date.now() - 86400000).toDateString();
+  const practicedToday = lastPracticeDate === today;
+  const streakAtRisk = streak > 0 && lastPracticeDate === yesterday;
+
   return (
     <GamificationContext.Provider
       value={{
@@ -383,10 +561,20 @@ export function GamificationProvider({ children }: { children: React.ReactNode }
         syncXPFromBackend,
         streak,
         longestStreak,
+        streakAtRisk,
+        practicedToday,
         syncStreak,
+        streakMilestone,
+        dismissStreakMilestone,
         correctStreak,
         incrementStreak,
         resetStreak,
+        studyTime,
+        startStudySession,
+        endStudySession,
+        pendingAchievement,
+        checkAchievements,
+        dismissAchievement,
         showConfetti,
         triggerConfetti,
         showXPPopup,
@@ -422,14 +610,13 @@ export function useExerciseAnswer() {
     hasHearts,
   } = useGamification();
 
-  const handleAnswer = useCallback((isCorrect: boolean) => {
+  const handleAnswer = useCallback((isCorrect: boolean, activityType: string = "exercise") => {
     if (isCorrect) {
       // Calculate XP with streak bonus
       const baseXP = XP_PER_CORRECT;
       const bonus = correctStreak >= 2 ? XP_STREAK_BONUS : 0;
-      const totalXP = baseXP + bonus;
 
-      addXP(totalXP);
+      addXP(baseXP, activityType, bonus);
       incrementStreak();
       triggerConfetti();
       triggerXPPopup(baseXP, bonus);

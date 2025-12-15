@@ -36,6 +36,9 @@ import {
   PlacementTestQuestionsResponse,
   PlacementTestSubmitRequest,
   PlacementTestResult,
+  AdaptiveTestStartResponse,
+  AdaptiveTestAnswerRequest,
+  AdaptiveTestAnswerResponse,
   StreakResponse,
   AchievementsResponse,
   DailyGoal,
@@ -367,6 +370,20 @@ class ApiClient {
     });
   }
 
+  // Adaptive Placement Test endpoints
+  async startAdaptivePlacementTest(): Promise<AdaptiveTestStartResponse> {
+    return this.request<AdaptiveTestStartResponse>("/api/placement-test/adaptive/start", {
+      method: "POST",
+    });
+  }
+
+  async submitAdaptiveAnswer(data: AdaptiveTestAnswerRequest): Promise<AdaptiveTestAnswerResponse> {
+    return this.request<AdaptiveTestAnswerResponse>("/api/placement-test/adaptive/answer", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  }
+
   async getLearningDashboard(): Promise<LearningDashboardResponse> {
     return this.request<LearningDashboardResponse>("/api/learning/dashboard");
   }
@@ -597,6 +614,656 @@ class ApiClient {
 
   async getThinkingSession(sessionId: string): Promise<ThinkingSession> {
     return this.request<ThinkingSession>(`/api/think/session/${sessionId}`);
+  }
+
+  // ============================================================================
+  // Analytics & XP Tracking endpoints
+  // ============================================================================
+
+  /**
+   * Record XP earned from an activity.
+   * @param activityType - Type of activity (exercise, lesson, drill, voice, review)
+   * @param xpEarned - Base XP earned
+   * @param bonusXp - Bonus XP (streak, challenge, etc.)
+   * @param sessionId - Optional session ID to associate with
+   */
+  async recordXP(
+    activityType: string,
+    xpEarned: number,
+    bonusXp: number = 0,
+    sessionId?: string
+  ): Promise<{ status: string; total_xp: number; xp_added: number }> {
+    return this.request("/api/xp/record", {
+      method: "POST",
+      body: JSON.stringify({
+        activity_type: activityType,
+        xp_earned: xpEarned,
+        bonus_xp: bonusXp,
+        session_id: sessionId,
+      }),
+    });
+  }
+
+  /**
+   * Track study session time.
+   * @param activityType - Type of activity (lesson, drill, voice, review, exercise)
+   * @param durationSeconds - Duration in seconds
+   * @param startedAt - Optional ISO timestamp when session started
+   */
+  async trackStudySession(
+    activityType: string,
+    durationSeconds: number,
+    startedAt?: string
+  ): Promise<{ status: string; session_id: string; duration_seconds: number }> {
+    return this.request("/api/sessions/track", {
+      method: "POST",
+      body: JSON.stringify({
+        activity_type: activityType,
+        duration_seconds: durationSeconds,
+        started_at: startedAt,
+      }),
+    });
+  }
+
+  /**
+   * Get analytics summary for dashboard.
+   */
+  async getAnalyticsSummary(): Promise<{
+    total_xp: number;
+    level: number;
+    xp_to_next_level: number;
+    today_xp: number;
+    week_xp: number;
+    study_time: {
+      today_minutes: number;
+      week_minutes: number;
+      total_minutes: number;
+    };
+    streak: {
+      current: number;
+      longest: number;
+      last_active_date: string | null;
+    };
+    activity_breakdown: Record<string, number>;
+  }> {
+    return this.request("/api/analytics/summary");
+  }
+
+  /**
+   * Get skill mastery history over time.
+   * @param days - Number of days to look back (default 30)
+   */
+  async getSkillsHistory(days: number = 30): Promise<{
+    skills: Array<{
+      skill_key: string;
+      category: string;
+      history: Array<{ date: string; mastery: number }>;
+      current_mastery: number;
+      trend: string;
+    }>;
+    overall_trend: string;
+    period_days: number;
+  }> {
+    return this.request(`/api/skills/history?days=${days}`);
+  }
+
+  /**
+   * Check for newly unlocked achievements.
+   */
+  async checkAchievements(): Promise<{
+    newly_unlocked: Array<{
+      key: string;
+      title: string;
+      description: string;
+      xp_reward: number;
+      tier: string;
+    }>;
+    total_unlocked: number;
+  }> {
+    return this.request("/api/achievements/check", {
+      method: "POST",
+    });
+  }
+
+  // ============================================================================
+  // Daily Challenges (3-slot system)
+  // ============================================================================
+
+  /**
+   * Get today's daily challenges (Core, Accuracy, Stretch).
+   */
+  async getDailyChallenges(): Promise<{
+    challenges: {
+      core: {
+        name: string;
+        description: string;
+        target: number;
+        progress: number;
+        completed: boolean;
+        xp_reward: number;
+        completed_at?: string;
+      };
+      accuracy: {
+        name: string;
+        description: string;
+        target: number;
+        progress: number;
+        completed: boolean;
+        xp_reward: number;
+        completed_at?: string;
+      };
+      stretch: {
+        name: string;
+        description: string;
+        xp_target: number;
+        xp_progress: number;
+        speaking_target: number;
+        speaking_progress: number;
+        completed: boolean;
+        xp_reward: number;
+        gives_freeze_token: boolean;
+        completed_at?: string;
+      };
+    };
+    all_completed: boolean;
+    streak_freeze_tokens: number;
+    date: string;
+  }> {
+    return this.request("/api/challenges/today");
+  }
+
+  /**
+   * Update daily challenge progress (3-slot system).
+   */
+  async updateDailyChallengeProgress(progress: {
+    lessons_completed?: number;
+    best_score?: number;
+    xp_earned?: number;
+    speaking_sessions?: number;
+  }): Promise<{
+    core_just_completed: boolean;
+    accuracy_just_completed: boolean;
+    stretch_just_completed: boolean;
+    total_xp_earned: number;
+    earned_freeze_token: boolean;
+    challenges: {
+      core: { progress: number; completed: boolean };
+      accuracy: { progress: number; completed: boolean };
+      stretch: { xp_progress: number; speaking_progress: number; completed: boolean };
+    };
+    all_completed: boolean;
+    streak_freeze_tokens: number;
+  }> {
+    return this.request("/api/challenges/progress", {
+      method: "POST",
+      body: JSON.stringify(progress),
+    });
+  }
+
+  /**
+   * Get number of available streak freeze tokens.
+   */
+  async getStreakFreezeTokens(): Promise<{ streak_freeze_tokens: number }> {
+    return this.request("/api/challenges/freeze-tokens");
+  }
+
+  /**
+   * Use a streak freeze token to protect streak.
+   */
+  async useStreakFreezeToken(): Promise<{
+    success: boolean;
+    streak_freeze_tokens: number;
+  }> {
+    return this.request("/api/challenges/use-freeze", {
+      method: "POST",
+    });
+  }
+
+  // ============================================================================
+  // Friends System Methods
+  // ============================================================================
+
+  /**
+   * Get friends list with today's stats and pending requests.
+   */
+  async getFriends(): Promise<{
+    friends: Array<{
+      user_id: string;
+      username: string | null;
+      display_name: string | null;
+      level: number;
+      total_xp: number;
+      streak_days: number;
+      xp_today: number;
+      lessons_today: number;
+      friend_since: string;
+    }>;
+    pending_requests: Array<{
+      request_id: string;
+      user_id: string;
+      username: string | null;
+      display_name: string | null;
+      level: number;
+      total_xp: number;
+      requested_at: string;
+    }>;
+    friend_code: string;
+    friend_count: number;
+  }> {
+    return this.request("/api/friends");
+  }
+
+  /**
+   * Search for users by username, display name, or friend code.
+   */
+  async searchUsers(query: string, limit: number = 10): Promise<{
+    users: Array<{
+      user_id: string;
+      username: string | null;
+      display_name: string | null;
+      friend_code: string | null;
+      level: number;
+      total_xp: number;
+      streak_days: number;
+      is_friend: boolean;
+      friendship_status: string | null;
+    }>;
+  }> {
+    return this.request("/api/friends/search", {
+      method: "POST",
+      body: JSON.stringify({ query, limit }),
+    });
+  }
+
+  /**
+   * Send a friend request.
+   */
+  async sendFriendRequest(friendId: string): Promise<{
+    success: boolean;
+    status: string;
+  }> {
+    return this.request("/api/friends/request", {
+      method: "POST",
+      body: JSON.stringify({ friend_id: friendId }),
+    });
+  }
+
+  /**
+   * Accept a friend request.
+   */
+  async acceptFriendRequest(friendId: string): Promise<{ success: boolean }> {
+    return this.request("/api/friends/accept", {
+      method: "POST",
+      body: JSON.stringify({ friend_id: friendId }),
+    });
+  }
+
+  /**
+   * Decline a friend request.
+   */
+  async declineFriendRequest(friendId: string): Promise<{ success: boolean }> {
+    return this.request("/api/friends/decline", {
+      method: "POST",
+      body: JSON.stringify({ friend_id: friendId }),
+    });
+  }
+
+  /**
+   * Remove a friend.
+   */
+  async removeFriend(friendId: string): Promise<{ success: boolean }> {
+    return this.request(`/api/friends/${friendId}`, {
+      method: "DELETE",
+    });
+  }
+
+  /**
+   * Get detailed friend profile with 7-day activity.
+   */
+  async getFriendProfile(friendId: string): Promise<{
+    user_id: string;
+    username: string | null;
+    display_name: string | null;
+    friend_code: string | null;
+    level: number;
+    total_xp: number;
+    streak_days: number;
+    longest_streak: number;
+    xp_today: number;
+    lessons_today: number;
+    is_friend: boolean;
+    last_7_days_activity: Array<{
+      date: string;
+      xp: number;
+      lessons: number;
+    }>;
+  }> {
+    return this.request(`/api/friends/${friendId}/profile`);
+  }
+
+  /**
+   * Create a shareable friend invite link.
+   */
+  async createInviteLink(): Promise<{
+    invite_code: string;
+    invite_url: string;
+  }> {
+    return this.request("/api/friends/invite-link", {
+      method: "POST",
+    });
+  }
+
+  /**
+   * Use a friend invite link.
+   */
+  async useInviteLink(inviteCode: string): Promise<{
+    success: boolean;
+    status: string;
+    inviter_name: string;
+  }> {
+    return this.request("/api/friends/use-invite", {
+      method: "POST",
+      body: JSON.stringify({ invite_code: inviteCode }),
+    });
+  }
+
+  /**
+   * Get friend challenges (sent and received).
+   */
+  async getFriendChallenges(): Promise<{
+    sent: Array<{
+      id: string;
+      challenged_id: string;
+      challenged_username: string | null;
+      challenged_display_name: string | null;
+      challenge_type: string;
+      challenge_date: string;
+      challenger_score: number;
+      challenged_score: number;
+      status: string;
+      winner_id: string | null;
+      xp_reward: number;
+    }>;
+    received: Array<{
+      id: string;
+      challenger_id: string;
+      challenger_username: string | null;
+      challenger_display_name: string | null;
+      challenge_type: string;
+      challenge_date: string;
+      challenger_score: number;
+      challenged_score: number;
+      status: string;
+      winner_id: string | null;
+      xp_reward: number;
+    }>;
+  }> {
+    return this.request("/api/friends/challenges");
+  }
+
+  /**
+   * Create a friend challenge.
+   */
+  async createFriendChallenge(
+    friendId: string,
+    challengeType: "beat_xp_today" | "more_lessons_today"
+  ): Promise<{
+    success: boolean;
+    challenge: {
+      id: string;
+      challenge_type: string;
+      challenge_date: string;
+      status: string;
+      xp_reward: number;
+    };
+  }> {
+    return this.request("/api/friends/challenge", {
+      method: "POST",
+      body: JSON.stringify({ friend_id: friendId, challenge_type: challengeType }),
+    });
+  }
+
+  /**
+   * Respond to a friend challenge.
+   */
+  async respondToChallenge(
+    challengeId: string,
+    accept: boolean
+  ): Promise<{ success: boolean; accepted: boolean }> {
+    return this.request("/api/friends/challenge/respond", {
+      method: "POST",
+      body: JSON.stringify({ challenge_id: challengeId, accept }),
+    });
+  }
+
+  /**
+   * Get current challenge status and scores.
+   */
+  async getChallengeStatus(challengeId: string): Promise<{
+    id: string;
+    challenger_score: number;
+    challenged_score: number;
+    winner_id: string | null;
+    status: string;
+  }> {
+    return this.request(`/api/friends/challenge/${challengeId}`);
+  }
+
+  // ============================================
+  // Activity Heatmap & Learning Insights
+  // ============================================
+
+  /**
+   * Get activity heatmap data for GitHub-style visualization.
+   */
+  async getActivityHeatmap(days: number = 365): Promise<{
+    success: boolean;
+    days_requested: number;
+    data: Array<{
+      date: string;
+      xp: number;
+      lessons: number;
+      sessions: number;
+    }>;
+  }> {
+    return this.request(`/api/analytics/heatmap?days=${days}`);
+  }
+
+  /**
+   * Get comprehensive learning insights.
+   */
+  async getLearningInsights(): Promise<{
+    success: boolean;
+    best_study_hours: Array<{
+      hour: number;
+      avg_score: number;
+      sessions: number;
+    }>;
+    day_performance: Array<{
+      day: string;
+      avg_score: number;
+      total_xp: number;
+      sessions: number;
+    }>;
+    error_trends: Array<{
+      error_type: string;
+      count: number;
+      recent_count: number;
+      trend: string;
+    }>;
+    skill_progress: Array<{
+      skill_key: string;
+      mastery_score: number;
+      practice_count: number;
+      last_practiced: string | null;
+    }>;
+    streak: {
+      current: number;
+      longest: number;
+    };
+    totals: {
+      total_lessons: number;
+      total_xp: number;
+      total_time_minutes: number;
+      avg_score: number;
+    };
+  }> {
+    return this.request('/api/analytics/insights');
+  }
+
+  // ============================================
+  // Push Notifications
+  // ============================================
+
+  /**
+   * Register a push notification subscription.
+   */
+  async registerPushSubscription(subscription: {
+    endpoint: string;
+    p256dh: string;
+    auth: string;
+  }): Promise<{ success: boolean }> {
+    return this.request("/api/push/subscribe", {
+      method: "POST",
+      body: JSON.stringify(subscription),
+    });
+  }
+
+  /**
+   * Unregister a push notification subscription.
+   */
+  async unregisterPushSubscription(endpoint: string): Promise<{ success: boolean }> {
+    return this.request("/api/push/unsubscribe", {
+      method: "POST",
+      body: JSON.stringify({ endpoint }),
+    });
+  }
+
+  /**
+   * Get push notification preferences.
+   */
+  async getPushPreferences(): Promise<{
+    enabled: boolean;
+    streak_reminders: boolean;
+    friend_challenges: boolean;
+    achievements: boolean;
+    daily_goals: boolean;
+  }> {
+    return this.request("/api/push/preferences");
+  }
+
+  /**
+   * Update push notification preferences.
+   */
+  async updatePushPreferences(preferences: {
+    enabled?: boolean;
+    streak_reminders?: boolean;
+    friend_challenges?: boolean;
+    achievements?: boolean;
+    daily_goals?: boolean;
+  }): Promise<{
+    enabled: boolean;
+    streak_reminders: boolean;
+    friend_challenges: boolean;
+    achievements: boolean;
+    daily_goals: boolean;
+  }> {
+    return this.request("/api/push/preferences", {
+      method: "PUT",
+      body: JSON.stringify(preferences),
+    });
+  }
+
+  /**
+   * Send a test push notification.
+   */
+  async sendTestPush(): Promise<{ success: boolean; message: string }> {
+    return this.request("/api/push/test", {
+      method: "POST",
+    });
+  }
+
+  // ============================================
+  // Gamification Bonuses
+  // ============================================
+
+  /**
+   * Get bonus summary for today including available and claimed bonuses.
+   */
+  async getBonusSummary(): Promise<{
+    total_bonus_xp_today: number;
+    bonuses_claimed: Array<{
+      type: string;
+      xp: number;
+      multiplier: number;
+    }>;
+    available_bonuses: {
+      login_bonus: { available: boolean; xp: number };
+      streak_bonus: { active: boolean; multiplier: number; streak_days: number };
+      weekend_bonus: { active: boolean; multiplier: number };
+      event_bonus: { active: boolean; name: string | null; multiplier: number };
+    };
+    current_multiplier: number;
+  }> {
+    return this.request("/api/bonuses/summary");
+  }
+
+  /**
+   * Claim daily login bonus.
+   */
+  async claimLoginBonus(): Promise<{
+    success: boolean;
+    xp_earned: number;
+    message: string;
+  }> {
+    return this.request("/api/bonuses/claim-login", {
+      method: "POST",
+    });
+  }
+
+  /**
+   * Get all active bonuses for the user.
+   */
+  async getActiveBonuses(): Promise<{
+    login_bonus_available: boolean;
+    login_bonus_xp: number;
+    streak_multiplier: number;
+    streak_days: number;
+    weekend_bonus_active: boolean;
+    weekend_multiplier: number;
+    event_bonus_active: boolean;
+    event_name: string | null;
+    event_multiplier: number;
+    total_multiplier: number;
+  }> {
+    return this.request("/api/bonuses/active");
+  }
+
+  /**
+   * Calculate XP with all active bonuses applied.
+   */
+  async calculateBonusXP(
+    baseXp: number,
+    isPerfectScore: boolean = false
+  ): Promise<{
+    final_xp: number;
+    bonus_breakdown: {
+      base_xp: number;
+      streak_multiplier: number;
+      weekend_multiplier: number;
+      event_multiplier: number;
+      perfect_score_multiplier: number;
+      final_xp: number;
+      bonus_xp: number;
+    };
+  }> {
+    return this.request("/api/bonuses/calculate-xp", {
+      method: "POST",
+      body: JSON.stringify({
+        base_xp: baseXp,
+        is_perfect_score: isPerfectScore,
+      }),
+    });
   }
 }
 

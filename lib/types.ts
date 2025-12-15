@@ -128,6 +128,21 @@ export interface UpdateVoicePreferencesRequest {
 }
 
 // Voice tutoring types
+export interface PronunciationWordScore {
+  word: string;
+  score: number;
+  status: "good" | "needs_work" | "focus" | "missing";
+  tip?: string;
+  problem_phonemes?: string[];
+}
+
+export interface PronunciationFeedback {
+  overall_score: number;
+  word_scores: PronunciationWordScore[];
+  problem_sounds: string[];
+  tips: string[];
+}
+
 export interface VoiceTutorResponse {
   transcript: string;
   tutor_response: {
@@ -135,6 +150,7 @@ export interface VoiceTutorResponse {
     errors: TutorError[];
     micro_task: string | null;
   };
+  pronunciation: PronunciationFeedback | null;
   audio_base64: string | null;
   session_id: string;
 }
@@ -428,6 +444,39 @@ export interface PlacementTestResult {
   strengths: string[];
   weaknesses: string[];
   recommendation: string;
+}
+
+// Adaptive Placement Test types
+export interface AdaptiveQuestion {
+  id: string;
+  question_text: string;
+  options: string[];
+  level: string;
+  skill_type: string;
+}
+
+export interface AdaptiveTestStartResponse {
+  session_id: string;
+  question: AdaptiveQuestion;
+  question_number: number;
+  current_level: string;
+}
+
+export interface AdaptiveTestAnswerRequest {
+  session_id: string;
+  question_id: string;
+  answer: number;
+}
+
+export interface AdaptiveTestAnswerResponse {
+  is_correct: boolean;
+  correct_answer: number;
+  explanation: string;
+  is_complete: boolean;
+  question_number?: number;
+  next_question?: AdaptiveQuestion;
+  current_level?: string;
+  final_result?: PlacementTestResult;
 }
 
 // Learning Dashboard types

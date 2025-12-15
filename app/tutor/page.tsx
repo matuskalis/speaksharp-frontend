@@ -45,7 +45,14 @@ export default function TutorPage() {
   const { user } = useAuth();
   const { hasAccess } = useTrialStatus();
   const router = useRouter();
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      id: "greeting",
+      type: "assistant",
+      content: "Hey! What would you like to practice today? You can tell me about your day, ask me questions, or we can chat about any topic you're interested in.",
+      timestamp: new Date(),
+    },
+  ]);
   const [loading, setLoading] = useState(false);
   const [sessionId, setSessionId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);

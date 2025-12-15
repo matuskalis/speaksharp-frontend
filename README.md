@@ -1,11 +1,14 @@
 # Vorex - AI-Powered English Learning Platform
 
-Modern, production-ready Next.js frontend for Vorex, an AI-powered English learning platform with personalized lessons, real-time feedback, and comprehensive CEFR assessment.
+Modern, production-ready Next.js frontend for Vorex, an AI-powered English learning platform with personalized lessons, real-time feedback, and adaptive CEFR assessment.
+
+**Live at**: [vorex.app](https://vorex.app)
+**Backend API**: https://speaksharp-core-production.up.railway.app
 
 ## Features
 
 ### Core Learning Experience
-- **CEFR Assessment**: Comprehensive placement test with 40-question evaluation across all proficiency levels
+- **Adaptive CEFR Assessment**: Smart placement test that adapts to your level (starts at B1, adjusts based on performance)
 - **Personalized Learning Paths**: Adaptive lessons based on user's CEFR level and goals
 - **AI Tutor**: Real-time English text feedback with categorized error corrections
 - **Voice Tutor**: Speech recognition with pronunciation feedback (powered by OpenAI Whisper)
@@ -146,11 +149,12 @@ vorex-frontend/
 
 ## Key Features Explained
 
-### CEFR Assessment (`/assessment`)
-- 40-question placement test
-- Adaptive difficulty based on responses
-- Comprehensive evaluation across A1-C2 levels
-- Immediate results with detailed breakdown
+### Adaptive CEFR Assessment (`/assessment`)
+- Smart adaptive placement test (10-15 questions)
+- Starts at B1 level, adjusts based on your answers
+- 2 correct → level up, 2 wrong → level down
+- Quick and accurate CEFR level detection (A1-C2)
+- Immediate results with confidence score
 
 ### Learning Paths (`/learn`)
 - Personalized lesson recommendations
@@ -189,7 +193,8 @@ vorex-frontend/
 The frontend integrates with the following backend API routes:
 
 - `POST /api/auth/*` - Authentication (via Supabase)
-- `POST /api/assessment/submit` - CEFR assessment
+- `POST /api/placement-test/adaptive/start` - Start adaptive placement test
+- `POST /api/placement-test/adaptive/answer` - Submit answer, get next question or result
 - `POST /api/tutor/text` - Text tutoring
 - `POST /api/tutor/voice` - Voice tutoring (ASR + TTS)
 - `GET /api/lessons` - Fetch lessons
@@ -307,4 +312,4 @@ Next.js • TypeScript • Tailwind CSS • Supabase • OpenAI
 **Live at**
 [vorex.app](https://vorex.app)
 
-**Last Updated**: November 29, 2025
+**Last Updated**: December 7, 2025
